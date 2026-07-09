@@ -2,15 +2,23 @@ using UnityEngine;
 
 public class Garden : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public int width = 7;
+    public int height = 3;
+    public GameObject tilePrefab;
+    public float tileSize = 2f;
+
     void Start()
     {
-        
-    }
+        Vector3 startPos = transform.position;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                Vector3 pos = startPos + new Vector3(x * tileSize, y * tileSize, 0);
+                GameObject tile = Instantiate(tilePrefab, pos, Quaternion.identity, transform);
+                tile.name = "Tile_" + x + "_" + y;
+            }
+        }
     }
 }
