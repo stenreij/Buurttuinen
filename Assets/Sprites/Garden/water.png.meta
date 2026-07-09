@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 7d1b9f9f4ea1a0b43a7a50ccd376a3c8
+guid: e05b0f40125308a4084a8ae16b0e9293
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5098126958726729954
-    second: fence_cross_0
+      213: 8509550459451208454
+    second: water_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,7 +113,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: fence_cross_0
+      name: water_0
       rect:
         serializedVersion: 2
         x: 0
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e1f2045ca80df39b0800000000000000
-      internalID: -5098126958726729954
+      spriteID: 603f9ddae0ff71670800000000000000
+      internalID: 8509550459451208454
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      fence_cross_0: -5098126958726729954
+      water_0: 8509550459451208454
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
