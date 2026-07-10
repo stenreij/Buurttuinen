@@ -1,10 +1,11 @@
 public enum ItemType
 {
     Plant,
-    Tree,
+    Tree_Big,
+    Tree_Small,
     Hedge,
     Water,
-    Tile,
+    Path,
     Decoration,
     Playground,
     Sabotage,
