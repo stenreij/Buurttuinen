@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2814edcf85886e144b058ce2a6d4161a, type: 3}
   m_Name: Rose Bush
   m_EditorClassIdentifier: 
-  icon: {fileID: 0}
+  icon: {fileID: 7075607781173046338, guid: e8fd7905747e88c4cade22b5cefb6fc5, type: 3}
   itemName: Rose Bush
   type: 0
   score: 16
@@ -21,5 +21,5 @@ MonoBehaviour:
   biodiversity: 8
   esthetic: 10
   color: {r: 0.9150943, g: 0, b: 0, a: 0}
-  maxAmount: 6
+  maxAmount: 3
   prefab: {fileID: 0}
