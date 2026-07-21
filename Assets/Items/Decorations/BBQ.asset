@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2814edcf85886e144b058ce2a6d4161a, type: 3}
-  m_Name: Apple Tree_2
+  m_Name: BBQ
   m_EditorClassIdentifier: 
-  icon: {fileID: -3632673356342089521, guid: b955ccc7e263e3e48a60026936feb539, type: 3}
-  itemName: Small Apple Tree
-  type: 2
-  score: 0
-  water: 0
-  soilHealth: 0
-  biodiversity: 0
-  esthetic: 0
+  icon: {fileID: -6036542359384570008, guid: cb6f1a9d03528434d82787445dc51022, type: 3}
+  itemName: BBQ
+  type: 6
+  score: -5
+  water: -1
+  soilHealth: -2
+  biodiversity: -3
+  esthetic: 2
   color: {r: 1, g: 0, b: 0, a: 0}
-  maxAmount: 3
+  maxAmount: 4
   prefab: {fileID: 0}

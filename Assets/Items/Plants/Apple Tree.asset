@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Apple Tree
   m_EditorClassIdentifier: 
   icon: {fileID: 2497978353774294010, guid: e1b4f3788dde348428df71dde4fa8c47, type: 3}
-  itemName: Apple Tree
+  itemName: Big Apple Tree
   type: 1
   score: 0
   water: 0
