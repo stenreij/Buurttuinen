@@ -594,6 +594,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 344786421}
+  - component: {fileID: 344786424}
+  - component: {fileID: 344786423}
+  - component: {fileID: 344786422}
   m_Layer: 0
   m_Name: Player_2
   m_TagString: Untagged
@@ -616,6 +619,49 @@ Transform:
   m_Children: []
   m_Father: {fileID: 813153599}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &344786422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 344786420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: daa2b37d3c67fed41a91fa99d0381a36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerInventory: {fileID: 344786423}
+  itemDatabase: {fileID: 1337639599}
+  startItemCount: 4
+--- !u!114 &344786423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 344786420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 796835862f346a241b0677769c87a756, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  items: []
+--- !u!114 &344786424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 344786420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4d3ee707a1eb044295a4792abefa1c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerIndex: 1
+  playerName: Player_2
+  score: 0
 --- !u!1 &358354315
 GameObject:
   m_ObjectHideFlags: 0
@@ -1834,6 +1880,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   players:
   - {fileID: 429839384}
+  - {fileID: 344786424}
   inventoryUI: {fileID: 746346862}
 --- !u!1 &1372691658
 GameObject:

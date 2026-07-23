@@ -8,7 +8,7 @@ public class Inventory : MonoBehaviour
     public void AddItem(ItemData item)
     {
         items.Add(item);
-        Debug.Log(gameObject.name + " received " + item.itemName);
+        //Debug.Log(gameObject.name + " received " + item.itemName);
     }
 
     public void RemoveItem(ItemData item)

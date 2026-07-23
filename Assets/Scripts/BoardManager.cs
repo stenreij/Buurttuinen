@@ -20,9 +20,6 @@ public class BoardManager : MonoBehaviour
 
     public void CreateBoard()
     {
-        Debug.Log("🏗️ CreateBoard() called!");
-
-
         for (int i = 0; i < numberOfGardens; i++)
         {
             Vector3 position = fixedPositions[i];
@@ -33,15 +30,12 @@ public class BoardManager : MonoBehaviour
 
     void CreateGarden(Vector3 position, int index)
     {
-        Debug.Log($"📍 Creating Garden_{index} at position {position}");
-
         GameObject garden = Instantiate(gardenPrefab, position, Quaternion.identity, transform);
         garden.name = "Garden_" + index;
 
         Garden gardenScript = garden.GetComponent<Garden>();
         if (gardenScript != null)
         {
-            Debug.Log($"✅ GardenScript found on {garden.name}");
             gardenScript.CreateGarden();
         }
         else

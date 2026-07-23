@@ -17,36 +17,39 @@ public class GameManager : MonoBehaviour
         Debug.Log("🎮 GAME STARTING...");
 
         // 1. Give each player their starting items
-        int playerIndex = 0;
         foreach (Player player in players)
         {
-            Debug.Log($"🔍 Checking Player {playerIndex}: {player.gameObject.name}");
-
             ItemActions actions = player.GetComponent<ItemActions>();
             if (actions != null)
             {
-                Debug.Log($"✅ ItemActions found on {player.gameObject.name}");
-                Debug.Log($"🔍 StartItemCount = {actions.startItemCount}");
-
                 for (int i = 0; i < actions.startItemCount; i++)
                 {
-                    Debug.Log($"🔄 Calling GiveRandomItem() {i+1}/{actions.startItemCount} for {player.gameObject.name}");
                     actions.GiveRandomItem();
                 }
-                Debug.Log("✅ Items given to " + player.gameObject.name);
+
+                // 📦 Log all items a player received
+                Inventory inv = player.GetComponent<Inventory>();
+                if (inv != null && inv.items.Count > 0)
+                {
+                    string itemList = "";
+                    foreach (ItemData item in inv.items)
+                    {
+                        itemList += item.itemName + ", ";
+                    }
+                    itemList = itemList.TrimEnd(',', ' ');
+                    Debug.Log($"📦 {player.gameObject.name} received: {itemList}");
+                }
             }
             else
             {
                 Debug.LogError($"❌ No ItemActions found on {player.gameObject.name}!");
             }
-            playerIndex++;
         }
 
         // 2. Update the UI after all items are added
         if (inventoryUI != null)
         {
             inventoryUI.RefreshUI();
-            Debug.Log("🔄 UI refreshed after all items were added");
         }
         else
         {

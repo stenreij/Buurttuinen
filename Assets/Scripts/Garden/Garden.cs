@@ -10,10 +10,7 @@ public class Garden : MonoBehaviour
 
     public void CreateGarden()
     {
-        Debug.Log($"🌱 CreateGarden() called for {gameObject.name}");
-
         Vector3 startPos = transform.position;
-        Debug.Log($"📍 Start position: {startPos}");
 
         for (int x = 0; x < width; x++)
         {
@@ -24,7 +21,5 @@ public class Garden : MonoBehaviour
                 tile.name = "Tile_" + x + "_" + y;
             }
         }
-
-        Debug.Log($"✅ Garden {gameObject.name} created with {width * height} tiles");
     }
 }

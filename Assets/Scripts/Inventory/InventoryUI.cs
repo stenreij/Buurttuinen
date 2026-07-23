@@ -11,14 +11,12 @@ public class InventoryUI : MonoBehaviour
 
     public void RefreshUI()
     {
-        Debug.Log("🔄 RefreshUI() called!");
+        //Debug.Log("🔄 RefreshUI() called!");
         UpdateUI();
     }
 
     void UpdateUI()
     {
-        Debug.Log("=== UPDATE UI STARTED ===");
-
         if (!ValidateReferences()) return;
 
         ClearOldButtons();
@@ -28,9 +26,6 @@ public class InventoryUI : MonoBehaviour
         Dictionary<ItemData, int> itemCounts = GetItemCounts();
 
         CreateButtons(itemCounts);
-
-        Debug.Log("✅ UpdateUI() completed! " + itemCounts.Count + " buttons created.");
-        Debug.Log("=== END UPDATE UI ===");
     }
 
     // ✅ VALIDATE REFERENCES
@@ -41,14 +36,12 @@ public class InventoryUI : MonoBehaviour
             Debug.LogError("❌ Content Parent is NOT assigned!");
             return false;
         }
-        Debug.Log("✅ Content Parent is assigned: " + contentParent.name);
 
         if (playerInventory == null)
         {
             Debug.LogError("❌ No Inventory linked to InventoryUI!");
             return false;
         }
-        Debug.Log("✅ Inventory is linked: " + playerInventory.gameObject.name);
 
         if (itemButtonPrefab == null)
         {
@@ -63,7 +56,6 @@ public class InventoryUI : MonoBehaviour
     void ClearOldButtons()
     {
         int childCount = contentParent.childCount;
-        Debug.Log("🗑️ Removing " + childCount + " old buttons...");
         foreach (Transform child in contentParent)
         {
             Destroy(child.gameObject);
@@ -74,7 +66,6 @@ public class InventoryUI : MonoBehaviour
     bool HasItems()
     {
         int totalItems = playerInventory.items.Count;
-        Debug.Log("📦 Total items in inventory: " + totalItems);
 
         if (totalItems == 0)
         {
@@ -96,7 +87,6 @@ public class InventoryUI : MonoBehaviour
                 itemCounts[item] = 1;
         }
 
-        Debug.Log("📊 Count unique items: " + itemCounts.Count);
         return itemCounts;
     }
 
@@ -109,10 +99,7 @@ public class InventoryUI : MonoBehaviour
             ItemData item = entry.Key;
             int count = entry.Value;
 
-            Debug.Log($"🔄 Button {buttonIndex + 1}: {item.itemName} ({count}x)");
-
             GameObject newButton = Instantiate(itemButtonPrefab, contentParent);
-            Debug.Log($"✅ Button created for: {item.itemName}");
 
             SetButtonIcon(newButton, item);
             SetButtonCountText(newButton, count);
@@ -131,7 +118,6 @@ public class InventoryUI : MonoBehaviour
             if (item.icon != null)
             {
                 iconImage.sprite = item.icon;
-                Debug.Log($"🖼️ Icon added for: {item.itemName}");
             }
             else
             {
@@ -153,12 +139,10 @@ public class InventoryUI : MonoBehaviour
             if (count > 1)
             {
                 countText.text = count + "x";
-                Debug.Log($"🔢 Count set: {countText.text}");
             }
             else
             {
                 countText.text = "";
-                Debug.Log($"🔢 No count (1x) - text empty");
             }
         }
         else
@@ -175,7 +159,6 @@ public class InventoryUI : MonoBehaviour
         {
             ItemData capturedItem = item;
             btn.onClick.AddListener(() => OnItemClicked(capturedItem));
-            Debug.Log($"🖱️ Click event added for: {item.itemName}");
         }
     }
 

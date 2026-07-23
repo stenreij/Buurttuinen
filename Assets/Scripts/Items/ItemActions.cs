@@ -13,8 +13,6 @@ public class ItemActions : MonoBehaviour
 
     public void GiveRandomItem()
     {
-        Debug.Log("🔍 GiveRandomItem() called for " + gameObject.name);
-
         if (itemDatabase == null)
         {
             Debug.LogError("❌ ItemDatabase is NULL for " + gameObject.name);
@@ -27,24 +25,18 @@ public class ItemActions : MonoBehaviour
             return;
         }
 
-        Debug.Log("📦 ItemDatabase has " + itemDatabase.allItems.Count + " items");
-
         List<ItemData> availableItems = new List<ItemData>(itemDatabase.allItems);
-        Debug.Log("📋 Available items before filtering: " + availableItems.Count);
 
         for (int i = availableItems.Count - 1; i >= 0; i--)
         {
             ItemData item = availableItems[i];
             int count = playerInventory.CountItem(item);
-            Debug.Log($"🔍 Checking {item.itemName}: maxAmount={item.maxAmount}, currentCount={count}");
             if (count >= item.maxAmount)
             {
                 availableItems.RemoveAt(i);
                 Debug.Log($"❌ Removed {item.itemName} (max reached)");
             }
         }
-
-        Debug.Log("📋 Available items after filtering: " + availableItems.Count);
 
         if (availableItems.Count == 0)
         {
@@ -54,8 +46,6 @@ public class ItemActions : MonoBehaviour
 
         int randomIndex = Random.Range(0, availableItems.Count);
         ItemData randomItem = availableItems[randomIndex];
-
-        Debug.Log($"🎲 Selected random item: {randomItem.itemName}");
 
         playerInventory.AddItem(randomItem);
     }
