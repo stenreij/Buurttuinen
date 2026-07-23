@@ -18,22 +18,22 @@ public class Inventory : MonoBehaviour
     {
         if (itemDatabase == null)
         {
-            Debug.LogWarning("Geen ItemDatabase gekoppeld aan " + gameObject.name);
+            Debug.LogWarning("No ItemDatabase found for " + gameObject.name);
             return;
         }
 
         // Make a copy of the item list to avoid modifying the original list
         List<ItemData> availableItems = new List<ItemData>(itemDatabase.allItems);
-        
+
         for (int i = 0; i < startItemCount; i++)
         {
             if (availableItems.Count == 0) break;
 
             int randomIndex = Random.Range(0, availableItems.Count);
             ItemData randomItem = availableItems[randomIndex];
-            
+
             AddItem(randomItem);
-            
+
             // Remove the item from availableItems if the player has reached the max amount
             int currentCount = CountItem(randomItem);
             if (currentCount >= randomItem.maxAmount)
@@ -41,12 +41,20 @@ public class Inventory : MonoBehaviour
                 availableItems.RemoveAt(randomIndex);
             }
         }
+
+        // 🔄 UPDATE THE UI AFTER ADDING ITEMS
+        InventoryUI ui = FindObjectOfType<InventoryUI>();
+        if (ui != null)
+        {
+            ui.RefreshUI();
+            Debug.Log("🔄 UI updated after adding items for " + gameObject.name);
+        }
     }
 
     public void AddItem(ItemData item)
     {
         items.Add(item);
-        Debug.Log(gameObject.name + " heeft " + item.itemName + " gekregen");
+        Debug.Log(gameObject.name + " received " + item.itemName);
     }
 
     public void RemoveItem(ItemData item)
@@ -54,7 +62,7 @@ public class Inventory : MonoBehaviour
         if (items.Contains(item))
         {
             items.Remove(item);
-            Debug.Log(gameObject.name + " heeft " + item.itemName + " gebruikt");
+            Debug.Log(gameObject.name + " used " + item.itemName);
         }
     }
 

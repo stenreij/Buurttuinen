@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2814edcf85886e144b058ce2a6d4161a, type: 3}
-  m_Name: Pond
+  m_Name: Slide
   m_EditorClassIdentifier: 
-  icon: {fileID: 5817799449637031085, guid: 2d1c4ebb0a4cc08429be7c7dcb9bf1ac, type: 3}
-  itemName: Pond
-  type: 4
-  score: 22
-  water: 10
-  soilHealth: 4
-  biodiversity: 9
-  esthetic: 9
-  color: {r: 0, g: 0.564461, b: 0.8207547, a: 0}
-  maxAmount: 3
+  icon: {fileID: 4857335772653305134, guid: f090e8d8a1ccf0b43a60b14c7ca51bf9, type: 3}
+  itemName: Slide
+  type: 0
+  score: 7
+  water: 0
+  soilHealth: 0
+  biodiversity: 1
+  esthetic: 5
+  color: {r: 1, g: 1, b: 0, a: 0}
+  maxAmount: 2
   prefab: {fileID: 0}

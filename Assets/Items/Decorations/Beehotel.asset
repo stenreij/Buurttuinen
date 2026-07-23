@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2814edcf85886e144b058ce2a6d4161a, type: 3}
-  m_Name: Pond
+  m_Name: Beehotel
   m_EditorClassIdentifier: 
-  icon: {fileID: 5817799449637031085, guid: 2d1c4ebb0a4cc08429be7c7dcb9bf1ac, type: 3}
-  itemName: Pond
-  type: 4
-  score: 22
-  water: 10
-  soilHealth: 4
-  biodiversity: 9
-  esthetic: 9
-  color: {r: 0, g: 0.564461, b: 0.8207547, a: 0}
-  maxAmount: 3
+  icon: {fileID: 5884615555693050259, guid: ce57717460c760042ae46c0daf7ea2ed, type: 3}
+  itemName: Beehotel
+  type: 0
+  score: 18
+  water: 0
+  soilHealth: 2
+  biodiversity: 10
+  esthetic: 7
+  color: {r: 1, g: 1, b: 0, a: 0}
+  maxAmount: 2
   prefab: {fileID: 0}
