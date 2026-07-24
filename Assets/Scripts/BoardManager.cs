@@ -13,20 +13,31 @@ public class BoardManager : MonoBehaviour
     public bool useFixedPositions = false;
     public Vector3[] fixedPositions = new Vector3[4];
 
-    void Start()
-    {
-        CreateBoard();
-    }
-
     public void CreateBoard()
     {
-        for (int i = 0; i < numberOfGardens; i++)
+        Debug.Log($"🏗️ CreateBoard() called! Creating {numberOfGardens} gardens.");
+
+        if (useFixedPositions && fixedPositions.Length >= numberOfGardens)
         {
-            Vector3 position = fixedPositions[i];
-            CreateGarden(position, i + 1);
+            for (int i = 0; i < numberOfGardens; i++)
+            {
+                Vector3 position = fixedPositions[i];
+                CreateGarden(position, i + 1);
+            }
+        }
+        else
+        {
+            float gardenWidth = 7 * 2f;
+            float totalWidth = (numberOfGardens - 1) * (gardenWidth + spacing);
+            float startX = -totalWidth / 2f;
+
+            for (int i = 0; i < numberOfGardens; i++)
+            {
+                Vector3 position = new Vector3(startX + i * (gardenWidth + spacing), 0, 0);
+                CreateGarden(position, i + 1);
+            }
         }
     }
-
 
     void CreateGarden(Vector3 position, int index)
     {
