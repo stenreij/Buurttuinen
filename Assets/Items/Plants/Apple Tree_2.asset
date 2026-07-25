@@ -22,4 +22,4 @@ MonoBehaviour:
   esthetic: 0
   color: {r: 1, g: 0, b: 0, a: 0}
   maxAmount: 3
-  prefab: {fileID: 0}
+  prefab: {fileID: 4727496124920862182, guid: 09ba1c1ebcc1c8b4eaf4d2f1c4740f68, type: 3}

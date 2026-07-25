@@ -8,6 +8,7 @@ public class InventoryUI : MonoBehaviour
     public Inventory playerInventory;
     public GameObject itemButtonPrefab;
     public Transform contentParent;
+    private ItemData selectedItem;
 
     public void RefreshUI()
     {
@@ -166,5 +167,28 @@ public class InventoryUI : MonoBehaviour
     void OnItemClicked(ItemData item)
     {
         Debug.Log($"🖱️ CLICKED ON: {item.itemName}");
+
+        // Find the TurnManager and current player
+        TurnManager turnManager = FindFirstObjectByType<TurnManager>();
+        if (turnManager == null) return;
+
+        Player currentPlayer = turnManager.GetCurrentPlayer();
+        if (currentPlayer == null) return;
+
+        ItemActions actions = currentPlayer.GetComponent<ItemActions>();
+        if (actions == null) return;
+
+        // Select the item using ItemActions
+        actions.SelectItem(item);
+    }
+
+    public ItemData GetSelectedItem()
+    {
+        return selectedItem;
+    }
+
+    public void ClearSelectedItem()
+    {
+        selectedItem = null;
     }
 }

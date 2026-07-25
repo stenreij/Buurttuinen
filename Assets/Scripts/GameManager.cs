@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     public Transform playersParent;
     public ItemDatabase itemDatabase;
 
-    private List<Player> players = new List<Player>();
+    public List<Player> players = new List<Player>();
 
     void Start()
     {
@@ -85,6 +85,15 @@ public class GameManager : MonoBehaviour
         }
 
         Debug.Log("🎮 GAME READY!");
+
+        // 6. Start TurnManager
+        TurnManager turnManager = FindFirstObjectByType<TurnManager>();
+        if (turnManager != null)
+        {
+            turnManager.players = players;
+            turnManager.StartTurn();
+            Debug.Log("🔄 TurnManager started!");
+        }
     }
 
     void CreatePlayers(List<string> playerNames)
