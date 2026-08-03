@@ -29,7 +29,7 @@ public class InventoryUI : MonoBehaviour
         CreateButtons(itemCounts);
     }
 
-    // ✅ VALIDATE REFERENCES
+    // VALIDATE REFERENCES
     bool ValidateReferences()
     {
         if (contentParent == null)
@@ -53,7 +53,7 @@ public class InventoryUI : MonoBehaviour
         return true;
     }
 
-    // ✅ CLEAR OLD BUTTONS
+    // CLEAR OLD BUTTONS
     void ClearOldButtons()
     {
         int childCount = contentParent.childCount;
@@ -63,7 +63,7 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
-    // ✅ CHECK IF INVENTORY HAS ITEMS
+    // CHECK IF INVENTORY HAS ITEMS
     bool HasItems()
     {
         int totalItems = playerInventory.items.Count;
@@ -76,7 +76,7 @@ public class InventoryUI : MonoBehaviour
         return true;
     }
 
-    // ✅ GET ITEM COUNTS
+    // GET ITEM COUNTS
     Dictionary<ItemData, int> GetItemCounts()
     {
         Dictionary<ItemData, int> itemCounts = new Dictionary<ItemData, int>();
@@ -91,7 +91,7 @@ public class InventoryUI : MonoBehaviour
         return itemCounts;
     }
 
-    // ✅ CREATE BUTTONS
+    // CREATE BUTTONS
     void CreateButtons(Dictionary<ItemData, int> itemCounts)
     {
         int buttonIndex = 0;
@@ -110,7 +110,7 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
-    // ✅ SET BUTTON ICON
+    // SET BUTTON ICON
     void SetButtonIcon(GameObject button, ItemData item)
     {
         Image iconImage = button.GetComponent<Image>();
@@ -131,7 +131,7 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
-    // ✅ SET BUTTON COUNT TEXT
+    // SET BUTTON COUNT TEXT
     void SetButtonCountText(GameObject button, int count)
     {
         Text countText = button.GetComponentInChildren<Text>();
@@ -152,7 +152,7 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
-    // ✅ SET BUTTON CLICK EVENT
+    // SET BUTTON CLICK EVENT
     void SetButtonClickEvent(GameObject button, ItemData item)
     {
         Button btn = button.GetComponent<Button>();
@@ -163,7 +163,7 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
-    // ✅ ON ITEM CLICKED
+    // ON ITEM CLICKED
     void OnItemClicked(ItemData item)
     {
         Debug.Log($"🖱️ CLICKED ON: {item.itemName}");

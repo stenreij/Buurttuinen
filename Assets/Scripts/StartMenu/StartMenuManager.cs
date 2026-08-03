@@ -14,7 +14,7 @@ public class StartMenuManager : MonoBehaviour
     public Button plusButton;
 
     private int playerCount = 2;
-    private const int minPlayers = 1;
+    private const int minPlayers = 2;
     private const int maxPlayers = 4;
 
     void Start()
@@ -71,6 +71,7 @@ public class StartMenuManager : MonoBehaviour
                 name = "Speler " + (i + 1);
             }
             playerNames.Add(name);
+            Debug.Log($"📝 Player {i + 1}: {name}");
         }
 
         // Save player names to GameSetup and load the main game scene

@@ -1,3 +1,4 @@
+using System.Collections.Generic; 
 using UnityEngine;
 
 public class BoardManager : MonoBehaviour
@@ -5,6 +6,7 @@ public class BoardManager : MonoBehaviour
     [Header("Garden Settings")]
     public GameObject gardenPrefab;
     public int numberOfGardens = 4;
+    public List<Garden> gardens = new List<Garden>();
 
     [Header("Spacing (automatic)")]
     public float spacing = 2f;
@@ -16,6 +18,8 @@ public class BoardManager : MonoBehaviour
     public void CreateBoard()
     {
         Debug.Log($"🏗️ CreateBoard() called! Creating {numberOfGardens} gardens.");
+
+        gardens.Clear();
 
         if (useFixedPositions && fixedPositions.Length >= numberOfGardens)
         {
@@ -48,6 +52,8 @@ public class BoardManager : MonoBehaviour
         if (gardenScript != null)
         {
             gardenScript.CreateGarden();
+            gardens.Add(gardenScript);
+            Debug.Log($"✅ Garden_{index} created and added to list!");
         }
         else
         {

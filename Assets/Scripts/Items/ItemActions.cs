@@ -15,8 +15,25 @@ public class ItemActions : MonoBehaviour
 
     void Start()
     {
+        // Find TurnManager if not assigned
         if (turnManager == null)
+        {
             turnManager = FindFirstObjectByType<TurnManager>();
+            if (turnManager == null)
+            {
+                Debug.LogWarning("⚠️ TurnManager not found in ItemActions!");
+            }
+        }
+
+        // Find Inventory if not assigned
+        if (playerInventory == null)
+        {
+            playerInventory = GetComponent<Inventory>();
+            if (playerInventory == null)
+            {
+                Debug.LogError($"❌ No Inventory found on {gameObject.name}!");
+            }
+        }
     }
 
     public void GiveRandomItem()
@@ -57,7 +74,7 @@ public class ItemActions : MonoBehaviour
         playerInventory.AddItem(randomItem);
     }
 
-    // ✅ SELECT ITEM
+    // SELECT ITEM
     public void SelectItem(ItemData item)
     {
         selectedItem = item;
@@ -74,41 +91,59 @@ public class ItemActions : MonoBehaviour
         selectedItem = null;
     }
 
-    // ✅ PLACE ITEM
+    // PLACE ITEM
     public void PlaceItem(GardenTile targetTile)
     {
-        // Check if the player has an inventory
+        // 1. Check if playerInventory exists
+        if (playerInventory == null)
+        {
+            Debug.LogError($"❌ PlayerInventory is NULL on {gameObject.name}!");
+            return;
+        }
+
+        // 2. Check if there is a selected item
         if (selectedItem == null)
         {
             Debug.Log("⚠️ No item selected!");
             return;
         }
 
-        // Check if the target tile is already occupied
+        // 3. Check if the tile is occupied
         if (targetTile.occupied)
         {
-            Debug.Log("⚠️ this tile is already occupied!");
+            Debug.Log("⚠️ This tile is already occupied!");
             return;
         }
 
-        // Check if the player has the selected item in their inventory
+        // 4. Check if the player has the item in inventory
         if (!playerInventory.HasItem(selectedItem))
         {
-            Debug.Log($"⚠️ {gameObject.name} has {selectedItem.itemName} not in his inventory!");
+            Debug.Log($"⚠️ {gameObject.name} does not have {selectedItem.itemName} in inventory!");
             return;
         }
 
-        // Check if the player has already placed an item this turn
+        // 5. Find TurnManager if not already set
+        if (turnManager == null)
+        {
+            turnManager = FindFirstObjectByType<TurnManager>();
+            if (turnManager == null)
+            {
+                Debug.LogWarning("⚠️ TurnManager not found!");
+                // Continue anyway, but pass button won't be updated
+            }
+        }
+
+        // 6. Check if the player has already placed an item this turn
         if (turnManager != null && turnManager.hasPlacedItemThisTurn)
         {
             Debug.Log("⚠️ You have already placed an item this turn!");
             return;
         }
 
-        // Remove the item from the player's inventory
+        // 7. Remove item from inventory
         playerInventory.RemoveItem(selectedItem);
 
-        // Make sure the prefab exists before instantiating
+        // 8. Place item on tile
         if (selectedItem.prefab != null)
         {
             GameObject placed = Instantiate(selectedItem.prefab, targetTile.transform.position, Quaternion.identity);
@@ -120,21 +155,23 @@ public class ItemActions : MonoBehaviour
             Debug.LogWarning($"⚠️ No prefab for {selectedItem.itemName}!");
         }
 
-        // Mark the tile as occupied
+        // 9. Mark tile as occupied
         targetTile.occupied = true;
 
-        // Mark that the player has placed an item this turn
+        // 10. Mark that the player has placed an item this turn
         if (turnManager != null)
         {
             turnManager.hasPlacedItemThisTurn = true;
+            turnManager.UpdateActionButtons();
         }
 
+        // 11. Log the placement BEFORE clearing the selection
         Debug.Log($"✅ {selectedItem.itemName} placed on tile!");
 
-        // Reset selected item
+        // 12. Clear selection
         ClearSelectedItem();
 
-        // Update UI
+        // 13. Update UI
         InventoryUI ui = FindFirstObjectByType<InventoryUI>();
         if (ui != null)
         {
@@ -142,5 +179,26 @@ public class ItemActions : MonoBehaviour
         }
     }
 
-    // PASS, TRADE, REMOVE 
+    // PASS TURN
+    public void PassTurn()
+    {
+        TurnManager turnManager = FindFirstObjectByType<TurnManager>();
+        if (turnManager != null)
+        {
+            GiveRandomItem();
+            Debug.Log($"⏭️ {gameObject.name} passed and received a random item!");
+
+            InventoryUI ui = FindFirstObjectByType<InventoryUI>();
+            if (ui != null)
+            {
+                ui.RefreshUI();
+            }
+
+            turnManager.EndTurn();
+        }
+        else
+        {
+            Debug.LogWarning("⚠️ TurnManager not found!");
+        }
+    }
 }

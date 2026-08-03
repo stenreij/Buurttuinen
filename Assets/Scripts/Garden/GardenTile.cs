@@ -11,7 +11,7 @@ public class GardenTile : MonoBehaviour
     {
         Debug.Log($"🖱️ Tile clicked: {gameObject.name} ({xPosition}, {yPosition})");
 
-        // Find the TurnManager in the scene
+        // Find the TurnManager
         TurnManager turnManager = FindFirstObjectByType<TurnManager>();
         if (turnManager == null)
         {
@@ -26,6 +26,21 @@ public class GardenTile : MonoBehaviour
             return;
         }
 
+        // CHECK: Is this tile in the current player's own garden?
+        Garden parentGarden = GetComponentInParent<Garden>();
+        if (parentGarden == null)
+        {
+            Debug.Log("⚠️ Tile has no Garden parent!");
+            return;
+        }
+
+        if (currentPlayer.assignedGarden != parentGarden)
+        {
+            Debug.Log($"⚠️ {currentPlayer.gameObject.name} cannot place in {parentGarden.name}! This is not your garden.");
+            return;
+        }
+
+        // Get the ItemActions from the current player
         ItemActions actions = currentPlayer.GetComponent<ItemActions>();
         if (actions == null)
         {

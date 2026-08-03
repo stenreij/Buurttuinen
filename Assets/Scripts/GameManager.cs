@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        // Try to get player names from GameSetup (StartMenu)
         GameSetup setup = FindObjectOfType<GameSetup>();
         if (setup != null && setup.playerNames.Count > 0)
         {
@@ -19,7 +20,8 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            List<string> defaultNames = new List<string> { "Player_1" };
+            // Fallback: 2 default players (for testing without StartMenu)
+            List<string> defaultNames = new List<string> { "Player 1", "Player 2" };
             StartGame(defaultNames);
         }
     }
@@ -31,15 +33,33 @@ public class GameManager : MonoBehaviour
         // 1. Add players to the game
         CreatePlayers(playerNames);
 
-        // 2. Configure board based on the number of players
+        // 2. CREATE THE BOARD
         BoardManager board = FindObjectOfType<BoardManager>();
         if (board != null)
         {
             board.numberOfGardens = playerNames.Count;
             board.CreateBoard();
+            Debug.Log("✅ Board created!");
+        }
+        else
+        {
+            Debug.LogError("❌ BoardManager not found!");
+            return;
         }
 
-        // 3. Give each player their starting items
+        // 3. Link players to their gardens
+        if (board != null)
+        {
+            for (int i = 0; i < players.Count && i < board.gardens.Count; i++)
+            {
+                Player player = players[i];
+                Garden garden = board.gardens[i];
+                player.assignedGarden = garden;
+                Debug.Log($"🔗 {player.gameObject.name} → {garden.name}");
+            }
+        }
+
+        // 4. Give each player their starting items
         foreach (Player player in players)
         {
             ItemActions actions = player.GetComponent<ItemActions>();
@@ -50,7 +70,6 @@ public class GameManager : MonoBehaviour
                     actions.GiveRandomItem();
                 }
 
-                // Log items
                 Inventory inv = player.GetComponent<Inventory>();
                 if (inv != null && inv.items.Count > 0)
                 {
@@ -69,14 +88,14 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        // 4. Update UI
+        // 5. Update UI
         if (inventoryUI != null && players.Count > 0)
         {
             inventoryUI.playerInventory = players[0].GetComponent<Inventory>();
             inventoryUI.RefreshUI();
         }
 
-        // 5. Set player names in PlayerTagManager
+        // 6. Set player names in PlayerTagManager
         PlayerTagManager tagManager = FindObjectOfType<PlayerTagManager>();
         if (tagManager != null)
         {
@@ -86,7 +105,7 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("🎮 GAME READY!");
 
-        // 6. Start TurnManager
+        // 7. Start TurnManager
         TurnManager turnManager = FindFirstObjectByType<TurnManager>();
         if (turnManager != null)
         {

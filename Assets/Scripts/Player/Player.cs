@@ -5,6 +5,7 @@ public class Player : MonoBehaviour
     public int playerIndex;
     public string playerName;
     public int score;
+    public Garden assignedGarden;
 
     private Inventory inventory;
 
