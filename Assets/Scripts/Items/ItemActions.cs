@@ -50,17 +50,8 @@ public class ItemActions : MonoBehaviour
             return;
         }
 
-        List<ItemData> availableItems = new List<ItemData>(itemDatabase.allItems);
-
-        for (int i = availableItems.Count - 1; i >= 0; i--)
-        {
-            ItemData item = availableItems[i];
-            int count = playerInventory.CountItem(item);
-            if (count >= item.maxAmount)
-            {
-                availableItems.RemoveAt(i);
-            }
-        }
+        // Get available items from the item database
+        List<ItemData> availableItems = itemDatabase.GetAvailableItems();
 
         if (availableItems.Count == 0)
         {
@@ -71,8 +62,33 @@ public class ItemActions : MonoBehaviour
         int randomIndex = Random.Range(0, availableItems.Count);
         ItemData randomItem = availableItems[randomIndex];
 
-        playerInventory.AddItem(randomItem);
+        // Check if the item can be taken from the pool
+        if (itemDatabase.TryTakeItem(randomItem))
+        {
+            playerInventory.AddItem(randomItem);
+            Debug.Log($"✅ {gameObject.name} received {randomItem.itemName} ({itemDatabase.GetRemaining(randomItem)} left)");
+        }
+        else
+        {
+            Debug.LogWarning($"⚠️ Could not take {randomItem.itemName} from pool!");
+        }
     }
+
+    // GET TOTAL ITEM COUNT IN ALL INVENTORIES
+    private int GetTotalItemCount(ItemData item)
+    {
+        int total = 0;
+
+        Inventory[] allInventories = FindObjectsByType<Inventory>(FindObjectsSortMode.None);
+
+        foreach (Inventory inv in allInventories)
+        {
+            total += inv.CountItem(item);
+        }
+
+        return total;
+    }
+
 
     // SELECT ITEM
     public void SelectItem(ItemData item)
