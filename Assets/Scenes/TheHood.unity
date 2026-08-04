@@ -2819,6 +2819,8 @@ MonoBehaviour:
   - {x: 2, y: 2, z: 0}
   - {x: -14, y: -6, z: 0}
   - {x: 2, y: -6, z: 0}
+  minStartItemsPerGarden: 1
+  maxStartItemsPerGarden: 3
 --- !u!1 &1674880404
 GameObject:
   m_ObjectHideFlags: 0

@@ -145,7 +145,6 @@ public class ItemActions : MonoBehaviour
             if (turnManager == null)
             {
                 Debug.LogWarning("⚠️ TurnManager not found!");
-                // Continue anyway, but pass button won't be updated
             }
         }
 
@@ -164,7 +163,23 @@ public class ItemActions : MonoBehaviour
         {
             GameObject placed = Instantiate(selectedItem.prefab, targetTile.transform.position, Quaternion.identity);
             placed.transform.parent = targetTile.transform;
+            placed.transform.localPosition = Vector3.zero;
+
+            // Force the SpriteRenderer to be on top of the ground
+            SpriteRenderer sr = placed.GetComponent<SpriteRenderer>();
+            if (sr != null)
+            {
+                sr.enabled = true;
+                sr.sortingOrder = 10;  // Zorg dat het boven de grond wordt getekend
+                Debug.Log($"🎨 SpriteRenderer enabled for {selectedItem.itemName}");
+            }
+            else
+            {
+                Debug.LogWarning($"⚠️ Geen SpriteRenderer op prefab van {selectedItem.itemName}!");
+            }
+
             targetTile.placedItem = placed;
+            targetTile.placedItemData = selectedItem;
         }
         else
         {
@@ -182,7 +197,7 @@ public class ItemActions : MonoBehaviour
         }
 
         // 11. Log the placement BEFORE clearing the selection
-        Debug.Log($"✅ {selectedItem.itemName} placed on tile!");
+        Debug.Log($"✅ {selectedItem.itemName} placed on tile at {targetTile.transform.position}!");
 
         // 12. Clear selection
         ClearSelectedItem();

@@ -62,6 +62,20 @@ public class StartMenuManager : MonoBehaviour
 
     void OnStartClicked()
     {
+        ItemDatabase oldDB = FindObjectOfType<ItemDatabase>();
+        if (oldDB != null)
+        {
+            Destroy(oldDB.gameObject);
+            Debug.Log("🗑️ Oude ItemDatabase verwijderd!");
+        }
+
+        GameSetup oldSetup = FindObjectOfType<GameSetup>();
+        if (oldSetup != null)
+        {
+            Destroy(oldSetup.gameObject);
+            Debug.Log("🗑️ Oude GameSetup verwijderd!");
+        }
+
         List<string> playerNames = new List<string>();
         for (int i = 0; i < playerCount; i++)
         {
@@ -74,7 +88,6 @@ public class StartMenuManager : MonoBehaviour
             Debug.Log($"📝 Player {i + 1}: {name}");
         }
 
-        // Save player names to GameSetup and load the main game scene
         GameSetup setup = FindObjectOfType<GameSetup>();
         if (setup == null)
         {

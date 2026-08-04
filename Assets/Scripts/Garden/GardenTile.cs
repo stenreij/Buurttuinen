@@ -6,6 +6,7 @@ public class GardenTile : MonoBehaviour
     public int xPosition;
     public int yPosition;
     public GameObject placedItem;
+    public ItemData placedItemData;
 
     private void OnMouseDown()
     {

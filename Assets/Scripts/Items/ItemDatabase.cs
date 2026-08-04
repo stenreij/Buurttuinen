@@ -6,25 +6,69 @@ public class ItemDatabase : MonoBehaviour
     public List<ItemData> allItems;
     private Dictionary<ItemData, int> itemPool;
 
+    void Awake()
+    {
+        ItemDatabase[] databases = FindObjectsByType<ItemDatabase>(FindObjectsSortMode.None);
+        if (databases.Length > 1)
+        {
+            Debug.LogWarning("⚠️ Multiple ItemDatabases found! Destroying this one.");
+            Destroy(gameObject);
+            return;
+        }
+
+        InitializePool();
+        Debug.Log("📦 ItemDatabase Awake() - Pool geïnitialiseerd!");
+    }
+
     void Start()
     {
-        InitializePool();
+        Debug.Log("📦 ItemDatabase Start() - Klaar voor gebruik!");
     }
 
     public void InitializePool()
     {
         itemPool = new Dictionary<ItemData, int>();
+        if (allItems == null || allItems.Count == 0)
+        {
+            Debug.LogWarning("⚠️ Geen items in ItemDatabase!");
+            return;
+        }
+
         foreach (ItemData item in allItems)
         {
-            itemPool[item] = item.maxAmount;
-            Debug.Log($"📦 {item.itemName}: {item.maxAmount} available");
+            if (item != null)
+            {
+                itemPool[item] = item.maxAmount;
+                Debug.Log($"📦 {item.itemName}: {item.maxAmount} available");
+            }
         }
+    }
+
+    public void ResetPool()
+    {
+        InitializePool();
+        Debug.Log("🔄 ItemDatabase pool gereset!");
     }
 
     public bool TryTakeItem(ItemData item)
     {
-        if (!itemPool.ContainsKey(item)) return false;
-        if (itemPool[item] <= 0) return false;
+        if (item == null)
+        {
+            Debug.LogWarning("⚠️ TryTakeItem: item is null!");
+            return false;
+        }
+
+        if (!itemPool.ContainsKey(item))
+        {
+            Debug.LogWarning($"⚠️ Item {item.itemName} niet gevonden in pool!");
+            return false;
+        }
+
+        if (itemPool[item] <= 0)
+        {
+            Debug.Log($"❌ {item.itemName} is niet meer beschikbaar (0 left)");
+            return false;
+        }
 
         itemPool[item]--;
         Debug.Log($"📦 {item.itemName} taken! {itemPool[item]} left");

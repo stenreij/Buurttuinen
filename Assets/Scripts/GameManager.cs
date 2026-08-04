@@ -12,7 +12,18 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        // Try to get player names from GameSetup (StartMenu)
+        itemDatabase = FindFirstObjectByType<ItemDatabase>();
+
+        if (itemDatabase != null)
+        {
+            itemDatabase.ResetPool();
+            Debug.Log("🔄 ItemDatabase pool gereset door GameManager!");
+        }
+        else
+        {
+            Debug.LogError("❌ ItemDatabase niet gevonden!");
+        }
+
         GameSetup setup = FindObjectOfType<GameSetup>();
         if (setup != null && setup.playerNames.Count > 0)
         {
@@ -20,7 +31,6 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            // Fallback: 2 default players (for testing without StartMenu)
             List<string> defaultNames = new List<string> { "Player 1", "Player 2" };
             StartGame(defaultNames);
         }

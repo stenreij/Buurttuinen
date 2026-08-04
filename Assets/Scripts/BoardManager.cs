@@ -1,4 +1,4 @@
-using System.Collections.Generic; 
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BoardManager : MonoBehaviour
@@ -15,18 +15,32 @@ public class BoardManager : MonoBehaviour
     public bool useFixedPositions = false;
     public Vector3[] fixedPositions = new Vector3[4];
 
+    [Header("Start Items")]
+    public int minStartItemsPerGarden = 1;
+    public int maxStartItemsPerGarden = 3;
+
     public void CreateBoard()
     {
+        for (int i = transform.childCount - 1; i >= 0; i--)
+        {
+            Transform child = transform.GetChild(i);
+            if (child.name.StartsWith("Garden_"))
+            {
+                Destroy(child.gameObject);
+            }
+        }
+        gardens.Clear();
+
         Debug.Log($"🏗️ CreateBoard() called! Creating {numberOfGardens} gardens.");
 
-        gardens.Clear();
+        ItemDatabase itemDatabase = FindFirstObjectByType<ItemDatabase>();
 
         if (useFixedPositions && fixedPositions.Length >= numberOfGardens)
         {
             for (int i = 0; i < numberOfGardens; i++)
             {
                 Vector3 position = fixedPositions[i];
-                CreateGarden(position, i + 1);
+                CreateGarden(position, i + 1, itemDatabase);
             }
         }
         else
@@ -38,12 +52,12 @@ public class BoardManager : MonoBehaviour
             for (int i = 0; i < numberOfGardens; i++)
             {
                 Vector3 position = new Vector3(startX + i * (gardenWidth + spacing), 0, 0);
-                CreateGarden(position, i + 1);
+                CreateGarden(position, i + 1, itemDatabase);
             }
         }
     }
 
-    void CreateGarden(Vector3 position, int index)
+    void CreateGarden(Vector3 position, int index, ItemDatabase itemDatabase)
     {
         GameObject garden = Instantiate(gardenPrefab, position, Quaternion.identity, transform);
         garden.name = "Garden_" + index;
@@ -54,10 +68,79 @@ public class BoardManager : MonoBehaviour
             gardenScript.CreateGarden();
             gardens.Add(gardenScript);
             Debug.Log($"✅ Garden_{index} created and added to list!");
+
+            if (itemDatabase != null)
+            {
+                PlaceStartItems(gardenScript, itemDatabase);
+            }
+            else
+            {
+                Debug.LogWarning($"⚠️ No ItemDatabase found, skipping start items for {garden.name}");
+            }
         }
         else
         {
             Debug.LogError($"❌ No Garden script on {garden.name}!");
+        }
+    }
+
+    void PlaceStartItems(Garden garden, ItemDatabase itemDatabase)
+    {
+        if (itemDatabase == null) return;
+
+        int itemCount = Random.Range(minStartItemsPerGarden, maxStartItemsPerGarden + 1);
+        Debug.Log($"🌱 Placing {itemCount} start items in {garden.name}");
+
+        GardenTile[] tiles = garden.GetComponentsInChildren<GardenTile>();
+
+        for (int i = 0; i < itemCount; i++)
+        {
+            List<GardenTile> emptyTiles = new List<GardenTile>();
+            foreach (GardenTile tile in tiles)
+            {
+                if (!tile.occupied)
+                {
+                    emptyTiles.Add(tile);
+                }
+            }
+
+            if (emptyTiles.Count == 0)
+            {
+                Debug.LogWarning($"⚠️ No empty tiles left in {garden.name}");
+                break;
+            }
+
+            int randomTileIndex = Random.Range(0, emptyTiles.Count);
+            GardenTile targetTile = emptyTiles[randomTileIndex];
+
+            List<ItemData> availableItems = itemDatabase.GetAvailableItems();
+            if (availableItems.Count == 0)
+            {
+                Debug.LogWarning("⚠️ No more items available in the pool!");
+                break;
+            }
+
+            int randomItemIndex = Random.Range(0, availableItems.Count);
+            ItemData randomItem = availableItems[randomItemIndex];
+
+            if (itemDatabase.TryTakeItem(randomItem))
+            {
+                if (randomItem.prefab != null)
+                {
+                    GameObject placed = Instantiate(randomItem.prefab, targetTile.transform.position, Quaternion.identity);
+                    placed.transform.parent = targetTile.transform;
+                    targetTile.placedItem = placed;
+                    targetTile.placedItemData = randomItem;
+                }
+
+                targetTile.occupied = true;
+                Debug.Log($"✅ Placed {randomItem.itemName} in {garden.name} on tile {targetTile.name}");
+            }
+            else
+            {
+                Debug.LogWarning($"⚠️ Could not take {randomItem.itemName} from pool!");
+                i--;
+            }
         }
     }
 }
