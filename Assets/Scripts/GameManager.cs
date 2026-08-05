@@ -7,34 +7,37 @@ public class GameManager : MonoBehaviour
     public InventoryUI inventoryUI;
     public Transform playersParent;
     public ItemDatabase itemDatabase;
+    public ScoreManager scoreManager;
 
     public List<Player> players = new List<Player>();
 
-    void Start()
+void Start()
+{
+    itemDatabase = FindFirstObjectByType<ItemDatabase>();
+    if (itemDatabase != null)
     {
-        itemDatabase = FindFirstObjectByType<ItemDatabase>();
-
-        if (itemDatabase != null)
-        {
-            itemDatabase.ResetPool();
-            Debug.Log("🔄 ItemDatabase pool gereset door GameManager!");
-        }
-        else
-        {
-            Debug.LogError("❌ ItemDatabase niet gevonden!");
-        }
-
-        GameSetup setup = FindObjectOfType<GameSetup>();
-        if (setup != null && setup.playerNames.Count > 0)
-        {
-            StartGame(setup.playerNames);
-        }
-        else
-        {
-            List<string> defaultNames = new List<string> { "Player 1", "Player 2" };
-            StartGame(defaultNames);
-        }
+        itemDatabase.ResetPool();
+        Debug.Log("🔄 ItemDatabase pool gereset!");
     }
+
+    ScoreManager scoreManager = FindFirstObjectByType<ScoreManager>();
+    if (scoreManager != null)
+    {
+        scoreManager.ResetScores();
+        Debug.Log("🔄 Scores gereset!");
+    }
+
+    GameSetup setup = FindObjectOfType<GameSetup>();
+    if (setup != null && setup.playerNames.Count > 0)
+    {
+        StartGame(setup.playerNames);
+    }
+    else
+    {
+        List<string> defaultNames = new List<string> { "Player 1", "Player 2" };
+        StartGame(defaultNames);
+    }
+}
 
     void StartGame(List<string> playerNames)
     {

@@ -85,62 +85,71 @@ public class BoardManager : MonoBehaviour
     }
 
     void PlaceStartItems(Garden garden, ItemDatabase itemDatabase)
+{
+    if (itemDatabase == null) return;
+
+    int itemCount = Random.Range(minStartItemsPerGarden, maxStartItemsPerGarden + 1);
+    Debug.Log($"🌱 Placing {itemCount} start items in {garden.name}");
+
+    GardenTile[] tiles = garden.GetComponentsInChildren<GardenTile>();
+
+    for (int i = 0; i < itemCount; i++)
     {
-        if (itemDatabase == null) return;
-
-        int itemCount = Random.Range(minStartItemsPerGarden, maxStartItemsPerGarden + 1);
-        Debug.Log($"🌱 Placing {itemCount} start items in {garden.name}");
-
-        GardenTile[] tiles = garden.GetComponentsInChildren<GardenTile>();
-
-        for (int i = 0; i < itemCount; i++)
+        List<GardenTile> emptyTiles = new List<GardenTile>();
+        foreach (GardenTile tile in tiles)
         {
-            List<GardenTile> emptyTiles = new List<GardenTile>();
-            foreach (GardenTile tile in tiles)
+            if (!tile.occupied)
             {
-                if (!tile.occupied)
-                {
-                    emptyTiles.Add(tile);
-                }
-            }
-
-            if (emptyTiles.Count == 0)
-            {
-                Debug.LogWarning($"⚠️ No empty tiles left in {garden.name}");
-                break;
-            }
-
-            int randomTileIndex = Random.Range(0, emptyTiles.Count);
-            GardenTile targetTile = emptyTiles[randomTileIndex];
-
-            List<ItemData> availableItems = itemDatabase.GetAvailableItems();
-            if (availableItems.Count == 0)
-            {
-                Debug.LogWarning("⚠️ No more items available in the pool!");
-                break;
-            }
-
-            int randomItemIndex = Random.Range(0, availableItems.Count);
-            ItemData randomItem = availableItems[randomItemIndex];
-
-            if (itemDatabase.TryTakeItem(randomItem))
-            {
-                if (randomItem.prefab != null)
-                {
-                    GameObject placed = Instantiate(randomItem.prefab, targetTile.transform.position, Quaternion.identity);
-                    placed.transform.parent = targetTile.transform;
-                    targetTile.placedItem = placed;
-                    targetTile.placedItemData = randomItem;
-                }
-
-                targetTile.occupied = true;
-                Debug.Log($"✅ Placed {randomItem.itemName} in {garden.name} on tile {targetTile.name}");
-            }
-            else
-            {
-                Debug.LogWarning($"⚠️ Could not take {randomItem.itemName} from pool!");
-                i--;
+                emptyTiles.Add(tile);
             }
         }
+
+        if (emptyTiles.Count == 0)
+        {
+            Debug.LogWarning($"⚠️ No empty tiles left in {garden.name}");
+            break;
+        }
+
+        int randomTileIndex = Random.Range(0, emptyTiles.Count);
+        GardenTile targetTile = emptyTiles[randomTileIndex];
+
+        List<ItemData> availableItems = itemDatabase.GetAvailableItems();
+        if (availableItems.Count == 0)
+        {
+            Debug.LogWarning("⚠️ No more items available in the pool!");
+            break;
+        }
+
+        int randomItemIndex = Random.Range(0, availableItems.Count);
+        ItemData randomItem = availableItems[randomItemIndex];
+
+        if (itemDatabase.TryTakeItem(randomItem))
+        {
+            if (randomItem.prefab != null)
+            {
+                GameObject placed = Instantiate(randomItem.prefab, targetTile.transform.position, Quaternion.identity);
+                placed.transform.parent = targetTile.transform;
+                placed.transform.localPosition = Vector3.zero;
+                
+                SpriteRenderer sr = placed.GetComponent<SpriteRenderer>();
+                if (sr != null)
+                {
+                    sr.enabled = true;
+                    sr.sortingOrder = 10;
+                }
+                
+                targetTile.placedItem = placed;
+                targetTile.placedItemData = randomItem;
+            }
+
+            targetTile.occupied = true;
+            Debug.Log($"✅ Placed {randomItem.itemName} in {garden.name} on tile {targetTile.name}");
+        }
+        else
+        {
+            Debug.LogWarning($"⚠️ Could not take {randomItem.itemName} from pool!");
+            i--;
+        }
     }
+}
 }

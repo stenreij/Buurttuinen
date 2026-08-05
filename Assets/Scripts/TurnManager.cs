@@ -8,6 +8,7 @@ public class TurnManager : MonoBehaviour
     [Header("References")]
     public List<Player> players;
     public InventoryUI inventoryUI;
+    public ScoreManager scoreManager;
 
     private int currentPlayerIndex = 0;
     private Player currentPlayer;
@@ -65,6 +66,13 @@ public class TurnManager : MonoBehaviour
         {
             turnText.text = $"Beurt: {currentPlayer.gameObject.name}";
         }
+
+
+        if (scoreManager != null)
+        {
+            scoreManager.UpdateScores();
+        }
+
 
         if (inventoryUI != null)
         {
