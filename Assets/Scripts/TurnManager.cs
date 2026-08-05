@@ -7,17 +7,24 @@ public class TurnManager : MonoBehaviour
 {
     [Header("References")]
     public List<Player> players;
-    public TextMeshProUGUI turnIndicator;
     public InventoryUI inventoryUI;
 
     private int currentPlayerIndex = 0;
     private Player currentPlayer;
+    private Player startingPlayer;
     public bool hasPlacedItemThisTurn = false;
 
     [Header("UI Buttons")]
     public Button passButton;
     public Button tradeButton;
     public Button endTurnButton;
+
+    [Header("UI Text")]
+    public TextMeshProUGUI roundText;
+    public TextMeshProUGUI turnText;
+
+    private int currentRound = 1;
+    public int maxRounds = 10;
 
     public void Initialize(List<Player> playerList)
     {
@@ -27,6 +34,8 @@ public class TurnManager : MonoBehaviour
             Debug.LogError("❌ No players found in TurnManager!");
             return;
         }
+
+        RandomizeStartingPlayer();
         StartTurn();
     }
 
@@ -38,29 +47,33 @@ public class TurnManager : MonoBehaviour
             return;
         }
 
-        // Reset the placed item flag for the new turn
-        hasPlacedItemThisTurn = false;
-
-        currentPlayer = players[currentPlayerIndex];
-
-        // Update turn indicator UI
-        if (turnIndicator != null)
+        if (currentRound > maxRounds)
         {
-            turnIndicator.text = "Turn: " + currentPlayer.gameObject.name;
+            Debug.Log("🏁 Game is already over!");
+            return;
         }
 
-        // Show inventory of the current player
+        hasPlacedItemThisTurn = false;
+        currentPlayer = players[currentPlayerIndex];
+
+        if (roundText != null)
+        {
+            roundText.text = $"Ronde {currentRound} / {maxRounds}";
+        }
+
+        if (turnText != null)
+        {
+            turnText.text = $"Beurt: {currentPlayer.gameObject.name}";
+        }
+
         if (inventoryUI != null)
         {
             inventoryUI.playerInventory = currentPlayer.GetComponent<Inventory>();
             inventoryUI.RefreshUI();
         }
 
-        // Update button states
         UpdateActionButtons();
 
-
-        // Link buttons to methods (remove old listeners first to avoid duplicates)
         if (passButton != null)
         {
             passButton.onClick.RemoveAllListeners();
@@ -80,7 +93,6 @@ public class TurnManager : MonoBehaviour
         Debug.Log($"🎮 {currentPlayer.gameObject.name} is now taking their turn.");
     }
 
-    // UPDATE BUTTON STATES
     public void UpdateActionButtons()
     {
         bool canAct = !hasPlacedItemThisTurn;
@@ -91,14 +103,10 @@ public class TurnManager : MonoBehaviour
         if (tradeButton != null)
             tradeButton.interactable = canAct;
 
-        // End turn button is always active
         if (endTurnButton != null)
             endTurnButton.interactable = true;
-
-        Debug.Log($"🔘 Buttons updated: Pass={canAct}, Trade={canAct}, EndTurn=true");
     }
 
-    // PASS BUTTON
     public void OnPassClicked()
     {
         Debug.Log($"⏭️ {currentPlayer.gameObject.name} clicked PASS");
@@ -115,14 +123,11 @@ public class TurnManager : MonoBehaviour
         }
     }
 
-    // TRADE BUTTON
     public void OnTradeClicked()
     {
         Debug.Log($"🔄 {currentPlayer.gameObject.name} clicked TRADE (not implemented yet)");
-        // Later: open trade UI
     }
 
-    // END TURN BUTTON
     public void OnEndTurnClicked()
     {
         Debug.Log($"⏹️ {currentPlayer.gameObject.name} clicked END TURN");
@@ -131,7 +136,6 @@ public class TurnManager : MonoBehaviour
 
     public void EndTurn()
     {
-        // Reset placed item flag
         hasPlacedItemThisTurn = false;
 
         // Give current player a random item at the end of their turn
@@ -149,7 +153,18 @@ public class TurnManager : MonoBehaviour
             currentPlayerIndex = 0;
         }
 
-        // Update UI
+        if (players[currentPlayerIndex] == startingPlayer)
+        {
+            if (currentRound >= maxRounds)
+            {
+                Debug.Log($"🏁 GAME HAS ENDED!");
+                return;
+            }
+
+            currentRound++;
+            Debug.Log($"🔄 New round: {currentRound}/{maxRounds}");
+        }
+
         if (inventoryUI != null)
         {
             inventoryUI.RefreshUI();
@@ -157,7 +172,6 @@ public class TurnManager : MonoBehaviour
 
         StartTurn();
     }
-
 
     public Player GetCurrentPlayer()
     {
@@ -168,5 +182,22 @@ public class TurnManager : MonoBehaviour
     {
         hasPlacedItemThisTurn = false;
         UpdateActionButtons();
+    }
+
+    public void SetMaxRounds(int rounds)
+    {
+        maxRounds = rounds;
+        Debug.Log($"📋 Max rounds set on: {maxRounds}");
+    }
+
+    private void RandomizeStartingPlayer()
+    {
+        if (players.Count == 0) return;
+
+        int randomStartIndex = Random.Range(0, players.Count);
+        currentPlayerIndex = randomStartIndex;
+        startingPlayer = players[randomStartIndex];
+
+        Debug.Log($"🎲 {startingPlayer.gameObject.name} starts the game!");
     }
 }

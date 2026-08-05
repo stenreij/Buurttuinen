@@ -119,8 +119,7 @@ public class GameManager : MonoBehaviour
         TurnManager turnManager = FindFirstObjectByType<TurnManager>();
         if (turnManager != null)
         {
-            turnManager.players = players;
-            turnManager.StartTurn();
+            turnManager.Initialize(players);
             Debug.Log("🔄 TurnManager started!");
         }
     }
