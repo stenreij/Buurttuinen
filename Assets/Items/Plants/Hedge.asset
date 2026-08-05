@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2814edcf85886e144b058ce2a6d4161a, type: 3}
+  m_Name: Hedge
+  m_EditorClassIdentifier: 
+  icon: {fileID: 2701908015940247595, guid: f6dabae4f39226b4f9b97a154163126e, type: 3}
+  itemName: Hedge
+  type: 0
+  score: 12
+  water: 7
+  soilHealth: 4
+  biodiversity: 6
+  esthetic: 6
+  color: {r: 0.27858543, g: 1, b: 0, a: 0}
+  maxAmount: 3
+  prefab: {fileID: 2812352178998991563, guid: e19e5fd6b486fce4e8f466d5deadb17d, type: 3}
