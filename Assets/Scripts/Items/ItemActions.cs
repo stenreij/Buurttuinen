@@ -66,7 +66,7 @@ public class ItemActions : MonoBehaviour
         if (itemDatabase.TryTakeItem(randomItem))
         {
             playerInventory.AddItem(randomItem);
-            Debug.Log($"✅ {gameObject.name} received {randomItem.itemName} ({itemDatabase.GetRemaining(randomItem)} left)");
+            //Debug.Log($"✅ {gameObject.name} received {randomItem.itemName} ({itemDatabase.GetRemaining(randomItem)} left)");
         }
         else
         {
@@ -170,8 +170,8 @@ public class ItemActions : MonoBehaviour
             if (sr != null)
             {
                 sr.enabled = true;
-                sr.sortingOrder = 10;  // Zorg dat het boven de grond wordt getekend
-                Debug.Log($"🎨 SpriteRenderer enabled for {selectedItem.itemName}");
+                sr.sortingOrder = 10;
+                //Debug.Log($"🎨 SpriteRenderer enabled for {selectedItem.itemName}");
             }
             else
             {

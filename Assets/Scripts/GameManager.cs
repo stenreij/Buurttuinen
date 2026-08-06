@@ -11,33 +11,33 @@ public class GameManager : MonoBehaviour
 
     public List<Player> players = new List<Player>();
 
-void Start()
-{
-    itemDatabase = FindFirstObjectByType<ItemDatabase>();
-    if (itemDatabase != null)
+    void Start()
     {
-        itemDatabase.ResetPool();
-        Debug.Log("🔄 ItemDatabase pool gereset!");
-    }
+        itemDatabase = FindFirstObjectByType<ItemDatabase>();
+        if (itemDatabase != null)
+        {
+            itemDatabase.ResetPool();
+            Debug.Log("🔄 ItemDatabase pool gereset!");
+        }
 
-    ScoreManager scoreManager = FindFirstObjectByType<ScoreManager>();
-    if (scoreManager != null)
-    {
-        scoreManager.ResetScores();
-        Debug.Log("🔄 Scores gereset!");
-    }
+        ScoreManager scoreManager = FindFirstObjectByType<ScoreManager>();
+        if (scoreManager != null)
+        {
+            scoreManager.ResetScores();
+            Debug.Log("🔄 Scores gereset!");
+        }
 
-    GameSetup setup = FindObjectOfType<GameSetup>();
-    if (setup != null && setup.playerNames.Count > 0)
-    {
-        StartGame(setup.playerNames);
+        GameSetup setup = FindFirstObjectByType<GameSetup>();
+        if (setup != null && setup.playerNames.Count > 0)
+        {
+            StartGame(setup.playerNames);
+        }
+        else
+        {
+            List<string> defaultNames = new List<string> { "Player 1", "Player 2" };
+            StartGame(defaultNames);
+        }
     }
-    else
-    {
-        List<string> defaultNames = new List<string> { "Player 1", "Player 2" };
-        StartGame(defaultNames);
-    }
-}
 
     void StartGame(List<string> playerNames)
     {
@@ -47,7 +47,7 @@ void Start()
         CreatePlayers(playerNames);
 
         // 2. CREATE THE BOARD
-        BoardManager board = FindObjectOfType<BoardManager>();
+        BoardManager board = FindFirstObjectByType<BoardManager>();
         if (board != null)
         {
             board.numberOfGardens = playerNames.Count;
@@ -68,7 +68,7 @@ void Start()
                 Player player = players[i];
                 Garden garden = board.gardens[i];
                 player.assignedGarden = garden;
-                Debug.Log($"🔗 {player.gameObject.name} → {garden.name}");
+                //Debug.Log($"🔗 {player.gameObject.name} → {garden.name}");
             }
         }
 
@@ -109,11 +109,11 @@ void Start()
         }
 
         // 6. Set player names in PlayerTagManager
-        PlayerTagManager tagManager = FindObjectOfType<PlayerTagManager>();
+        PlayerTagManager tagManager = FindFirstObjectByType<PlayerTagManager>();
         if (tagManager != null)
         {
             tagManager.SetPlayerTags(playerNames);
-            Debug.Log("🏷️ Playertags added!");
+            //Debug.Log("🏷️ Playertags added!");
         }
 
         Debug.Log("🎮 GAME READY!");
@@ -123,7 +123,7 @@ void Start()
         if (turnManager != null)
         {
             turnManager.Initialize(players);
-            Debug.Log("🔄 TurnManager started!");
+            //Debug.Log("🔄 TurnManager started!");
         }
     }
 

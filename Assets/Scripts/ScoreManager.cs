@@ -52,7 +52,6 @@ public class ScoreManager : MonoBehaviour
         if (currentPlayer == null) return;
 
         int playerScore = CalculatePlayerScore(currentPlayer);
-
         currentPlayer.score = playerScore;
 
         if (playerScoreText != null)
@@ -73,46 +72,23 @@ public class ScoreManager : MonoBehaviour
     }
 
     public int CalculatePlayerScore(Player player)
-{
-    int total = 0;
-
-    if (player == null || player.assignedGarden == null)
     {
-        Debug.Log($"⚠️ {player?.gameObject.name} heeft geen tuin!");
-        return 0;
-    }
+        int total = 0;
 
-    GardenTile[] tiles = player.assignedGarden.GetComponentsInChildren<GardenTile>();
-    
-    Debug.Log($"🔍 ===== SCORE BEREKENING VOOR {player.gameObject.name} =====");
-    Debug.Log($"🔍 Aantal tiles in tuin: {tiles.Length}");
+        if (player == null || player.assignedGarden == null) return 0;
 
-    int occupiedCount = 0;
-    int itemCount = 0;
+        GardenTile[] tiles = player.assignedGarden.GetComponentsInChildren<GardenTile>();
 
-    foreach (GardenTile tile in tiles)
-    {
-        if (tile.occupied)
+        foreach (GardenTile tile in tiles)
         {
-            occupiedCount++;
-            if (tile.placedItemData != null)
+            if (tile.occupied && tile.placedItemData != null)
             {
                 total += tile.placedItemData.score;
-                itemCount++;
-                Debug.Log($"   ✅ {tile.placedItemData.itemName} (+{tile.placedItemData.score}) op {tile.name}");
-            }
-            else
-            {
-                Debug.LogWarning($"   ⚠️ Tile {tile.name} is occupied maar placedItemData is NULL!");
             }
         }
-    }
 
-    Debug.Log($"📊 {player.gameObject.name}: {occupiedCount} bezette tiles, {itemCount} items, totaal {total} punten");
-    Debug.Log($"🔍 ===== EINDE SCORE BEREKENING =====");
-    
-    return total;
-}
+        return total;
+    }
 
     public int CalculateTotalScore()
     {
@@ -122,5 +98,42 @@ public class ScoreManager : MonoBehaviour
             total += CalculatePlayerScore(player);
         }
         return total;
+    }
+
+    public void SaveFinalScores()
+    {
+        GameSetup setup = FindFirstObjectByType<GameSetup>();
+        if (setup == null)
+        {
+            GameObject setupGO = new GameObject("GameSetup");
+            setup = setupGO.AddComponent<GameSetup>();
+            DontDestroyOnLoad(setupGO);
+        }
+
+        setup.finalScores.Clear();
+
+        if (turnManager == null)
+        {
+            turnManager = FindFirstObjectByType<TurnManager>();
+        }
+
+        if (turnManager == null || turnManager.players == null)
+        {
+            Debug.LogWarning("⚠️ No players found to save scores for!");
+            return;
+        }
+
+        int totalScore = CalculateTotalScore();
+
+        foreach (Player player in turnManager.players)
+        {
+            int score = CalculatePlayerScore(player);
+            setup.finalScores[player.gameObject.name] = score;
+            //Debug.Log($"📊 {player.gameObject.name}: {score} points saved!");
+        }
+
+        setup.totalScore = totalScore;
+        //Debug.Log($"📊 Total neighborhood score: {totalScore} points saved!");
+
     }
 }

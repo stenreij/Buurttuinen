@@ -62,14 +62,14 @@ public class StartMenuManager : MonoBehaviour
 
     void OnStartClicked()
     {
-        ItemDatabase oldDB = FindObjectOfType<ItemDatabase>();
+        ItemDatabase oldDB = FindFirstObjectByType<ItemDatabase>();
         if (oldDB != null)
         {
             Destroy(oldDB.gameObject);
             Debug.Log("🗑️ Oude ItemDatabase verwijderd!");
         }
 
-        GameSetup oldSetup = FindObjectOfType<GameSetup>();
+        GameSetup oldSetup = FindFirstObjectByType<GameSetup>();
         if (oldSetup != null)
         {
             Destroy(oldSetup.gameObject);
@@ -85,10 +85,11 @@ public class StartMenuManager : MonoBehaviour
                 name = "Speler " + (i + 1);
             }
             playerNames.Add(name);
-            Debug.Log($"📝 Player {i + 1}: {name}");
+            //Debug.Log($"📝 Player {i + 1}: {name}");
         }
+        Debug.Log($"📝 Player names: {string.Join(", ", playerNames)}");
 
-        GameSetup setup = FindObjectOfType<GameSetup>();
+        GameSetup setup = FindFirstObjectByType<GameSetup>();
         if (setup == null)
         {
             GameObject setupGO = new GameObject("GameSetup");

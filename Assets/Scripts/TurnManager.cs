@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using TMPro;
+using UnityEngine.SceneManagement; 
 
 public class TurnManager : MonoBehaviour
 {
@@ -146,7 +147,6 @@ public class TurnManager : MonoBehaviour
     {
         hasPlacedItemThisTurn = false;
 
-        // Give current player a random item at the end of their turn
         ItemActions actions = currentPlayer.GetComponent<ItemActions>();
         if (actions != null)
         {
@@ -154,7 +154,6 @@ public class TurnManager : MonoBehaviour
             Debug.Log($"🎁 {currentPlayer.gameObject.name} received a random item at end of turn!");
         }
 
-        // Move to next player
         currentPlayerIndex++;
         if (currentPlayerIndex >= players.Count)
         {
@@ -165,7 +164,16 @@ public class TurnManager : MonoBehaviour
         {
             if (currentRound >= maxRounds)
             {
-                Debug.Log($"🏁 GAME HAS ENDED!");
+                Debug.Log($"🏁 GAME HAS ENDED! Ronde {currentRound} is voltooid!");
+
+                ScoreManager scoreManager = FindFirstObjectByType<ScoreManager>();
+                if (scoreManager != null)
+                {
+                    scoreManager.SaveFinalScores();
+                    //Debug.Log("📊 Scores opgeslagen!");
+                }
+
+                SceneManager.LoadScene("EndScene");
                 return;
             }
 

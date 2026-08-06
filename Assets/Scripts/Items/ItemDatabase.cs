@@ -17,12 +17,15 @@ public class ItemDatabase : MonoBehaviour
         }
 
         InitializePool();
-        Debug.Log("📦 ItemDatabase Awake() - Pool geïnitialiseerd!");
     }
 
     void Start()
     {
-        Debug.Log("📦 ItemDatabase Start() - Klaar voor gebruik!");
+        if (itemPool == null || itemPool.Count == 0)
+        {
+            Debug.LogWarning("⚠️ ItemDatabase pool is empty! Initializing pool.");
+            InitializePool();
+        }
     }
 
     public void InitializePool()
@@ -39,7 +42,6 @@ public class ItemDatabase : MonoBehaviour
             if (item != null)
             {
                 itemPool[item] = item.maxAmount;
-                Debug.Log($"📦 {item.itemName}: {item.maxAmount} available");
             }
         }
     }
@@ -66,12 +68,10 @@ public class ItemDatabase : MonoBehaviour
 
         if (itemPool[item] <= 0)
         {
-            Debug.Log($"❌ {item.itemName} is niet meer beschikbaar (0 left)");
             return false;
         }
 
         itemPool[item]--;
-        Debug.Log($"📦 {item.itemName} taken! {itemPool[item]} left");
         return true;
     }
 

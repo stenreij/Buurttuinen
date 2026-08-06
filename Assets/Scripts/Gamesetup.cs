@@ -4,10 +4,12 @@ using System.Collections.Generic;
 public class GameSetup : MonoBehaviour
 {
     public List<string> playerNames = new List<string>();
+    public Dictionary<string, int> finalScores = new Dictionary<string, int>();
+    public int totalScore = 0;
 
     void Awake()
     {
-        if (FindObjectsOfType<GameSetup>().Length > 1)
+        if (FindObjectsByType<GameSetup>(FindObjectsSortMode.None).Length > 1)
         {
             Destroy(gameObject);
         }
