@@ -15,7 +15,6 @@ public class ItemActions : MonoBehaviour
 
     void Start()
     {
-        // Find TurnManager if not assigned
         if (turnManager == null)
         {
             turnManager = FindFirstObjectByType<TurnManager>();
@@ -25,7 +24,6 @@ public class ItemActions : MonoBehaviour
             }
         }
 
-        // Find Inventory if not assigned
         if (playerInventory == null)
         {
             playerInventory = GetComponent<Inventory>();
@@ -50,7 +48,6 @@ public class ItemActions : MonoBehaviour
             return;
         }
 
-        // Get available items from the item database
         List<ItemData> availableItems = itemDatabase.GetAvailableItems();
 
         if (availableItems.Count == 0)
@@ -62,11 +59,9 @@ public class ItemActions : MonoBehaviour
         int randomIndex = Random.Range(0, availableItems.Count);
         ItemData randomItem = availableItems[randomIndex];
 
-        // Check if the item can be taken from the pool
         if (itemDatabase.TryTakeItem(randomItem))
         {
             playerInventory.AddItem(randomItem);
-            //Debug.Log($"✅ {gameObject.name} received {randomItem.itemName} ({itemDatabase.GetRemaining(randomItem)} left)");
         }
         else
         {
@@ -74,23 +69,17 @@ public class ItemActions : MonoBehaviour
         }
     }
 
-    // GET TOTAL ITEM COUNT IN ALL INVENTORIES
     private int GetTotalItemCount(ItemData item)
     {
         int total = 0;
-
         Inventory[] allInventories = FindObjectsByType<Inventory>(FindObjectsSortMode.None);
-
         foreach (Inventory inv in allInventories)
         {
             total += inv.CountItem(item);
         }
-
         return total;
     }
 
-
-    // SELECT ITEM
     public void SelectItem(ItemData item)
     {
         selectedItem = item;
@@ -107,71 +96,56 @@ public class ItemActions : MonoBehaviour
         selectedItem = null;
     }
 
-    // PLACE ITEM
     public void PlaceItem(GardenTile targetTile)
     {
-        // 1. Check if playerInventory exists
         if (playerInventory == null)
         {
             Debug.LogError($"❌ PlayerInventory is NULL on {gameObject.name}!");
             return;
         }
 
-        // 2. Check if there is a selected item
         if (selectedItem == null)
         {
             Debug.Log("⚠️ No item selected!");
             return;
         }
 
-        // 3. Check if the tile is occupied
         if (targetTile.occupied)
         {
             Debug.Log("⚠️ This tile is already occupied!");
             return;
         }
 
-        // 4. Check if the player has the item in inventory
         if (!playerInventory.HasItem(selectedItem))
         {
             Debug.Log($"⚠️ {gameObject.name} does not have {selectedItem.itemName} in inventory!");
             return;
         }
 
-        // 5. Find TurnManager if not already set
         if (turnManager == null)
         {
             turnManager = FindFirstObjectByType<TurnManager>();
-            if (turnManager == null)
-            {
-                Debug.LogWarning("⚠️ TurnManager not found!");
-            }
         }
 
-        // 6. Check if the player has already placed an item this turn
         if (turnManager != null && turnManager.hasPlacedItemThisTurn)
         {
-            Debug.Log("⚠️ You have already placed an item this turn!");
+            Debug.Log("⚠️ You have already performed an action this turn! (placed or removed an item)");
             return;
         }
 
-        // 7. Remove item from inventory
         playerInventory.RemoveItem(selectedItem);
 
-        // 8. Place item on tile
         if (selectedItem.prefab != null)
         {
             GameObject placed = Instantiate(selectedItem.prefab, targetTile.transform.position, Quaternion.identity);
             placed.transform.parent = targetTile.transform;
             placed.transform.localPosition = Vector3.zero;
 
-            // Force the SpriteRenderer to be on top of the ground
             SpriteRenderer sr = placed.GetComponent<SpriteRenderer>();
             if (sr != null)
             {
                 sr.enabled = true;
                 sr.sortingOrder = 10;
-                //Debug.Log($"🎨 SpriteRenderer enabled for {selectedItem.itemName}");
             }
             else
             {
@@ -186,23 +160,17 @@ public class ItemActions : MonoBehaviour
             Debug.LogWarning($"⚠️ No prefab for {selectedItem.itemName}!");
         }
 
-        // 9. Mark tile as occupied
         targetTile.occupied = true;
 
-        // 10. Mark that the player has placed an item this turn
         if (turnManager != null)
         {
             turnManager.hasPlacedItemThisTurn = true;
             turnManager.UpdateActionButtons();
         }
 
-        // 11. Log the placement BEFORE clearing the selection
-        Debug.Log($"✅ {selectedItem.itemName} placed on tile at {targetTile.transform.position}!");
-
-        // 12. Clear selection
+        Debug.Log($"✅ {selectedItem.itemName} placed on tile!");
         ClearSelectedItem();
 
-        // 13. Update UI
         InventoryUI ui = FindFirstObjectByType<InventoryUI>();
         if (ui != null)
         {
@@ -210,7 +178,59 @@ public class ItemActions : MonoBehaviour
         }
     }
 
-    // PASS TURN
+    public void RemoveItem(GardenTile targetTile)
+    {
+        if (playerInventory == null)
+        {
+            Debug.LogError($"❌ PlayerInventory is NULL on {gameObject.name}!");
+            return;
+        }
+
+        if (selectedItem == null)
+        {
+            Debug.Log("⚠️ No item selected to remove!");
+            return;
+        }
+
+        if (selectedItem.type != ItemType.Sabotage)
+        {
+            Debug.Log("⚠️ This is not a removal item!");
+            return;
+        }
+
+        if (!targetTile.occupied || targetTile.placedItemData == null)
+        {
+            Debug.Log("⚠️ There is nothing to be removed on this tile!");
+            return;
+        }
+
+        if (targetTile.placedItem != null)
+        {
+            Destroy(targetTile.placedItem);
+        }
+
+        targetTile.occupied = false;
+        targetTile.placedItem = null;
+        targetTile.placedItemData = null;
+
+        playerInventory.RemoveItem(selectedItem);
+        ClearSelectedItem();
+
+        if (turnManager != null)
+        {
+            turnManager.hasPlacedItemThisTurn = true;
+            turnManager.UpdateActionButtons();
+        }
+
+        InventoryUI ui = FindFirstObjectByType<InventoryUI>();
+        if (ui != null)
+        {
+            ui.RefreshUI();
+        }
+
+        Debug.Log($"✅ {gameObject.name} removed an item from the garden!");
+    }
+
     public void PassTurn()
     {
         TurnManager turnManager = FindFirstObjectByType<TurnManager>();
