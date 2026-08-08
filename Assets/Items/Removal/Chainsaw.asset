@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2814edcf85886e144b058ce2a6d4161a, type: 3}
-  m_Name: Saw
+  m_Name: Chainsaw
   m_EditorClassIdentifier: 
-  icon: {fileID: 2420867765292838666, guid: 685d95f75c2ded94ea2c6023fe29a534, type: 3}
-  itemName: Saw
+  icon: {fileID: 2513086883955787816, guid: f849bdc0ae5d51e44accd0e368c7a898, type: 3}
+  itemName: Chainsaw
   type: 8
   score: 0
   water: 0
