@@ -3,6 +3,7 @@ using UnityEngine;
 public class GardenTile : MonoBehaviour
 {
     public bool occupied = false;
+    public bool protected = false;
     public int xPosition;
     public int yPosition;
     public GameObject placedItem;
