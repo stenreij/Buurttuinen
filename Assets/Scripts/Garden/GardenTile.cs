@@ -3,7 +3,7 @@ using UnityEngine;
 public class GardenTile : MonoBehaviour
 {
     public bool occupied = false;
-    public bool protected = false;
+    public bool isProtected = false;
     public int xPosition;
     public int yPosition;
     public GameObject placedItem;
@@ -41,10 +41,23 @@ public class GardenTile : MonoBehaviour
             return;
         }
 
+        PowerUpActions powerActions = currentPlayer.GetComponent<PowerUpActions>();
+        if (powerActions != null && powerActions.IsWaitingForTile())
+        {
+            powerActions.ExecutePendingPowerUp(this);
+            return;
+        }
+
         ItemData selectedItem = actions.GetSelectedItem();
         if (selectedItem != null && selectedItem.type == ItemType.Sabotage)
         {
             actions.RemoveItem(this);
+            return;
+        }
+
+        if (selectedItem != null && selectedItem.type == ItemType.PowerUp)
+        {
+            actions.PlaceItem(this);
             return;
         }
 

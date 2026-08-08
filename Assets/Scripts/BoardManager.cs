@@ -89,7 +89,6 @@ public class BoardManager : MonoBehaviour
         if (itemDatabase == null) return;
 
         int itemCount = Random.Range(minStartItemsPerGarden, maxStartItemsPerGarden + 1);
-        //Debug.Log($"🌱 Placing {itemCount} start items in {garden.name}");
 
         GardenTile[] tiles = garden.GetComponentsInChildren<GardenTile>();
 
@@ -113,10 +112,18 @@ public class BoardManager : MonoBehaviour
             int randomTileIndex = Random.Range(0, emptyTiles.Count);
             GardenTile targetTile = emptyTiles[randomTileIndex];
 
-            List<ItemData> availableItems = itemDatabase.GetAvailableItems();
+            List<ItemData> availableItems = new List<ItemData>();
+            foreach (ItemData item in itemDatabase.GetAvailableItems())
+            {
+                if (item.type != ItemType.Sabotage && item.type != ItemType.PowerUp)
+                {
+                    availableItems.Add(item);
+                }
+            }
+
             if (availableItems.Count == 0)
             {
-                Debug.LogWarning("⚠️ No more items available in the pool!");
+                Debug.LogWarning("⚠️ No more normal items available in the pool!");
                 break;
             }
 
@@ -143,7 +150,6 @@ public class BoardManager : MonoBehaviour
                 }
 
                 targetTile.occupied = true;
-                //Debug.Log($"✅ Placed {randomItem.itemName} in {garden.name} on tile {targetTile.name}");
             }
             else
             {

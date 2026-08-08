@@ -17,6 +17,19 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
+    public static void RefreshScores()
+    {
+        ScoreManager instance = FindFirstObjectByType<ScoreManager>();
+        if (instance != null)
+        {
+            instance.UpdateScores();
+        }
+        else
+        {
+            Debug.LogWarning("⚠️ ScoreManager niet gevonden!");
+        }
+    }
+
     public void ResetScores()
     {
         if (playerScoreText != null)
@@ -59,11 +72,7 @@ public class ScoreManager : MonoBehaviour
             playerScoreText.text = $"Score: {playerScore}";
         }
 
-        int totalScore = 0;
-        foreach (Player player in turnManager.players)
-        {
-            totalScore += CalculatePlayerScore(player);
-        }
+        int totalScore = CalculateTotalScore();
 
         if (neighborhoodScoreText != null)
         {
@@ -83,7 +92,7 @@ public class ScoreManager : MonoBehaviour
         {
             if (tile.occupied && tile.placedItemData != null)
             {
-                total += tile.placedItemData.score;
+                total += tile.placedItemData.score + player.soilBoost;
             }
         }
 
@@ -129,11 +138,8 @@ public class ScoreManager : MonoBehaviour
         {
             int score = CalculatePlayerScore(player);
             setup.finalScores[player.gameObject.name] = score;
-            //Debug.Log($"📊 {player.gameObject.name}: {score} points saved!");
         }
 
         setup.totalScore = totalScore;
-        //Debug.Log($"📊 Total neighborhood score: {totalScore} points saved!");
-
     }
 }

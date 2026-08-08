@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
     public Garden assignedGarden;
 
     private Inventory inventory;
+    public int soilBoost;
 
     void Start()
     {

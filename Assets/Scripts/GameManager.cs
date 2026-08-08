@@ -138,6 +138,8 @@ public class GameManager : MonoBehaviour
             players.Clear();
         }
 
+        TurnManager turnManager = FindFirstObjectByType<TurnManager>();
+
         for (int i = 0; i < playerNames.Count; i++)
         {
             GameObject playerGO = new GameObject(playerNames[i]);
@@ -150,9 +152,15 @@ public class GameManager : MonoBehaviour
             Inventory inv = playerGO.AddComponent<Inventory>();
             ItemActions actions = playerGO.AddComponent<ItemActions>();
 
+            PowerUpActions powerActions = playerGO.AddComponent<PowerUpActions>();
+
             actions.playerInventory = inv;
             actions.itemDatabase = itemDatabase;
             actions.startItemCount = 4;
+
+            powerActions.playerInventory = inv;
+            powerActions.itemDatabase = itemDatabase;
+            powerActions.turnManager = turnManager;
 
             players.Add(player);
         }

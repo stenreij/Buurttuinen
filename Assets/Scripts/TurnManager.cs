@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using TMPro;
-using UnityEngine.SceneManagement; 
+using UnityEngine.SceneManagement;
 
 public class TurnManager : MonoBehaviour
 {
@@ -15,11 +15,13 @@ public class TurnManager : MonoBehaviour
     private Player currentPlayer;
     private Player startingPlayer;
     public bool hasPlacedItemThisTurn = false;
+    public bool hasUsedExtraAction = false;
 
     [Header("UI Buttons")]
     public Button passButton;
     public Button tradeButton;
     public Button endTurnButton;
+    public Button powerUpButton;
 
     [Header("UI Text")]
     public TextMeshProUGUI roundText;
@@ -81,7 +83,14 @@ public class TurnManager : MonoBehaviour
             inventoryUI.RefreshUI();
         }
 
+
         UpdateActionButtons();
+
+        if (powerUpButton != null)
+        {
+            powerUpButton.onClick.RemoveAllListeners();
+            powerUpButton.onClick.AddListener(OnPowerUpClicked);
+        }
 
         if (passButton != null)
         {
@@ -114,6 +123,41 @@ public class TurnManager : MonoBehaviour
 
         if (endTurnButton != null)
             endTurnButton.interactable = true;
+
+        if (powerUpButton != null)
+        {
+            Player currentPlayer = GetCurrentPlayer();
+            if (currentPlayer != null)
+            {
+                PowerUpActions powerActions = currentPlayer.GetComponent<PowerUpActions>();
+                if (powerActions != null)
+                {
+                    powerUpButton.interactable = powerActions.GetSelectedPowerUp() != null && canAct;
+                }
+                else
+                {
+                    powerUpButton.interactable = false;
+                }
+            }
+            else
+            {
+                powerUpButton.interactable = false;
+            }
+        }
+    }
+
+    public void OnPowerUpClicked()
+    {
+        Debug.Log($"⚡ {currentPlayer.gameObject.name} clicked POWER UP!");
+
+        PowerUpActions powerActions = currentPlayer.GetComponent<PowerUpActions>();
+        if (powerActions == null)
+        {
+            Debug.Log("⚠️ Geen PowerUpActions gevonden!");
+            return;
+        }
+
+        powerActions.ExecuteSelectedPowerUp();
     }
 
     public void OnPassClicked()

@@ -167,18 +167,56 @@ public class InventoryUI : MonoBehaviour
     void OnItemClicked(ItemData item)
     {
         Debug.Log($"🖱️ CLICKED ON: {item.itemName}");
+        Debug.Log($"🔍 item.type = {item.type}");
 
-        // Find the TurnManager and current player
         TurnManager turnManager = FindFirstObjectByType<TurnManager>();
-        if (turnManager == null) return;
+        if (turnManager == null)
+        {
+            Debug.Log("⚠️ TurnManager not found!");
+            return;
+        }
+
+        if (turnManager.hasPlacedItemThisTurn)
+        {
+            Debug.Log("⚠️ Je hebt deze beurt al een actie gedaan! Je kunt geen items meer selecteren.");
+            return;
+        }
 
         Player currentPlayer = turnManager.GetCurrentPlayer();
-        if (currentPlayer == null) return;
+        if (currentPlayer == null)
+        {
+            Debug.Log("⚠️ No current player!");
+            return;
+        }
 
+        if (item.type == ItemType.PowerUp)
+        {
+            Debug.Log($"🔍 PowerUp detected! Looking for PowerUpActions...");
+
+            PowerUpActions powerActions = currentPlayer.GetComponent<PowerUpActions>();
+            if (powerActions != null)
+            {
+                Debug.Log($"✅ PowerUpActions found!");
+                powerActions.SelectPowerUp(item);
+                Debug.Log($"⚡ Power-up geselecteerd: {item.itemName}");
+
+                turnManager.UpdateActionButtons();
+            }
+            else
+            {
+                Debug.Log($"❌ PowerUpActions NOT found on {currentPlayer.gameObject.name}!");
+            }
+            return;
+        }
+
+        Debug.Log($"🔍 Normaal item detected, using ItemActions");
         ItemActions actions = currentPlayer.GetComponent<ItemActions>();
-        if (actions == null) return;
+        if (actions == null)
+        {
+            Debug.Log("⚠️ No ItemActions found!");
+            return;
+        }
 
-        // Select the item using ItemActions
         actions.SelectItem(item);
     }
 

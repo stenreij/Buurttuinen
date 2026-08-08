@@ -129,7 +129,7 @@ public class ItemActions : MonoBehaviour
 
         if (turnManager != null && turnManager.hasPlacedItemThisTurn)
         {
-            Debug.Log("⚠️ You have already performed an action this turn! (placed or removed an item)");
+            Debug.Log("⚠️ You have already performed an action this turn!");
             return;
         }
 
@@ -170,6 +170,67 @@ public class ItemActions : MonoBehaviour
 
         Debug.Log($"✅ {selectedItem.itemName} placed on tile!");
         ClearSelectedItem();
+
+        ScoreManager.RefreshScores();
+
+        InventoryUI ui = FindFirstObjectByType<InventoryUI>();
+        if (ui != null)
+        {
+            ui.RefreshUI();
+        }
+    }
+
+    public void PlaceItemDirect(GardenTile targetTile)
+    {
+        if (playerInventory == null)
+        {
+            Debug.LogError($"❌ PlayerInventory is NULL on {gameObject.name}!");
+            return;
+        }
+
+        if (selectedItem == null)
+        {
+            Debug.Log("⚠️ No item selected!");
+            return;
+        }
+
+        if (targetTile.occupied)
+        {
+            Debug.Log("⚠️ This tile is already occupied!");
+            return;
+        }
+
+        if (!playerInventory.HasItem(selectedItem))
+        {
+            Debug.Log($"⚠️ {gameObject.name} does not have {selectedItem.itemName} in inventory!");
+            return;
+        }
+
+        playerInventory.RemoveItem(selectedItem);
+
+        if (selectedItem.prefab != null)
+        {
+            GameObject placed = Instantiate(selectedItem.prefab, targetTile.transform.position, Quaternion.identity);
+            placed.transform.parent = targetTile.transform;
+            placed.transform.localPosition = Vector3.zero;
+
+            SpriteRenderer sr = placed.GetComponent<SpriteRenderer>();
+            if (sr != null)
+            {
+                sr.enabled = true;
+                sr.sortingOrder = 10;
+            }
+
+            targetTile.placedItem = placed;
+            targetTile.placedItemData = selectedItem;
+        }
+
+        targetTile.occupied = true;
+
+        Debug.Log($"✅ {selectedItem.itemName} placed on tile (PlaceAnywhere)!");
+        ClearSelectedItem();
+
+        ScoreManager.RefreshScores();
 
         InventoryUI ui = FindFirstObjectByType<InventoryUI>();
         if (ui != null)
@@ -221,6 +282,8 @@ public class ItemActions : MonoBehaviour
             turnManager.hasPlacedItemThisTurn = true;
             turnManager.UpdateActionButtons();
         }
+
+        ScoreManager.RefreshScores();
 
         InventoryUI ui = FindFirstObjectByType<InventoryUI>();
         if (ui != null)
