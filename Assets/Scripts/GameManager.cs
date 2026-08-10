@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     public Transform playersParent;
     public ItemDatabase itemDatabase;
     public ScoreManager scoreManager;
+    public Sprite shieldSprite;
 
     public List<Player> players = new List<Player>();
 
@@ -161,6 +162,7 @@ public class GameManager : MonoBehaviour
             powerActions.playerInventory = inv;
             powerActions.itemDatabase = itemDatabase;
             powerActions.turnManager = turnManager;
+            powerActions.shieldSprite = shieldSprite;
 
             players.Add(player);
         }

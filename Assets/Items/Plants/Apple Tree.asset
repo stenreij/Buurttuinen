@@ -15,11 +15,11 @@ MonoBehaviour:
   icon: {fileID: 2497978353774294010, guid: e1b4f3788dde348428df71dde4fa8c47, type: 3}
   itemName: Big Apple Tree
   type: 1
-  score: 0
-  water: 0
-  soilHealth: 0
-  biodiversity: 0
-  esthetic: 0
+  score: 22
+  water: 8
+  soilHealth: 3
+  biodiversity: 7
+  esthetic: 8
   color: {r: 0.6415094, g: 0.056822076, b: 0, a: 0}
   maxAmount: 2
   prefab: {fileID: 3201413668922650777, guid: 08a6003dad5834747a8e6fe6da44b907, type: 3}

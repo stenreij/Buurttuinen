@@ -11,6 +11,7 @@ public class PowerUpActions : MonoBehaviour
     private ItemData selectedPowerUp;
     private bool isWaitingForTile = false;
     private string pendingPowerUpName = "";
+    public Sprite shieldSprite;
 
     void Start()
     {
@@ -180,6 +181,8 @@ public class PowerUpActions : MonoBehaviour
                 Debug.Log("🔄 Klik op twee tiles om te wisselen!");
                 break;
             case "Protection":
+                isWaitingForTile = true;
+                pendingPowerUpName = "Protection";
                 Debug.Log("🛡️ Klik op een item om te beschermen!");
                 break;
             case "Soil":
@@ -226,6 +229,64 @@ public class PowerUpActions : MonoBehaviour
         ConsumePowerUp();
     }
 
+    public void UseProtection(GardenTile targetTile)
+    {
+        if (!ValidatePowerUp("Protection")) return;
+
+        if (targetTile == null || !targetTile.occupied)
+        {
+            Debug.Log("⚠️ Kies een geplaatst item om te beschermen!");
+            return;
+        }
+
+        targetTile.isProtected = true;
+        Debug.Log($"🛡️ {targetTile.placedItemData.itemName} is beschermd!");
+
+        AddProtectionVisual(targetTile);
+
+        if (turnManager != null)
+        {
+            turnManager.hasPlacedItemThisTurn = true;
+            turnManager.UpdateActionButtons();
+        }
+
+        ConsumePowerUp();
+    }
+
+    private void AddProtectionVisual(GardenTile targetTile)
+{
+    if (targetTile.placedItem == null) return;
+
+    GameObject shield = new GameObject("ShieldIndicator");
+    shield.transform.parent = targetTile.placedItem.transform;
+
+    shield.transform.localPosition = new Vector3(-0.6f, 0.6f, 0f);
+
+    SpriteRenderer sr = shield.AddComponent<SpriteRenderer>();
+
+    if (shieldSprite != null)
+    {
+        sr.sprite = shieldSprite;
+    }
+    else
+    {
+        Texture2D tex = new Texture2D(64, 64);
+        for (int x = 0; x < 64; x++)
+        {
+            for (int y = 0; y < 64; y++)
+            {
+                tex.SetPixel(x, y, Color.white);
+            }
+        }
+        tex.Apply();
+        sr.sprite = Sprite.Create(tex, new Rect(0, 0, 64, 64), new Vector2(0.5f, 0.5f));
+    }
+
+    sr.sortingOrder = 20;
+
+    Debug.Log($"🛡️ Shield indicator toegevoegd aan {targetTile.placedItem.name}");
+}
+
     public bool IsWaitingForTile()
     {
         return isWaitingForTile;
@@ -241,7 +302,7 @@ public class PowerUpActions : MonoBehaviour
                 UsePlaceAnywhere(targetTile);
                 break;
             case "Protection":
-                //UseWeatherShield(targetTile);
+                UseProtection(targetTile);
                 break;
             case "Swap Items":
                 break;

@@ -2568,6 +2568,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c1d4f51cb22dc9b4c990a58a1404a83b, type: 2}
   - {fileID: 11400000, guid: f499f11b505d4624aaa1c4e8ec0249f6, type: 2}
   - {fileID: 11400000, guid: 84e9f740131ce9c4490c0f88b991cd59, type: 2}
+  - {fileID: 11400000, guid: ab37ab3d3c292224f836e39053dc241d, type: 2}
 --- !u!114 &1337639600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2583,7 +2584,8 @@ MonoBehaviour:
   inventoryUI: {fileID: 746346862}
   playersParent: {fileID: 813153599}
   itemDatabase: {fileID: 1337639599}
-  scoreManager: {fileID: 0}
+  scoreManager: {fileID: 1967871654}
+  shieldSprite: {fileID: 2389193319765324094, guid: d17c883cf555c3e4792f94ebfe91d8d2, type: 3}
   players: []
 --- !u!1 &1372691658
 GameObject:
@@ -4753,7 +4755,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5295cf0dcc41b5458f8156ac441032a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turnManager: {fileID: 0}
+  turnManager: {fileID: 2121273569}
   playerScoreText: {fileID: 1786540635}
   neighborhoodScoreText: {fileID: 858098411}
 --- !u!1 &2005353876

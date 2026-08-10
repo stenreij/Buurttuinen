@@ -265,6 +265,12 @@ public class ItemActions : MonoBehaviour
             return;
         }
 
+        if (targetTile.isProtected)
+        {
+            Debug.Log("🛡️ This tile is protected and cannot be removed!");
+            return;
+        }
+
         if (targetTile.placedItem != null)
         {
             Destroy(targetTile.placedItem);
