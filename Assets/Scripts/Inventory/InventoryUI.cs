@@ -12,8 +12,12 @@ public class InventoryUI : MonoBehaviour
 
     public void RefreshUI()
     {
-        //Debug.Log("🔄 RefreshUI() called!");
         UpdateUI();
+
+        if (selectedItem != null)
+        {
+            UpdateItemSelection(selectedItem);
+        }
     }
 
     void UpdateUI()
@@ -101,6 +105,9 @@ public class InventoryUI : MonoBehaviour
             int count = entry.Value;
 
             GameObject newButton = Instantiate(itemButtonPrefab, contentParent);
+            newButton.name = item.itemName;
+
+            Debug.Log($"✅ Created button for: {item.itemName} with count: {count}");
 
             SetButtonIcon(newButton, item);
             SetButtonCountText(newButton, count);
@@ -189,6 +196,10 @@ public class InventoryUI : MonoBehaviour
             return;
         }
 
+        selectedItem = item;
+
+        UpdateItemSelection(item);
+
         if (item.type == ItemType.PowerUp)
         {
             Debug.Log($"🔍 PowerUp detected! Looking for PowerUpActions...");
@@ -223,6 +234,21 @@ public class InventoryUI : MonoBehaviour
     public ItemData GetSelectedItem()
     {
         return selectedItem;
+    }
+
+    private void UpdateItemSelection(ItemData selectedItem)
+    {
+        foreach (Transform child in contentParent)
+        {
+            if (child.name == selectedItem.itemName)
+            {
+                child.localScale = new Vector3(1.15f, 1.15f, 1f);
+            }
+            else
+            {
+                child.localScale = new Vector3(1f, 1f, 1f);
+            }
+        }
     }
 
     public void ClearSelectedItem()
