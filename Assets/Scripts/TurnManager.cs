@@ -10,7 +10,7 @@ public class TurnManager : MonoBehaviour
     public List<Player> players;
     public InventoryUI inventoryUI;
     public ScoreManager scoreManager;
-
+    public System.Action<int> OnRoundStarted;   
     private int currentPlayerIndex = 0;
     private Player currentPlayer;
     private Player startingPlayer;
@@ -30,6 +30,9 @@ public class TurnManager : MonoBehaviour
     private int currentRound = 1;
     public int maxRounds = 10;
 
+    private bool isWeatherEventActive = false;
+    private bool isWaitingForWeatherToFinish = false; // Nieuwe vlag
+
     public void Initialize(List<Player> playerList)
     {
         players = playerList;
@@ -40,6 +43,9 @@ public class TurnManager : MonoBehaviour
         }
 
         RandomizeStartingPlayer();
+        
+        OnRoundStarted?.Invoke(currentRound);
+        
         StartTurn();
     }
 
@@ -57,6 +63,17 @@ public class TurnManager : MonoBehaviour
             return;
         }
 
+        // Als er een weer event actief is, wachten we
+        if (isWeatherEventActive)
+        {
+            Debug.Log("⏳ Weer event actief, wachten tot het afgelopen is...");
+            isWaitingForWeatherToFinish = true;
+            return;
+        }
+
+        // Reset de wacht-vlag als we hier komen
+        isWaitingForWeatherToFinish = false;
+
         hasPlacedItemThisTurn = false;
         currentPlayer = players[currentPlayerIndex];
 
@@ -70,19 +87,16 @@ public class TurnManager : MonoBehaviour
             turnText.text = $"Beurt: {currentPlayer.gameObject.name}";
         }
 
-
         if (scoreManager != null)
         {
             scoreManager.UpdateScores();
         }
-
 
         if (inventoryUI != null)
         {
             inventoryUI.playerInventory = currentPlayer.GetComponent<Inventory>();
             inventoryUI.RefreshUI();
         }
-
 
         UpdateActionButtons();
 
@@ -113,7 +127,7 @@ public class TurnManager : MonoBehaviour
 
     public void UpdateActionButtons()
     {
-        bool canAct = !hasPlacedItemThisTurn;
+        bool canAct = !hasPlacedItemThisTurn && !isWeatherEventActive;
 
         if (passButton != null)
             passButton.interactable = canAct;
@@ -214,7 +228,6 @@ public class TurnManager : MonoBehaviour
                 if (scoreManager != null)
                 {
                     scoreManager.SaveFinalScores();
-                    //Debug.Log("📊 Scores opgeslagen!");
                 }
 
                 SceneManager.LoadScene("EndScene");
@@ -223,6 +236,8 @@ public class TurnManager : MonoBehaviour
 
             currentRound++;
             Debug.Log($"🔄 New round: {currentRound}/{maxRounds}");
+            
+            OnRoundStarted?.Invoke(currentRound);
         }
 
         if (inventoryUI != null)
@@ -259,5 +274,37 @@ public class TurnManager : MonoBehaviour
         startingPlayer = players[randomStartIndex];
 
         Debug.Log($"🎲 {startingPlayer.gameObject.name} starts the game!");
+    }
+
+    // ============================================
+    // WEER GERELATEERDE METHODES
+    // ============================================
+
+    public void SetWeatherEventActive(bool active)
+    {
+        isWeatherEventActive = active;
+        UpdateActionButtons();
+        
+        if (active)
+        {
+            Debug.Log("🌪️ Weer event actief! Spelers kunnen geen acties uitvoeren.");
+        }
+        else
+        {
+            Debug.Log("☀️ Weer event voorbij! Spelers kunnen weer acties uitvoeren.");
+            
+            // Als we aan het wachten waren op het weer om te eindigen,
+            // herstart dan de beurt voor dezelfde speler
+            if (isWaitingForWeatherToFinish)
+            {
+                Debug.Log($"🔄 Weer is voorbij, hervat beurt voor {currentPlayer.gameObject.name}");
+                StartTurn();
+            }
+        }
+    }
+
+    public bool IsWeatherEventActive()
+    {
+        return isWeatherEventActive;
     }
 }

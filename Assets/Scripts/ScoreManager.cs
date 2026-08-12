@@ -102,6 +102,8 @@ public class ScoreManager : MonoBehaviour
     public int CalculateTotalScore()
     {
         int total = 0;
+        if (turnManager == null || turnManager.players == null) return 0;
+        
         foreach (Player player in turnManager.players)
         {
             total += CalculatePlayerScore(player);

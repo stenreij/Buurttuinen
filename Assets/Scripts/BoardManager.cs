@@ -31,8 +31,6 @@ public class BoardManager : MonoBehaviour
         }
         gardens.Clear();
 
-        //Debug.Log($"🏗️ CreateBoard() called! Creating {numberOfGardens} gardens.");
-
         ItemDatabase itemDatabase = FindFirstObjectByType<ItemDatabase>();
 
         if (useFixedPositions && fixedPositions.Length >= numberOfGardens)
@@ -67,7 +65,6 @@ public class BoardManager : MonoBehaviour
         {
             gardenScript.CreateGarden();
             gardens.Add(gardenScript);
-            //Debug.Log($"✅ Garden_{index} created and added to list!");
 
             if (itemDatabase != null)
             {
