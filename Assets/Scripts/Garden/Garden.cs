@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Garden : MonoBehaviour
 {
-    public int width = 7;
+    public int width = 6;
     public int height = 3;
     public GameObject tilePrefab;
     public float tileSize = 2f;
