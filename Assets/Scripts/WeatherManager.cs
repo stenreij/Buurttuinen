@@ -22,7 +22,7 @@ public class WeatherManager : MonoBehaviour
     [Header("Settings")]
     public int maxWeatherEvents = 3;
     public int minWeatherEvents = 2;
-    public float weatherAnnouncementDuration = 9f;
+    public float weatherAnnouncementDuration = 6f;
 
     private List<int> roundsWithWeather = new List<int>();
     private int weatherEventsTriggered = 0;
@@ -106,12 +106,12 @@ public class WeatherManager : MonoBehaviour
     {
         switch (weatherType)
         {
-            case WeatherType.Tornado: return "🌪️ TORNADO WAARSCHUWING!";
-            case WeatherType.Hitte: return "☀️ HITTEGOLF! Water verdampt!";
-            case WeatherType.Regen: return "🌧️ HEVIGE REGENVAL! Planten groeien!";
-            case WeatherType.Vorst: return "❄️ VORST! Planten bevriezen!";
-            case WeatherType.Storm: return "💨 ZWARE STORM! Items waaien weg!";
-            default: return "⚠️ WEERSWAARSCHUWING!";
+            case WeatherType.Tornado: return " Tornado waarschuwing!";
+            case WeatherType.Hitte: return " Hittegolf! Water verdampt!";
+            case WeatherType.Regen: return " Hevige regenval! Planten verzuipen!";
+            case WeatherType.Vorst: return " Vorst! Planten bevriezen!";
+            case WeatherType.Storm: return " Zware storm! Items waaien weg!";
+            default: return " Weerswaarschuwing!";
         }
     }
 
@@ -151,7 +151,7 @@ public class WeatherManager : MonoBehaviour
 
         if (gardensAffected == 0)
         {
-            ShowWeatherAnnouncement("🌪️ Tornado mist de buurt! Geluk gehad!");
+            ShowWeatherAnnouncement("Tornado mist de buurt! Geluk gehad!");
             return;
         }
 
@@ -225,7 +225,7 @@ public class WeatherManager : MonoBehaviour
 
     void ExecuteRegen()
     {
-        ShowWeatherAnnouncement("Hevige regenval! Planten groeien!");
+        ShowWeatherAnnouncement("Hevige regenval! Planten verzuipen!");
         PlayEffect(rainEffectPrefab);
 
         int boostedPlants = 0;
@@ -279,7 +279,7 @@ public class WeatherManager : MonoBehaviour
 
     void ExecuteVorst()
     {
-        ShowWeatherAnnouncement("❄️ Vorst! Planten bevriezen!");
+        ShowWeatherAnnouncement("Vorst! Planten bevriezen!");
         PlayEffect(frostEffectPrefab);
 
         int totalDestroyed = 0;
@@ -441,7 +441,7 @@ public class WeatherManager : MonoBehaviour
         tile.occupied = false;
         tile.placedItem = null;
         tile.placedItemData = null;
-        Debug.Log($"🗑️ Item verwijderd uit tuin van {player.playerName}");
+        Debug.Log($"Item verwijderd uit tuin van {player.playerName}");
     }
 
     bool IsPlantType(ItemType type)
