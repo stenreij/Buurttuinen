@@ -569,7 +569,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 160, y: -120}
+  m_AnchoredPosition: {x: 160, y: -130}
   m_SizeDelta: {x: 300, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &234007141
@@ -601,8 +601,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294901788
-  m_fontColor: {r: 0.10980392, g: 0, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -2703,6 +2703,15 @@ MonoBehaviour:
   itemDatabase: {fileID: 1337639599}
   scoreManager: {fileID: 1967871654}
   shieldSprite: {fileID: 2389193319765324094, guid: d17c883cf555c3e4792f94ebfe91d8d2, type: 3}
+  weatherAnnouncementText: {fileID: 0}
+  tornadoEffectPrefab: {fileID: 0}
+  stormEffectPrefab: {fileID: 0}
+  heatEffectPrefab: {fileID: 0}
+  rainEffectPrefab: {fileID: 0}
+  frostEffectPrefab: {fileID: 0}
+  maxWeatherEvents: 3
+  minWeatherEvents: 2
+  weatherAnnouncementDuration: 9
   players: []
 --- !u!1 &1372691658
 GameObject:
@@ -3745,8 +3754,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294901788
-  m_fontColor: {r: 0.10980392, g: 0, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -4497,8 +4506,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294901788
-  m_fontColor: {r: 0.10980392, g: 0, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
