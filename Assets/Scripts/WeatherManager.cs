@@ -98,26 +98,28 @@ public class WeatherManager : MonoBehaviour
 
     WeatherType GetRandomWeatherType()
     {
-        WeatherType[] allTypes = System.Enum.GetValues(typeof(WeatherType)) as WeatherType[];
-        return allTypes[Random.Range(0, allTypes.Length)];
+        //WeatherType[] allTypes = System.Enum.GetValues(typeof(WeatherType)) as WeatherType[];
+        //return allTypes[Random.Range(0, allTypes.Length)];
+
+        return WeatherType.Tornado;
     }
 
     string GetWeatherAnnouncement(WeatherType weatherType)
     {
         switch (weatherType)
         {
-            case WeatherType.Tornado: return " Tornado waarschuwing!";
-            case WeatherType.Hitte: return " Hittegolf! Water verdampt!";
-            case WeatherType.Regen: return " Hevige regenval! Planten verzuipen!";
-            case WeatherType.Vorst: return " Vorst! Planten bevriezen!";
-            case WeatherType.Storm: return " Zware storm! Items waaien weg!";
-            default: return " Weerswaarschuwing!";
+            case WeatherType.Tornado: return "Tornado waarschuwing!";
+            case WeatherType.Hitte: return "Hittegolf! Water verdampt!";
+            case WeatherType.Regen: return "Hevige regenval! Planten verzuipen!";
+            case WeatherType.Vorst: return "Vorst! Planten bevriezen!";
+            case WeatherType.Storm: return "Zware storm! Items waaien weg!";
+            default: return "Weerswaarschuwing!";
         }
     }
 
     IEnumerator ExecuteWeatherEvent(WeatherType weatherType)
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
 
         switch (weatherType)
         {
@@ -165,17 +167,9 @@ public class WeatherManager : MonoBehaviour
         {
             Player player = players[playerIndex];
             int itemsToDestroy = Random.Range(1, 3);
-            List<GardenTile> occupiedTiles = GetOccupiedTiles(player);
-            int actualDestroyCount = Mathf.Min(itemsToDestroy, occupiedTiles.Count);
 
-            for (int i = 0; i < actualDestroyCount && occupiedTiles.Count > 0; i++)
-            {
-                int randomTileIndex = Random.Range(0, occupiedTiles.Count);
-                GardenTile targetTile = occupiedTiles[randomTileIndex];
-                occupiedTiles.RemoveAt(randomTileIndex);
-                DestroyItemInGarden(targetTile, player);
-                totalDestroyed++;
-            }
+            List<GardenTile> tilesToDestroy = GetRandomUnprotectedTiles(player, itemsToDestroy);
+            totalDestroyed += DestroyTiles(tilesToDestroy, player);
         }
 
         ShowWeatherAnnouncement($"Tornado vernietigde {totalDestroyed} item(s)!");
@@ -201,7 +195,8 @@ public class WeatherManager : MonoBehaviour
                 foreach (GardenTile tile in allTiles)
                 {
                     if (tile.occupied && tile.placedItemData != null &&
-                        tile.placedItemData.type == ItemType.Water)
+                        tile.placedItemData.type == ItemType.Water &&
+                        !tile.isProtected)
                     {
                         waterTiles.Add(tile);
                     }
@@ -262,12 +257,19 @@ public class WeatherManager : MonoBehaviour
                 }
             }
 
-            int decorToDestroy = Mathf.Min(Random.Range(0, 2), decoratieTiles.Count);
-            for (int i = 0; i < decorToDestroy && decoratieTiles.Count > 0; i++)
+            List<GardenTile> unprotectedDecor = new List<GardenTile>();
+            foreach (GardenTile tile in decoratieTiles)
             {
-                int randomIndex = Random.Range(0, decoratieTiles.Count);
-                GardenTile targetTile = decoratieTiles[randomIndex];
-                decoratieTiles.RemoveAt(randomIndex);
+                if (!tile.isProtected)
+                    unprotectedDecor.Add(tile);
+            }
+
+            int decorToDestroy = Mathf.Min(Random.Range(0, 2), unprotectedDecor.Count);
+            for (int i = 0; i < decorToDestroy && unprotectedDecor.Count > 0; i++)
+            {
+                int randomIndex = Random.Range(0, unprotectedDecor.Count);
+                GardenTile targetTile = unprotectedDecor[randomIndex];
+                unprotectedDecor.RemoveAt(randomIndex);
                 DestroyItemInGarden(targetTile, player);
                 destroyedDecor++;
             }
@@ -296,7 +298,8 @@ public class WeatherManager : MonoBehaviour
                 foreach (GardenTile tile in allTiles)
                 {
                     if (tile.occupied && tile.placedItemData != null &&
-                        IsPlantType(tile.placedItemData.type))
+                        IsPlantType(tile.placedItemData.type) &&
+                        !tile.isProtected)
                     {
                         plantTiles.Add(tile);
                     }
@@ -339,6 +342,12 @@ public class WeatherManager : MonoBehaviour
             int randomIndex = Random.Range(0, allOccupiedTiles.Count);
             GardenTile sourceTile = allOccupiedTiles[randomIndex];
             allOccupiedTiles.RemoveAt(randomIndex);
+
+            if (sourceTile.isProtected)
+            {
+                Debug.Log($"🛡️ Beschermd item overgeslagen door storm!");
+                continue;
+            }
 
             Player sourcePlayer = null;
             foreach (Player player in players)
@@ -417,6 +426,53 @@ public class WeatherManager : MonoBehaviour
         return tiles;
     }
 
+    List<GardenTile> GetUnprotectedTiles(Player player)
+    {
+        List<GardenTile> allTiles = GetOccupiedTiles(player);
+        List<GardenTile> unprotectedTiles = new List<GardenTile>();
+
+        foreach (GardenTile tile in allTiles)
+        {
+            if (!tile.isProtected)
+            {
+                unprotectedTiles.Add(tile);
+            }
+        }
+
+        return unprotectedTiles;
+    }
+
+    List<GardenTile> GetRandomUnprotectedTiles(Player player, int count)
+    {
+        List<GardenTile> unprotectedTiles = GetUnprotectedTiles(player);
+        List<GardenTile> selectedTiles = new List<GardenTile>();
+
+        int actualCount = Mathf.Min(count, unprotectedTiles.Count);
+
+        for (int i = 0; i < actualCount && unprotectedTiles.Count > 0; i++)
+        {
+            int randomIndex = Random.Range(0, unprotectedTiles.Count);
+            selectedTiles.Add(unprotectedTiles[randomIndex]);
+            unprotectedTiles.RemoveAt(randomIndex);
+        }
+
+        return selectedTiles;
+    }
+
+    int DestroyTiles(List<GardenTile> tiles, Player player)
+    {
+        int destroyed = 0;
+        foreach (GardenTile tile in tiles)
+        {
+            if (tile != null && tile.occupied && tile.placedItem != null && !tile.isProtected)
+            {
+                DestroyItemInGarden(tile, player);
+                destroyed++;
+            }
+        }
+        return destroyed;
+    }
+
     GardenTile GetRandomEmptyTile(Player player)
     {
         Garden garden = player.assignedGarden;
@@ -437,11 +493,18 @@ public class WeatherManager : MonoBehaviour
     {
         if (tile == null || !tile.occupied || tile.placedItem == null) return;
 
+        // 🔥 Extra check voor de zekerheid
+        if (tile.isProtected)
+        {
+            Debug.Log($"🛡️ Beschermd item in tuin van {player.playerName} overgeslagen!");
+            return;
+        }
+
         if (tile.placedItem != null) Destroy(tile.placedItem);
         tile.occupied = false;
         tile.placedItem = null;
         tile.placedItemData = null;
-        Debug.Log($"Item verwijderd uit tuin van {player.playerName}");
+        Debug.Log($"🗑️ Item verwijderd uit tuin van {player.playerName} door weer!");
     }
 
     bool IsPlantType(ItemType type)

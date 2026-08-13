@@ -41,6 +41,12 @@ public class GardenTile : MonoBehaviour
             return;
         }
 
+        if (turnManager.IsGamePaused())
+        {
+            Debug.Log("⏸️ Game is gepauzeerd (weer), je kunt geen acties uitvoeren!");
+            return;
+        }
+
         PowerUpActions powerActions = currentPlayer.GetComponent<PowerUpActions>();
         if (powerActions != null && powerActions.IsWaitingForTile())
         {

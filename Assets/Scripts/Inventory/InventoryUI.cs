@@ -183,6 +183,12 @@ public class InventoryUI : MonoBehaviour
             return;
         }
 
+        if (turnManager.IsGamePaused())
+        {
+            Debug.Log("⏸️ Game is gepauzeerd (weer), je kunt geen items selecteren!");
+            return;
+        }
+
         if (turnManager.hasPlacedItemThisTurn)
         {
             Debug.Log("⚠️ Je hebt deze beurt al een actie gedaan! Je kunt geen items meer selecteren.");

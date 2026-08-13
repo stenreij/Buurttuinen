@@ -1935,7 +1935,7 @@ MonoBehaviour:
   scoreManager: {fileID: 1967871654}
   inventoryUI: {fileID: 746346862}
   weatherAnnouncementText: {fileID: 1804482632}
-  tornadoEffectPrefab: {fileID: 0}
+  tornadoEffectPrefab: {fileID: 189496079909016412, guid: d4c094dc51be1804fa49c3b713418854, type: 3}
   stormEffectPrefab: {fileID: 0}
   heatEffectPrefab: {fileID: 0}
   rainEffectPrefab: {fileID: 0}

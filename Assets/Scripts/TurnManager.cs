@@ -170,6 +170,11 @@ public class TurnManager : MonoBehaviour
         }
     }
 
+    public bool IsGamePaused()
+    {
+        return isGamePaused;
+    }
+
     public void OnPowerUpClicked()
     {
         if (isGamePaused)
