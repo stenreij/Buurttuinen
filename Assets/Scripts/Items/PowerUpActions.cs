@@ -74,6 +74,12 @@ public class PowerUpActions : MonoBehaviour
 
         ScoreManager.RefreshScores();
 
+        CommunityManager communityManager = FindFirstObjectByType<CommunityManager>();
+        if (communityManager != null)
+        {
+            communityManager.UpdateCommunityGoalScore();
+        }
+
         ConsumePowerUp();
     }
 
@@ -102,7 +108,7 @@ public class PowerUpActions : MonoBehaviour
         ClearSelectedPowerUp();
 
         InventoryUI ui = FindFirstObjectByType<InventoryUI>();
-        if (ui != null) 
+        if (ui != null)
         {
             ui.ClearSelectedItem();
             ui.RefreshUI();

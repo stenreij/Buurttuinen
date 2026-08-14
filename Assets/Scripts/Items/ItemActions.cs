@@ -174,6 +174,12 @@ public class ItemActions : MonoBehaviour
 
         ScoreManager.RefreshScores();
 
+        CommunityManager communityManager = FindFirstObjectByType<CommunityManager>();
+        if (communityManager != null)
+        {
+            communityManager.UpdateCommunityGoalScore();
+        }
+
         InventoryUI ui = FindFirstObjectByType<InventoryUI>();
         if (ui != null)
         {
@@ -293,6 +299,12 @@ public class ItemActions : MonoBehaviour
         }
 
         ScoreManager.RefreshScores();
+
+        CommunityManager communityManager = FindFirstObjectByType<CommunityManager>();
+        if (communityManager != null)
+        {
+            communityManager.UpdateCommunityGoalScore();
+        }
 
         InventoryUI ui = FindFirstObjectByType<InventoryUI>();
         if (ui != null)

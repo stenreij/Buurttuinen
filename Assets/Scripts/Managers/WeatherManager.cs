@@ -23,9 +23,8 @@ public class WeatherManager : MonoBehaviour
     public int maxWeatherEvents = 3;
     public int minWeatherEvents = 2;
 
-    // 🔥 AANGEPAST: Verschillende duur voor verschillende meldingen
-    public float weatherAnnouncementDuration = 3f;        // Standaard duur
-    public float resultAnnouncementDuration = 5f;         // Duur voor resultaat meldingen (vernietigt x items)
+    public float weatherAnnouncementDuration = 3f;
+    public float resultAnnouncementDuration = 5f;
 
     private List<int> roundsWithWeather = new List<int>();
     private int weatherEventsTriggered = 0;
@@ -33,7 +32,8 @@ public class WeatherManager : MonoBehaviour
     private bool isExecutingWeather = false;
     private int currentRound = 0;
 
-    // 🔥 NIEUW: Coroutine reference om te voorkomen dat meldingen overlappen
+    private List<int> processedRounds = new List<int>();
+
     private Coroutine currentAnnouncementCoroutine;
 
     void Start()
@@ -52,6 +52,7 @@ public class WeatherManager : MonoBehaviour
     {
         int numberOfEvents = Random.Range(minWeatherEvents, maxWeatherEvents + 1);
         roundsWithWeather.Clear();
+        processedRounds.Clear();
 
         List<int> availableRounds = new List<int>();
         for (int i = 2; i < totalRounds - 1; i++)
@@ -75,45 +76,44 @@ public class WeatherManager : MonoBehaviour
     {
         currentRound = roundNumber;
 
-        // Check if community is active - if so, delay weather
-        CommunityManager community = FindFirstObjectByType<CommunityManager>();
-        if (community != null && community.IsCommunityActive())
+        if (processedRounds.Contains(roundNumber))
         {
-            Debug.Log("🌤️ Community is active, weather will wait...");
+            Debug.Log($"🌤️ Ronde {roundNumber} is al afgehandeld, skip...");
             return;
         }
 
-        if (roundsWithWeather.Contains(roundNumber) &&
-            weatherEventsTriggered < maxWeatherEvents &&
-            !weatherEventActive &&
-            !isExecutingWeather)
+        if (weatherEventActive || isExecutingWeather)
         {
+            Debug.Log($"🌤️ Weather event al actief in ronde {roundNumber}, skip...");
+            return;
+        }
+
+        if (roundsWithWeather.Contains(roundNumber) && weatherEventsTriggered < maxWeatherEvents)
+        {
+            processedRounds.Add(roundNumber);
             TriggerWeatherEvent();
         }
     }
 
     public bool CanWeatherTrigger()
     {
-        // Check if community is active
-        CommunityManager community = FindFirstObjectByType<CommunityManager>();
-        if (community != null && community.IsCommunityActive())
-        {
-            Debug.Log("🌤️ Community is active, weather will wait...");
-            return false;
-        }
-        return true;
+        return !weatherEventActive && !isExecutingWeather;
     }
-
 
     public void TriggerWeatherEvent()
     {
+        if (weatherEventActive || isExecutingWeather)
+        {
+            Debug.Log("🌤️ Weather event is al actief, trigger geweigerd!");
+            return;
+        }
+
         weatherEventsTriggered++;
         weatherEventActive = true;
         isExecutingWeather = true;
 
         if (turnManager != null)
         {
-            turnManager.SetGamePaused(true);
         }
 
         WeatherType weatherType = GetRandomWeatherType();
@@ -147,7 +147,7 @@ public class WeatherManager : MonoBehaviour
 
     IEnumerator ExecuteWeatherEvent(WeatherType weatherType)
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
 
         switch (weatherType)
         {
@@ -158,16 +158,17 @@ public class WeatherManager : MonoBehaviour
             case WeatherType.Vorst: ExecuteVorst(); break;
         }
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1f);
 
         weatherEventActive = false;
         isExecutingWeather = false;
 
         if (turnManager != null)
         {
-            turnManager.SetGamePaused(false);
-            turnManager.ResumeTurnAfterWeather();
+            turnManager.UpdateActionButtons();
         }
+
+        Debug.Log($"🌤️ Weather event {weatherType} voltooid!");
     }
 
     // ============================================
@@ -241,7 +242,6 @@ public class WeatherManager : MonoBehaviour
             }
         }
 
-        // 🔥 AANGEPAST: Resultaat melding met kortere duur
         if (movedCount > 0)
         {
             ShowWeatherAnnouncement($"Tornado verplaatst {movedCount} item(s)!", resultAnnouncementDuration);
@@ -283,7 +283,6 @@ public class WeatherManager : MonoBehaviour
             totalDestroyed += DestroyTiles(tilesToDestroy, player);
         }
 
-        // 🔥 AANGEPAST: Resultaat melding met kortere duur
         ShowWeatherAnnouncement($"Storm vernietigde {totalDestroyed} item(s)!", resultAnnouncementDuration);
         UpdateAllUI();
     }
@@ -330,7 +329,6 @@ public class WeatherManager : MonoBehaviour
             }
         }
 
-        // 🔥 AANGEPAST: Resultaat melding met kortere duur
         ShowWeatherAnnouncement($"Hitte verdampt {totalDestroyed} water item(s)!", resultAnnouncementDuration);
         UpdateAllUI();
     }
@@ -396,7 +394,6 @@ public class WeatherManager : MonoBehaviour
             }
         }
 
-        // 🔥 AANGEPAST: Resultaat melding met kortere duur
         ShowWeatherAnnouncement($"Regen boost {boostedPlants} planten, beschadigt {destroyedDecor} decoratie(s)!", resultAnnouncementDuration);
         UpdateAllUI();
     }
@@ -443,7 +440,6 @@ public class WeatherManager : MonoBehaviour
             }
         }
 
-        // 🔥 AANGEPAST: Resultaat melding met kortere duur
         ShowWeatherAnnouncement($"Vorst vernietigt {totalDestroyed} plant(en)!", resultAnnouncementDuration);
         UpdateAllUI();
     }
@@ -589,7 +585,6 @@ public class WeatherManager : MonoBehaviour
         }
     }
 
-    // 🔥 AANGEPAST: ShowWeatherAnnouncement met custom duration
     void ShowWeatherAnnouncement(string message, float duration = -1)
     {
         if (weatherAnnouncementText != null)
@@ -597,7 +592,6 @@ public class WeatherManager : MonoBehaviour
             weatherAnnouncementText.text = message;
             weatherAnnouncementText.gameObject.SetActive(true);
 
-            // Gebruik de meegegeven duration, of de standaard als -1
             float actualDuration = duration > 0 ? duration : weatherAnnouncementDuration;
             StartCoroutine(HideAnnouncementAfterDelay(actualDuration));
         }
@@ -618,6 +612,12 @@ public class WeatherManager : MonoBehaviour
     {
         if (scoreManager != null) scoreManager.UpdateScores();
         if (inventoryUI != null) inventoryUI.RefreshUI();
+
+        CommunityManager communityManager = FindFirstObjectByType<CommunityManager>();
+        if (communityManager != null)
+        {
+            communityManager.UpdateCommunityGoalScore();
+        }
     }
 
     // ============================================
@@ -626,4 +626,27 @@ public class WeatherManager : MonoBehaviour
 
     public bool IsWeatherEventActive() => weatherEventActive;
     public List<int> GetWeatherRounds() => roundsWithWeather;
+
+    public void ResetWeatherManager()
+    {
+        weatherEventActive = false;
+        isExecutingWeather = false;
+        weatherEventsTriggered = 0;
+        currentRound = 0;
+        roundsWithWeather.Clear();
+        processedRounds.Clear();
+
+        if (currentAnnouncementCoroutine != null)
+        {
+            StopCoroutine(currentAnnouncementCoroutine);
+            currentAnnouncementCoroutine = null;
+        }
+
+        if (weatherAnnouncementText != null)
+        {
+            weatherAnnouncementText.gameObject.SetActive(false);
+        }
+
+        Debug.Log("🌤️ WeatherManager gereset!");
+    }
 }

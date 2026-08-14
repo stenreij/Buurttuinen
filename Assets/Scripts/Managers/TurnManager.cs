@@ -135,6 +135,12 @@ public class TurnManager : MonoBehaviour
             communityManager.OnRoundStarted(currentRound);
         }
 
+        WeatherManager weatherManager = FindFirstObjectByType<WeatherManager>();
+        if (weatherManager != null)
+        {
+            weatherManager.OnRoundStarted(currentRound);
+        }
+
         UpdateActionButtons();
 
         if (powerUpButton != null)
