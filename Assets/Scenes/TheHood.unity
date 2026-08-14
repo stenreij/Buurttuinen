@@ -321,7 +321,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 10
+  m_SortingOrder: -1
   m_TargetDisplay: 0
 --- !u!224 &93350313
 RectTransform:
@@ -1935,8 +1935,8 @@ MonoBehaviour:
   scoreManager: {fileID: 1967871654}
   inventoryUI: {fileID: 746346862}
   weatherAnnouncementText: {fileID: 1804482632}
-  tornadoEffectPrefab: {fileID: 189496079909016412, guid: d4c094dc51be1804fa49c3b713418854, type: 3}
-  stormEffectPrefab: {fileID: 0}
+  tornadoEffectPrefab: {fileID: 7548901137181223228, guid: d4c094dc51be1804fa49c3b713418854, type: 3}
+  stormEffectPrefab: {fileID: 6608656064761540521, guid: 6b3d342b61a6a0c4099d2bd5d3e40ebf, type: 3}
   heatEffectPrefab: {fileID: 0}
   rainEffectPrefab: {fileID: 0}
   frostEffectPrefab: {fileID: 0}

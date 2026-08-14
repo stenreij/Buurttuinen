@@ -101,7 +101,7 @@ public class WeatherManager : MonoBehaviour
         //WeatherType[] allTypes = System.Enum.GetValues(typeof(WeatherType)) as WeatherType[];
         //return allTypes[Random.Range(0, allTypes.Length)];
 
-        return WeatherType.Tornado;
+        return WeatherType.Storm;
     }
 
     string GetWeatherAnnouncement(WeatherType weatherType)

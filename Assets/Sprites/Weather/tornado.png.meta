@@ -1,22 +1,25 @@
 fileFormatVersion: 2
-guid: 56763afb680919946b151d87fc3e39e5
+guid: 50ff214d46be32e4ba2d65ecf89a5a96
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 715368135737836640
-    second: tornado_0
+      213: 3255800203211723129
+    second: Tornado 1_0
   - first:
-      213: -6309994406216402850
-    second: tornado_1
+      213: -4024609381360285539
+    second: Tornado 1_1
   - first:
-      213: -8146329417134413000
-    second: tornado_2
+      213: -8535421798708680146
+    second: Tornado 1_2
   - first:
-      213: 6174124654450928253
-    second: tornado_3
+      213: -7726540889970235546
+    second: Tornado 1_3
   - first:
-      213: -8508149933846727963
-    second: tornado_4
+      213: 146746393208751298
+    second: Tornado 1_4
+  - first:
+      213: -2354184809434741516
+    second: Tornado 1_5
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -125,13 +128,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: tornado_0
+      name: Tornado 1_0
       rect:
         serializedVersion: 2
-        x: 29
-        y: 58
-        width: 99
-        height: 119
+        x: 34
+        y: 121
+        width: 116
+        height: 122
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -140,20 +143,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 064894e778f7de900800000000000000
-      internalID: 715368135737836640
+      spriteID: 971541ce80dee2d20800000000000000
+      internalID: 3255800203211723129
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: tornado_1
+      name: Tornado 1_1
       rect:
         serializedVersion: 2
-        x: 161
-        y: 58
-        width: 113
-        height: 132
+        x: 190
+        y: 120
+        width: 132
+        height: 139
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -162,20 +165,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e58f4c2f4856e68a0800000000000000
-      internalID: -6309994406216402850
+      spriteID: d98c0584717b528c0800000000000000
+      internalID: -4024609381360285539
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: tornado_2
+      name: Tornado 1_2
       rect:
         serializedVersion: 2
-        x: 299
-        y: 59
-        width: 114
-        height: 133
+        x: 352
+        y: 119
+        width: 134
+        height: 142
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -184,19 +187,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 83b63646e8c62fe80800000000000000
-      internalID: -8146329417134413000
+      spriteID: e2ae7dfb8171c8980800000000000000
+      internalID: -8535421798708680146
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: tornado_3
+      name: Tornado 1_3
       rect:
         serializedVersion: 2
-        x: 434
-        y: 140
-        width: 9
+        x: 512
+        y: 202
+        width: 10
         height: 13
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -206,20 +209,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d7a678b49a5eea550800000000000000
-      internalID: 6174124654450928253
+      spriteID: 6672bce5fffc5c490800000000000000
+      internalID: -7726540889970235546
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: tornado_4
+      name: Tornado 1_4
       rect:
         serializedVersion: 2
-        x: 438
-        y: 61
-        width: 110
-        height: 128
+        x: 517
+        y: 120
+        width: 128
+        height: 139
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -228,8 +231,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5e27d4996bafce980800000000000000
-      internalID: -8508149933846727963
+      spriteID: 2c4074f2119590200800000000000000
+      internalID: 146746393208751298
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tornado 1_5
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 162
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4f4850a8361445fd0800000000000000
+      internalID: -2354184809434741516
       vertices: []
       indices: 
       edges: []
@@ -248,11 +273,12 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      tornado_0: 715368135737836640
-      tornado_1: -6309994406216402850
-      tornado_2: -8146329417134413000
-      tornado_3: 6174124654450928253
-      tornado_4: -8508149933846727963
+      Tornado 1_0: 3255800203211723129
+      Tornado 1_1: -4024609381360285539
+      Tornado 1_2: -8535421798708680146
+      Tornado 1_3: -7726540889970235546
+      Tornado 1_4: 146746393208751298
+      Tornado 1_5: -2354184809434741516
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
