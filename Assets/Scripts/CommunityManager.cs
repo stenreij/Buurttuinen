@@ -55,8 +55,10 @@ public class CommunityManager : MonoBehaviour
         // Goal 1: Biodiversity
         possibleGoals.Add(new CommunityGoal(
             "Biodiversity",
+            "🌳",
             "Reach {0} biodiversity points in the neighborhood!",
-            (players) => {
+            (players) =>
+            {
                 int total = 0;
                 foreach (Player player in players)
                 {
@@ -64,15 +66,16 @@ public class CommunityManager : MonoBehaviour
                 }
                 return total;
             },
-            15,
-            ""
+            15
         ));
 
         // Goal 2: Water Storage
         possibleGoals.Add(new CommunityGoal(
             "Water Storage",
+            "💧",
             "Reach {0} water storage points in the neighborhood!",
-            (players) => {
+            (players) =>
+            {
                 int total = 0;
                 foreach (Player player in players)
                 {
@@ -80,15 +83,16 @@ public class CommunityManager : MonoBehaviour
                 }
                 return total;
             },
-            12,
-            ""
+            12
         ));
 
         // Goal 3: Soil Health
         possibleGoals.Add(new CommunityGoal(
             "Soil Health",
+            "🌱",
             "Reach {0} soil health points in the neighborhood!",
-            (players) => {
+            (players) =>
+            {
                 int total = 0;
                 foreach (Player player in players)
                 {
@@ -96,15 +100,16 @@ public class CommunityManager : MonoBehaviour
                 }
                 return total;
             },
-            10,
-            ""
+            10
         ));
 
         // Goal 4: Aesthetics
         possibleGoals.Add(new CommunityGoal(
             "Aesthetics",
+            "🎨",
             "Reach {0} aesthetic points in the neighborhood!",
-            (players) => {
+            (players) =>
+            {
                 int total = 0;
                 foreach (Player player in players)
                 {
@@ -112,8 +117,7 @@ public class CommunityManager : MonoBehaviour
                 }
                 return total;
             },
-            8,
-            ""
+            8
         ));
     }
 
@@ -152,13 +156,11 @@ public class CommunityManager : MonoBehaviour
         isCommunityActive = true;
         isExecutingCommunity = true;
 
-        // Pause the game briefly for announcement
         if (turnManager != null)
         {
             turnManager.SetGamePaused(true);
         }
 
-        // Select a random goal (different from previous if possible)
         CommunityGoal newGoal = possibleGoals[Random.Range(0, possibleGoals.Count)];
         if (possibleGoals.Count > 1 && currentGoal != null)
         {
@@ -169,18 +171,12 @@ public class CommunityManager : MonoBehaviour
         }
         currentGoal = newGoal;
 
-        // Store the start round and score
         goalStartRound = currentRound;
         goalEndRound = currentRound + communityInterval;
-        
+
         List<Player> players = turnManager.players;
         goalScoreAtStart = currentGoal.CalculateScore(players);
 
-        // Show announcement
-        string announcement = $"COMMUNITY GOAL!";
-        ShowCommunityAnnouncement(announcement, announcementDuration);
-
-        // Show the goal text (stays visible)
         ShowGoalText(currentGoal, goalScoreAtStart);
 
         StartCoroutine(ExecuteNewGoal());
@@ -190,8 +186,7 @@ public class CommunityManager : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
 
-        // Show the goal details
-        string goalDisplay = $"{currentGoal.icon} {currentGoal.name}\n{string.Format(currentGoal.goalText, currentGoal.goalValue)}\nCurrent: {goalScoreAtStart} / {currentGoal.goalValue}";
+        string goalDisplay = $"{currentGoal.name}\n{string.Format(currentGoal.goalText, currentGoal.goalValue)}\nCurrent: {goalScoreAtStart} / {currentGoal.goalValue}";
         ShowCommunityAnnouncement(goalDisplay, goalDisplayDuration);
 
         yield return new WaitForSeconds(2f);
@@ -206,7 +201,7 @@ public class CommunityManager : MonoBehaviour
             turnManager.ResumeTurnAfterWeather();
         }
 
-        Debug.Log($"Community goal active until round {goalEndRound}: {currentGoal.name} ({goalScoreAtStart}/{currentGoal.goalValue})");
+        Debug.Log($"🏛️ Community goal active until round {goalEndRound}: {currentGoal.name} ({goalScoreAtStart}/{currentGoal.goalValue})");
     }
 
     void CheckGoalResult()
@@ -228,13 +223,13 @@ public class CommunityManager : MonoBehaviour
         string resultText;
         if (isAchieved)
         {
-            resultText = $"GOAL ACHIEVED! {currentGoal.icon}\nScore: {currentScore} / {currentGoal.goalValue} (+{scoreGained})";
+            resultText = $"GOAL ACHIEVED! Score: {currentScore} / {currentGoal.goalValue} (+{scoreGained})";
             ShowCommunityAnnouncement(resultText, announcementDuration + 1f);
             StartCoroutine(DelayedReward(players));
         }
         else
         {
-            resultText = $"GOAL FAILED! {currentGoal.icon}\nScore: {currentScore} / {currentGoal.goalValue} (+{scoreGained})";
+            resultText = $"GOAL FAILED! Score: {currentScore} / {currentGoal.goalValue} (+{scoreGained})";
             ShowCommunityAnnouncement(resultText, announcementDuration + 1f);
             StartCoroutine(DelayedPenalty(players));
         }
@@ -243,6 +238,7 @@ public class CommunityManager : MonoBehaviour
         if (communityGoalText != null)
         {
             communityGoalText.text = "";
+            communityGoalText.gameObject.SetActive(false);
         }
 
         StartCoroutine(FinishGoalCheck());
@@ -274,7 +270,7 @@ public class CommunityManager : MonoBehaviour
         }
 
         UpdateAllUI();
-        Debug.Log($"Community goal check completed!");
+        Debug.Log($"🏛️ Community goal check completed!");
     }
 
     // ============================================
@@ -303,7 +299,7 @@ public class CommunityManager : MonoBehaviour
     {
         Player targetPlayer = players[Random.Range(0, players.Count)];
         ItemData powerUpItem = FindItemByType(ItemType.PowerUp);
-        
+
         if (powerUpItem != null && targetPlayer != null)
         {
             Inventory inv = targetPlayer.GetComponent<Inventory>();
@@ -325,11 +321,11 @@ public class CommunityManager : MonoBehaviour
     {
         Player targetPlayer = players[Random.Range(0, players.Count)];
         Garden garden = targetPlayer.assignedGarden;
-        
+
         if (garden != null)
         {
             ItemData goodItem = FindGoodItem();
-            
+
             if (goodItem != null)
             {
                 GardenTile emptyTile = GetRandomEmptyTile(targetPlayer);
@@ -338,20 +334,20 @@ public class CommunityManager : MonoBehaviour
                     GameObject placed = Instantiate(goodItem.prefab, emptyTile.transform.position, Quaternion.identity);
                     placed.transform.parent = emptyTile.transform;
                     placed.transform.localPosition = Vector3.zero;
-                    
+
                     SpriteRenderer sr = placed.GetComponent<SpriteRenderer>();
                     if (sr != null)
                     {
                         sr.enabled = true;
                         sr.sortingOrder = 10;
                     }
-                    
+
                     emptyTile.placedItem = placed;
                     emptyTile.placedItemData = goodItem;
                     emptyTile.occupied = true;
-                    
+
                     ShowCommunityAnnouncement($"{targetPlayer.playerName} receives a {goodItem.itemName} in their garden!", announcementDuration);
-                    Debug.Log($"Community reward: {goodItem.itemName} placed in {targetPlayer.playerName}'s garden");
+                    Debug.Log($"🏛️ Community reward: {goodItem.itemName} placed in {targetPlayer.playerName}'s garden");
                 }
                 else
                 {
@@ -379,7 +375,7 @@ public class CommunityManager : MonoBehaviour
             player.score += 3;
         }
         ShowCommunityAnnouncement($"All players receive +3 score bonus!", announcementDuration);
-        Debug.Log($"Community reward: All players +3 score");
+        Debug.Log($"🏛️ Community reward: All players +3 score");
     }
 
     // ============================================
@@ -407,12 +403,12 @@ public class CommunityManager : MonoBehaviour
     void RemoveItemsPenalty(List<Player> players)
     {
         int totalRemoved = 0;
-        
+
         foreach (Player player in players)
         {
             Garden garden = player.assignedGarden;
             if (garden == null) continue;
-            
+
             List<GardenTile> occupiedTiles = new List<GardenTile>();
             GardenTile[] allTiles = garden.GetComponentsInChildren<GardenTile>();
             foreach (GardenTile tile in allTiles)
@@ -422,24 +418,24 @@ public class CommunityManager : MonoBehaviour
                     occupiedTiles.Add(tile);
                 }
             }
-            
+
             int itemsToRemove = Mathf.Min(Random.Range(1, 3), occupiedTiles.Count);
             for (int i = 0; i < itemsToRemove && occupiedTiles.Count > 0; i++)
             {
                 int randomIndex = Random.Range(0, occupiedTiles.Count);
                 GardenTile targetTile = occupiedTiles[randomIndex];
                 occupiedTiles.RemoveAt(randomIndex);
-                
+
                 if (targetTile.placedItem != null)
                     Destroy(targetTile.placedItem);
-                
+
                 targetTile.occupied = false;
                 targetTile.placedItem = null;
                 targetTile.placedItemData = null;
                 totalRemoved++;
             }
         }
-        
+
         ShowCommunityAnnouncement($"Community removes {totalRemoved} item(s) from the neighborhood!", announcementDuration);
         Debug.Log($"🏛️ Community penalty: {totalRemoved} items removed");
     }
@@ -448,9 +444,9 @@ public class CommunityManager : MonoBehaviour
     {
         ItemType[] types = { ItemType.Plant, ItemType.Tree_Big, ItemType.Tree_Small, ItemType.Hedge, ItemType.Water, ItemType.Decoration };
         ItemType blockedType = types[Random.Range(0, types.Length)];
-        
+
         ShowCommunityAnnouncement($"Community blocks {blockedType} for 1 round!", announcementDuration);
-        Debug.Log($"Community penalty: {blockedType} is blocked for 1 round");
+        Debug.Log($"🏛️ Community penalty: {blockedType} is blocked for 1 round");
     }
 
     void ReduceScorePenalty(List<Player> players)
@@ -460,7 +456,7 @@ public class CommunityManager : MonoBehaviour
             player.score = Mathf.Max(0, player.score - 2);
         }
         ShowCommunityAnnouncement($"All players lose 2 score points!", announcementDuration);
-        Debug.Log($"Community penalty: All players -2 score");
+        Debug.Log($"🏛️ Community penalty: All players -2 score");
     }
 
     // ============================================
@@ -472,7 +468,7 @@ public class CommunityManager : MonoBehaviour
         int total = 0;
         Garden garden = player.assignedGarden;
         if (garden == null) return 0;
-        
+
         GardenTile[] tiles = garden.GetComponentsInChildren<GardenTile>();
         foreach (GardenTile tile in tiles)
         {
@@ -489,7 +485,7 @@ public class CommunityManager : MonoBehaviour
         int total = 0;
         Garden garden = player.assignedGarden;
         if (garden == null) return 0;
-        
+
         GardenTile[] tiles = garden.GetComponentsInChildren<GardenTile>();
         foreach (GardenTile tile in tiles)
         {
@@ -506,7 +502,7 @@ public class CommunityManager : MonoBehaviour
         int total = 0;
         Garden garden = player.assignedGarden;
         if (garden == null) return 0;
-        
+
         GardenTile[] tiles = garden.GetComponentsInChildren<GardenTile>();
         foreach (GardenTile tile in tiles)
         {
@@ -523,7 +519,7 @@ public class CommunityManager : MonoBehaviour
         int total = 0;
         Garden garden = player.assignedGarden;
         if (garden == null) return 0;
-        
+
         GardenTile[] tiles = garden.GetComponentsInChildren<GardenTile>();
         foreach (GardenTile tile in tiles)
         {
@@ -580,14 +576,14 @@ public class CommunityManager : MonoBehaviour
     {
         Garden garden = player.assignedGarden;
         if (garden == null) return null;
-        
+
         List<GardenTile> emptyTiles = new List<GardenTile>();
         GardenTile[] allTiles = garden.GetComponentsInChildren<GardenTile>();
         foreach (GardenTile tile in allTiles)
         {
             if (!tile.occupied) emptyTiles.Add(tile);
         }
-        
+
         if (emptyTiles.Count == 0) return null;
         return emptyTiles[Random.Range(0, emptyTiles.Count)];
     }
@@ -598,13 +594,13 @@ public class CommunityManager : MonoBehaviour
         {
             communityAnnouncementText.text = message;
             communityAnnouncementText.gameObject.SetActive(true);
-            
+
             float actualDuration = duration > 0 ? duration : announcementDuration;
             StartCoroutine(HideAnnouncementAfterDelay(actualDuration));
         }
         else
         {
-            Debug.Log($"{message}");
+            Debug.Log($"🏛️ {message}");
         }
     }
 
@@ -612,10 +608,10 @@ public class CommunityManager : MonoBehaviour
     {
         if (communityGoalText != null)
         {
-            string goalDisplay = $"{goal.icon} COMMUNITY GOAL: {goal.name}\n" +
+            string goalDisplay = $"{goal.name}\n" +
                                  $"{string.Format(goal.goalText, goal.goalValue)}\n" +
                                  $"Current: {currentScore} / {goal.goalValue}\n" +
-                                 $"Complete by round {goalEndRound}";
+                                 $"Ends at round: {goalEndRound}";
             communityGoalText.text = goalDisplay;
             communityGoalText.gameObject.SetActive(true);
         }
@@ -647,18 +643,18 @@ public class CommunityManager : MonoBehaviour
 public class CommunityGoal
 {
     public string name;
+    public string icon;
     public string goalText;
     public System.Func<List<Player>, int> calculateScore;
     public int goalValue;
-    public string icon;
 
-    public CommunityGoal(string name, string goalText, System.Func<List<Player>, int> calculateScore, int goalValue, string icon)
+    public CommunityGoal(string name, string icon, string goalText, System.Func<List<Player>, int> calculateScore, int goalValue)
     {
         this.name = name;
+        this.icon = icon;
         this.goalText = goalText;
         this.calculateScore = calculateScore;
         this.goalValue = goalValue;
-        this.icon = icon;
     }
 
     public int CalculateScore(List<Player> players)

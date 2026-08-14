@@ -37,7 +37,7 @@ public class TurnManager : MonoBehaviour
     public int maxRounds = 10;
 
     private bool isGamePaused = false;
-    
+
     private bool isPowerUpSelected = false;
     private Image powerUpButtonImage;
     private Text powerUpButtonText;
@@ -49,11 +49,11 @@ public class TurnManager : MonoBehaviour
         {
             pulseTimer += Time.deltaTime * powerUpPulseSpeed;
             float pulse = Mathf.Sin(pulseTimer) * 0.15f + 0.85f;
-            
+
             Color pulsedColor = powerUpSelectedColor;
             pulsedColor.a = pulse;
             powerUpButtonImage.color = pulsedColor;
-            
+
             float scale = 1f + Mathf.Sin(pulseTimer) * 0.05f;
             powerUpButton.transform.localScale = new Vector3(scale, scale, 1f);
         }
@@ -129,6 +129,12 @@ public class TurnManager : MonoBehaviour
             inventoryUI.RefreshUI();
         }
 
+        CommunityManager communityManager = FindFirstObjectByType<CommunityManager>();
+        if (communityManager != null)
+        {
+            communityManager.OnRoundStarted(currentRound);
+        }
+
         UpdateActionButtons();
 
         if (powerUpButton != null)
@@ -180,13 +186,13 @@ public class TurnManager : MonoBehaviour
                     ItemData selectedPowerUp = powerActions.GetSelectedPowerUp();
                     bool hasPowerUp = selectedPowerUp != null;
                     bool canUsePowerUp = canAct && hasPowerUp;
-                    
+
                     powerUpButton.interactable = canUsePowerUp;
-                    
+
                     if (hasPowerUp && canAct)
                     {
                         isPowerUpSelected = true;
-                        
+
                         if (powerUpButtonText != null)
                         {
                             powerUpButtonText.text = $"⚡ {selectedPowerUp.itemName}";
@@ -196,7 +202,7 @@ public class TurnManager : MonoBehaviour
                     {
                         isPowerUpSelected = false;
                         ResetPowerUpButtonVisuals();
-                        
+
                         if (powerUpButtonText != null)
                         {
                             powerUpButtonText.text = "⚡ POWERUP";
@@ -208,7 +214,7 @@ public class TurnManager : MonoBehaviour
                     powerUpButton.interactable = false;
                     isPowerUpSelected = false;
                     ResetPowerUpButtonVisuals();
-                    
+
                     if (powerUpButtonText != null)
                     {
                         powerUpButtonText.text = "⚡ POWERUP";
@@ -220,7 +226,7 @@ public class TurnManager : MonoBehaviour
                 powerUpButton.interactable = false;
                 isPowerUpSelected = false;
                 ResetPowerUpButtonVisuals();
-                
+
                 if (powerUpButtonText != null)
                 {
                     powerUpButtonText.text = "⚡ POWERUP";
@@ -239,7 +245,7 @@ public class TurnManager : MonoBehaviour
         {
             powerUpButton.transform.localScale = Vector3.one;
         }
-        
+
         if (powerUpButtonText != null)
         {
             powerUpButtonText.text = "⚡ POWERUP";
@@ -303,12 +309,12 @@ public class TurnManager : MonoBehaviour
         }
 
         powerActions.ExecuteSelectedPowerUp();
-        
+
         isPowerUpSelected = false;
         ResetPowerUpButtonVisuals();
-        
+
         UpdateActionButtons();
-        
+
         if (inventoryUI != null)
         {
             inventoryUI.ClearSelectedItem();
@@ -319,7 +325,7 @@ public class TurnManager : MonoBehaviour
     System.Collections.IEnumerator FlashPowerUpButton()
     {
         if (powerUpButtonImage == null) yield break;
-        
+
         Color originalColor = powerUpButtonImage.color;
         powerUpButtonImage.color = Color.green;
         yield return new WaitForSeconds(0.1f);
@@ -333,7 +339,7 @@ public class TurnManager : MonoBehaviour
     System.Collections.IEnumerator ShowPowerUpWarning()
     {
         if (powerUpButtonImage == null) yield break;
-        
+
         Color originalColor = powerUpButtonImage.color;
         for (int i = 0; i < 3; i++)
         {
@@ -389,10 +395,10 @@ public class TurnManager : MonoBehaviour
         }
 
         Debug.Log($"⏹️ {currentPlayer.gameObject.name} clicked END TURN");
-        
+
         isPowerUpSelected = false;
         ResetPowerUpButtonVisuals();
-        
+
         EndTurn();
     }
 
@@ -486,18 +492,18 @@ public class TurnManager : MonoBehaviour
         // Reset powerup selection after weather/community event
         isPowerUpSelected = false;
         ResetPowerUpButtonVisuals();
-        
+
         // Update UI to reflect current state
         if (inventoryUI != null)
         {
             inventoryUI.RefreshUI();
         }
-        
+
         if (scoreManager != null)
         {
             scoreManager.UpdateScores();
         }
-        
+
         StartTurn();
         Debug.Log($"🔄 Turn resumed for {currentPlayer.gameObject.name} after event");
     }
