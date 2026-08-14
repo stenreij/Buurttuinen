@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,6 +10,7 @@ public class GameManager : MonoBehaviour
     public ScoreManager scoreManager;
     public Sprite shieldSprite;
     public WeatherManager weatherManager;
+    public CommunityManager communityManager;
 
     public List<Player> players = new List<Player>();
     private TurnManager turnManager;
@@ -21,14 +21,14 @@ public class GameManager : MonoBehaviour
         if (itemDatabase != null)
         {
             itemDatabase.ResetPool();
-            Debug.Log("🔄 ItemDatabase pool gereset!");
+            Debug.Log("🔄 ItemDatabase pool reset!");
         }
 
         ScoreManager scoreManager = FindFirstObjectByType<ScoreManager>();
         if (scoreManager != null)
         {
             scoreManager.ResetScores();
-            Debug.Log("🔄 Scores gereset!");
+            Debug.Log("🔄 Scores reset!");
         }
 
         GameSetup setup = FindFirstObjectByType<GameSetup>();
@@ -89,12 +89,12 @@ public class GameManager : MonoBehaviour
                         itemList += item.itemName + ", ";
                     }
                     itemList = itemList.TrimEnd(',', ' ');
-                    Debug.Log($"📦 {player.gameObject.name} ontving: {itemList}");
+                    Debug.Log($"📦 {player.gameObject.name} received: {itemList}");
                 }
             }
             else
             {
-                Debug.LogError($"❌ Geen ItemActions gevonden op {player.gameObject.name}!");
+                Debug.LogError($"❌ No ItemActions found on {player.gameObject.name}!");
             }
         }
 
@@ -117,19 +117,45 @@ public class GameManager : MonoBehaviour
         {
             turnManager.Initialize(players);
             turnManager.OnRoundStarted += OnRoundStarted;
-            Debug.Log("🔄 TurnManager gestart!");
+            Debug.Log("🔄 TurnManager started!");
         }
 
-        // 🔥 Weer systeem initialiseren
+        // 🔥 Initialize Weather system
         if (weatherManager != null)
         {
             weatherManager.InitializeWeatherSystem(10);
+        }
+
+        // 🔥 Initialize Community system
+        if (communityManager != null)
+        {
+            communityManager = FindFirstObjectByType<CommunityManager>();
+            if (communityManager == null)
+            {
+                Debug.LogWarning("⚠️ CommunityManager not found! Add it to the scene.");
+            }
         }
     }
 
     void OnRoundStarted(int roundNumber)
     {
-        if (weatherManager != null)
+        // Check if we should trigger community first
+        bool communityTriggered = false;
+
+        if (communityManager != null)
+        {
+            // Community checks if it should start a new goal or check result
+            communityManager.OnRoundStarted(roundNumber);
+
+            // Check if community is now active
+            if (communityManager.IsCommunityActive())
+            {
+                communityTriggered = true;
+            }
+        }
+
+        // Only trigger weather if community is not active
+        if (!communityTriggered && weatherManager != null)
         {
             weatherManager.OnRoundStarted(roundNumber);
         }

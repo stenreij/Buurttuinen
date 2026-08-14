@@ -22,7 +22,7 @@ public class WeatherManager : MonoBehaviour
     [Header("Settings")]
     public int maxWeatherEvents = 3;
     public int minWeatherEvents = 2;
-    
+
     // 🔥 AANGEPAST: Verschillende duur voor verschillende meldingen
     public float weatherAnnouncementDuration = 3f;        // Standaard duur
     public float resultAnnouncementDuration = 5f;         // Duur voor resultaat meldingen (vernietigt x items)
@@ -32,7 +32,7 @@ public class WeatherManager : MonoBehaviour
     private bool weatherEventActive = false;
     private bool isExecutingWeather = false;
     private int currentRound = 0;
-    
+
     // 🔥 NIEUW: Coroutine reference om te voorkomen dat meldingen overlappen
     private Coroutine currentAnnouncementCoroutine;
 
@@ -75,6 +75,14 @@ public class WeatherManager : MonoBehaviour
     {
         currentRound = roundNumber;
 
+        // Check if community is active - if so, delay weather
+        CommunityManager community = FindFirstObjectByType<CommunityManager>();
+        if (community != null && community.IsCommunityActive())
+        {
+            Debug.Log("🌤️ Community is active, weather will wait...");
+            return;
+        }
+
         if (roundsWithWeather.Contains(roundNumber) &&
             weatherEventsTriggered < maxWeatherEvents &&
             !weatherEventActive &&
@@ -83,6 +91,19 @@ public class WeatherManager : MonoBehaviour
             TriggerWeatherEvent();
         }
     }
+
+    public bool CanWeatherTrigger()
+    {
+        // Check if community is active
+        CommunityManager community = FindFirstObjectByType<CommunityManager>();
+        if (community != null && community.IsCommunityActive())
+        {
+            Debug.Log("🌤️ Community is active, weather will wait...");
+            return false;
+        }
+        return true;
+    }
+
 
     public void TriggerWeatherEvent()
     {
@@ -106,7 +127,7 @@ public class WeatherManager : MonoBehaviour
     {
         WeatherType[] allTypes = System.Enum.GetValues(typeof(WeatherType)) as WeatherType[];
         WeatherType selectedType = allTypes[Random.Range(0, allTypes.Length)];
-        
+
         Debug.Log($"🌤️ Willekeurig weer gekozen: {selectedType}");
         return selectedType;
     }
@@ -575,7 +596,7 @@ public class WeatherManager : MonoBehaviour
         {
             weatherAnnouncementText.text = message;
             weatherAnnouncementText.gameObject.SetActive(true);
-            
+
             // Gebruik de meegegeven duration, of de standaard als -1
             float actualDuration = duration > 0 ? duration : weatherAnnouncementDuration;
             StartCoroutine(HideAnnouncementAfterDelay(actualDuration));

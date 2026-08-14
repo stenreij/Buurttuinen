@@ -27,7 +27,6 @@ public class TurnManager : MonoBehaviour
     public TextMeshProUGUI roundText;
     public TextMeshProUGUI turnText;
 
-    // 🔥 NIEUW: PowerUp button visuals
     [Header("PowerUp Button Visuals")]
     public Color powerUpDefaultColor = Color.white;
     public Color powerUpSelectedColor = new Color(1f, 0.8f, 0.2f, 1f);
@@ -39,7 +38,6 @@ public class TurnManager : MonoBehaviour
 
     private bool isGamePaused = false;
     
-    // 🔥 NIEUW: PowerUp button state
     private bool isPowerUpSelected = false;
     private Image powerUpButtonImage;
     private Text powerUpButtonText;
@@ -47,18 +45,15 @@ public class TurnManager : MonoBehaviour
 
     void Update()
     {
-        // 🔥 NIEUW: Pulse animatie voor geselecteerde powerup knop
         if (isPowerUpSelected && powerUpButtonImage != null && powerUpButton != null)
         {
             pulseTimer += Time.deltaTime * powerUpPulseSpeed;
             float pulse = Mathf.Sin(pulseTimer) * 0.15f + 0.85f;
             
-            // Kleur laten pulseren
             Color pulsedColor = powerUpSelectedColor;
             pulsedColor.a = pulse;
             powerUpButtonImage.color = pulsedColor;
             
-            // Schaal laten pulseren
             float scale = 1f + Mathf.Sin(pulseTimer) * 0.05f;
             powerUpButton.transform.localScale = new Vector3(scale, scale, 1f);
         }
@@ -73,7 +68,6 @@ public class TurnManager : MonoBehaviour
             return;
         }
 
-        // 🔥 NIEUW: Sla de Image en Text references op
         if (powerUpButton != null)
         {
             powerUpButtonImage = powerUpButton.GetComponent<Image>();
@@ -103,12 +97,11 @@ public class TurnManager : MonoBehaviour
 
         if (isGamePaused)
         {
-            Debug.Log("⏸️ Game is gepauzeerd (weer)");
+            Debug.Log("⏸️ Game is paused (weather/community)");
             UpdateActionButtons();
             return;
         }
 
-        // 🔥 NIEUW: Reset powerup selectie aan het begin van elke beurt
         isPowerUpSelected = false;
         ResetPowerUpButtonVisuals();
 
@@ -117,12 +110,12 @@ public class TurnManager : MonoBehaviour
 
         if (roundText != null)
         {
-            roundText.text = $"Ronde {currentRound} / {maxRounds}";
+            roundText.text = $"Round {currentRound} / {maxRounds}";
         }
 
         if (turnText != null)
         {
-            turnText.text = $"Beurt: {currentPlayer.gameObject.name}";
+            turnText.text = $"Turn: {currentPlayer.gameObject.name}";
         }
 
         if (scoreManager != null)
@@ -176,7 +169,6 @@ public class TurnManager : MonoBehaviour
         if (endTurnButton != null)
             endTurnButton.interactable = !isGamePaused;
 
-        // 🔥 AANGEPAST: PowerUp button met visuele feedback
         if (powerUpButton != null)
         {
             Player currentPlayer = GetCurrentPlayer();
@@ -191,13 +183,10 @@ public class TurnManager : MonoBehaviour
                     
                     powerUpButton.interactable = canUsePowerUp;
                     
-                    // 🔥 NIEUW: Update powerup button visuals
                     if (hasPowerUp && canAct)
                     {
-                        // Er is een powerup geselecteerd en we kunnen hem gebruiken
                         isPowerUpSelected = true;
                         
-                        // Update de tekst
                         if (powerUpButtonText != null)
                         {
                             powerUpButtonText.text = $"⚡ {selectedPowerUp.itemName}";
@@ -205,7 +194,6 @@ public class TurnManager : MonoBehaviour
                     }
                     else
                     {
-                        // Geen powerup geselecteerd of niet bruikbaar
                         isPowerUpSelected = false;
                         ResetPowerUpButtonVisuals();
                         
@@ -241,7 +229,6 @@ public class TurnManager : MonoBehaviour
         }
     }
 
-    // 🔥 NIEUW: Reset de powerup button visuals
     void ResetPowerUpButtonVisuals()
     {
         if (powerUpButtonImage != null)
@@ -266,11 +253,11 @@ public class TurnManager : MonoBehaviour
 
         if (paused)
         {
-            Debug.Log("⏸️ Game gepauzeerd (weer)");
+            Debug.Log("⏸️ Game paused");
         }
         else
         {
-            Debug.Log("▶️ Game hervat na weer");
+            Debug.Log("▶️ Game resumed");
         }
     }
 
@@ -279,24 +266,22 @@ public class TurnManager : MonoBehaviour
         return isGamePaused;
     }
 
-    // 🔥 AANGEPAST: PowerUp clicked met feedback
     public void OnPowerUpClicked()
     {
         if (isGamePaused)
         {
-            Debug.Log("⏸️ Even wachten, game is gepauzeerd!");
+            Debug.Log("⏸️ Game is paused, cannot use powerup!");
             return;
         }
 
         if (hasPlacedItemThisTurn)
         {
-            Debug.Log("⚠️ Je hebt deze beurt al een actie gedaan!");
+            Debug.Log("⚠️ You have already performed an action this turn!");
             return;
         }
 
         Debug.Log($"⚡ {currentPlayer.gameObject.name} clicked POWER UP!");
 
-        // 🔥 NIEUW: Flash feedback op de knop
         if (powerUpButtonImage != null)
         {
             StartCoroutine(FlashPowerUpButton());
@@ -305,31 +290,25 @@ public class TurnManager : MonoBehaviour
         PowerUpActions powerActions = currentPlayer.GetComponent<PowerUpActions>();
         if (powerActions == null)
         {
-            Debug.Log("⚠️ Geen PowerUpActions gevonden!");
+            Debug.Log("⚠️ No PowerUpActions found!");
             return;
         }
 
-        // Check of er een powerup is geselecteerd
         ItemData selectedPowerUp = powerActions.GetSelectedPowerUp();
         if (selectedPowerUp == null)
         {
-            Debug.Log("⚠️ Selecteer eerst een power-up uit je inventory!");
-            // Toon een visuele waarschuwing
+            Debug.Log("⚠️ Select a power-up from your inventory first!");
             StartCoroutine(ShowPowerUpWarning());
             return;
         }
 
-        // Voer de powerup uit
         powerActions.ExecuteSelectedPowerUp();
         
-        // 🔥 NIEUW: Reset de powerup selectie status na gebruik
         isPowerUpSelected = false;
         ResetPowerUpButtonVisuals();
         
-        // Update de UI
         UpdateActionButtons();
         
-        // Refresh inventory UI
         if (inventoryUI != null)
         {
             inventoryUI.ClearSelectedItem();
@@ -337,7 +316,6 @@ public class TurnManager : MonoBehaviour
         }
     }
 
-    // 🔥 NIEUW: Flash animatie voor powerup knop
     System.Collections.IEnumerator FlashPowerUpButton()
     {
         if (powerUpButtonImage == null) yield break;
@@ -352,7 +330,6 @@ public class TurnManager : MonoBehaviour
         powerUpButtonImage.color = originalColor;
     }
 
-    // 🔥 NIEUW: Waarschuwing als er geen powerup is geselecteerd
     System.Collections.IEnumerator ShowPowerUpWarning()
     {
         if (powerUpButtonImage == null) yield break;
@@ -371,13 +348,12 @@ public class TurnManager : MonoBehaviour
     {
         if (isGamePaused)
         {
-            Debug.Log("⏸️ Even wachten, game is gepauzeerd!");
+            Debug.Log("⏸️ Game is paused, cannot pass!");
             return;
         }
 
         Debug.Log($"⏭️ {currentPlayer.gameObject.name} clicked PASS");
 
-        // 🔥 NIEUW: Reset powerup selectie bij passen
         isPowerUpSelected = false;
         ResetPowerUpButtonVisuals();
 
@@ -397,7 +373,7 @@ public class TurnManager : MonoBehaviour
     {
         if (isGamePaused)
         {
-            Debug.Log("⏸️ Even wachten, game is gepauzeerd!");
+            Debug.Log("⏸️ Game is paused, cannot trade!");
             return;
         }
 
@@ -408,13 +384,12 @@ public class TurnManager : MonoBehaviour
     {
         if (isGamePaused)
         {
-            Debug.Log("⏸️ Even wachten, game is gepauzeerd!");
+            Debug.Log("⏸️ Game is paused, cannot end turn!");
             return;
         }
 
         Debug.Log($"⏹️ {currentPlayer.gameObject.name} clicked END TURN");
         
-        // 🔥 NIEUW: Reset powerup selectie bij einde beurt
         isPowerUpSelected = false;
         ResetPowerUpButtonVisuals();
         
@@ -425,7 +400,7 @@ public class TurnManager : MonoBehaviour
     {
         if (isGamePaused)
         {
-            Debug.Log("⏸️ Game is gepauzeerd, einde beurt uitgesteld!");
+            Debug.Log("⏸️ Game is paused, end turn delayed!");
             return;
         }
 
@@ -448,7 +423,7 @@ public class TurnManager : MonoBehaviour
         {
             if (currentRound >= maxRounds)
             {
-                Debug.Log($"🏁 GAME HAS ENDED! Ronde {currentRound} is voltooid!");
+                Debug.Log($"🏁 GAME HAS ENDED! Round {currentRound} completed!");
 
                 ScoreManager scoreManager = FindFirstObjectByType<ScoreManager>();
                 if (scoreManager != null)
@@ -488,7 +463,7 @@ public class TurnManager : MonoBehaviour
     public void SetMaxRounds(int rounds)
     {
         maxRounds = rounds;
-        Debug.Log($"📋 Max rounds set on: {maxRounds}");
+        Debug.Log($"📋 Max rounds set to: {maxRounds}");
     }
 
     private void RandomizeStartingPlayer()
@@ -502,13 +477,28 @@ public class TurnManager : MonoBehaviour
         Debug.Log($"🎲 {startingPlayer.gameObject.name} starts the game!");
     }
 
+    // ============================================
+    // RESUME TURN AFTER WEATHER/COMMUNITY
+    // ============================================
+
     public void ResumeTurnAfterWeather()
     {
-        // 🔥 NIEUW: Reset powerup selectie na weer
+        // Reset powerup selection after weather/community event
         isPowerUpSelected = false;
         ResetPowerUpButtonVisuals();
         
+        // Update UI to reflect current state
+        if (inventoryUI != null)
+        {
+            inventoryUI.RefreshUI();
+        }
+        
+        if (scoreManager != null)
+        {
+            scoreManager.UpdateScores();
+        }
+        
         StartTurn();
-        Debug.Log($"🔄 Beurt hervat voor {currentPlayer.gameObject.name} na weerevent");
+        Debug.Log($"🔄 Turn resumed for {currentPlayer.gameObject.name} after event");
     }
 }
