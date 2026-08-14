@@ -10,6 +10,13 @@ public class InventoryUI : MonoBehaviour
     public Transform contentParent;
     private ItemData selectedItem;
 
+    // Kleur voor selectie indicator
+    [Header("Selection Visuals")]
+    public Color selectedColor = new Color(1f, 1f, 0.5f, 1f);  // Geelachtig
+    public Color defaultColor = Color.white;
+    public float selectedScale = 1.15f;
+    public float defaultScale = 1f;
+
     public void RefreshUI()
     {
         UpdateUI();
@@ -107,13 +114,26 @@ public class InventoryUI : MonoBehaviour
             GameObject newButton = Instantiate(itemButtonPrefab, contentParent);
             newButton.name = item.itemName;
 
-            //Debug.Log($"✅ Created button for: {item.itemName} with count: {count}");
-
             SetButtonIcon(newButton, item);
             SetButtonCountText(newButton, count);
             SetButtonClickEvent(newButton, item);
 
+            // 🔥 NIEUW: Voeg een background image toe voor selectie feedback als die er niet is
+            EnsureButtonHasBackground(newButton);
+
             buttonIndex++;
+        }
+    }
+
+    // 🔥 NIEUW: Zorg dat de button een background Image heeft voor selectie
+    void EnsureButtonHasBackground(GameObject button)
+    {
+        Image img = button.GetComponent<Image>();
+        if (img == null)
+        {
+            img = button.AddComponent<Image>();
+            img.color = defaultColor;
+            img.raycastTarget = true;
         }
     }
 
@@ -126,6 +146,7 @@ public class InventoryUI : MonoBehaviour
             if (item.icon != null)
             {
                 iconImage.sprite = item.icon;
+                iconImage.color = defaultColor;
             }
             else
             {
@@ -170,11 +191,10 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
-    // ON ITEM CLICKED
+    // 🔥 AANGEPAST: ON ITEM CLICKED - Nu met betere feedback voor alle items
     void OnItemClicked(ItemData item)
     {
-        Debug.Log($"🖱️ CLICKED ON: {item.itemName}");
-        Debug.Log($"🔍 item.type = {item.type}");
+        Debug.Log($"🖱️ CLICKED ON: {item.itemName} (Type: {item.type})");
 
         TurnManager turnManager = FindFirstObjectByType<TurnManager>();
         if (turnManager == null)
@@ -202,39 +222,114 @@ public class InventoryUI : MonoBehaviour
             return;
         }
 
+        // 🔥 NIEUW: Als we op hetzelfde item klikken, deselecteer het dan
+        if (selectedItem == item)
+        {
+            Debug.Log($"🔓 Deselecting: {item.itemName}");
+            selectedItem = null;
+            
+            // Clear selection in actions
+            ItemActions actions = currentPlayer.GetComponent<ItemActions>();
+            if (actions != null) actions.ClearSelectedItem();
+            
+            PowerUpActions powerActions = currentPlayer.GetComponent<PowerUpActions>();
+            if (powerActions != null) powerActions.ClearSelectedPowerUp();
+            
+            UpdateUI();
+            turnManager.UpdateActionButtons();
+            return;
+        }
+
+        // 🔥 Selecteer het item
         selectedItem = item;
 
+        // Update de visuele selectie
         UpdateItemSelection(item);
 
+        // 🔥 Verwerk op basis van item type
         if (item.type == ItemType.PowerUp)
         {
-            Debug.Log($"🔍 PowerUp detected! Looking for PowerUpActions...");
-
+            Debug.Log($"⚡ PowerUp detected! Selecting power-up...");
+            
             PowerUpActions powerActions = currentPlayer.GetComponent<PowerUpActions>();
             if (powerActions != null)
             {
-                Debug.Log($"✅ PowerUpActions found!");
                 powerActions.SelectPowerUp(item);
                 Debug.Log($"⚡ Power-up geselecteerd: {item.itemName}");
-
-                turnManager.UpdateActionButtons();
             }
             else
             {
                 Debug.Log($"❌ PowerUpActions NOT found on {currentPlayer.gameObject.name}!");
             }
-            return;
         }
-
-        Debug.Log($"🔍 Normaal item detected, using ItemActions");
-        ItemActions actions = currentPlayer.GetComponent<ItemActions>();
-        if (actions == null)
+        else if (item.type == ItemType.Sabotage)
         {
-            Debug.Log("⚠️ No ItemActions found!");
-            return;
+            Debug.Log($"🔧 Sabotage item detected! Selecting sabotage...");
+            
+            ItemActions actions = currentPlayer.GetComponent<ItemActions>();
+            if (actions != null)
+            {
+                actions.SelectItem(item);
+                Debug.Log($"🔧 Sabotage item geselecteerd: {item.itemName}");
+            }
+            else
+            {
+                Debug.Log($"❌ ItemActions NOT found on {currentPlayer.gameObject.name}!");
+            }
+        }
+        else
+        {
+            Debug.Log($"🌱 Normal item detected, using ItemActions");
+            ItemActions actions = currentPlayer.GetComponent<ItemActions>();
+            if (actions == null)
+            {
+                Debug.Log("⚠️ No ItemActions found!");
+                return;
+            }
+
+            actions.SelectItem(item);
         }
 
-        actions.SelectItem(item);
+        turnManager.UpdateActionButtons();
+    }
+
+    // 🔥 VERBETERD: Update item selection met kleur EN schaal
+    private void UpdateItemSelection(ItemData selectedItem)
+    {
+        foreach (Transform child in contentParent)
+        {
+            Image img = child.GetComponent<Image>();
+            if (img != null)
+            {
+                if (child.name == selectedItem.itemName)
+                {
+                    // Geselecteerd: gele highlight + groter
+                    img.color = selectedColor;
+                    child.localScale = new Vector3(selectedScale, selectedScale, 1f);
+                }
+                else
+                {
+                    // Niet geselecteerd: normale kleur + normale grootte
+                    img.color = defaultColor;
+                    child.localScale = new Vector3(defaultScale, defaultScale, 1f);
+                }
+            }
+        }
+    }
+
+    // 🔥 NIEUW: Reset alle selectie visuals
+    public void ClearAllSelections()
+    {
+        selectedItem = null;
+        foreach (Transform child in contentParent)
+        {
+            Image img = child.GetComponent<Image>();
+            if (img != null)
+            {
+                img.color = defaultColor;
+                child.localScale = new Vector3(defaultScale, defaultScale, 1f);
+            }
+        }
     }
 
     public ItemData GetSelectedItem()
@@ -242,23 +337,9 @@ public class InventoryUI : MonoBehaviour
         return selectedItem;
     }
 
-    private void UpdateItemSelection(ItemData selectedItem)
-    {
-        foreach (Transform child in contentParent)
-        {
-            if (child.name == selectedItem.itemName)
-            {
-                child.localScale = new Vector3(1.15f, 1.15f, 1f);
-            }
-            else
-            {
-                child.localScale = new Vector3(1f, 1f, 1f);
-            }
-        }
-    }
-
     public void ClearSelectedItem()
     {
         selectedItem = null;
+        UpdateUI();
     }
 }

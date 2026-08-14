@@ -47,6 +47,7 @@ public class GardenTile : MonoBehaviour
             return;
         }
 
+        // 🔥 NIEUW: Check eerst of we een PowerUp actie hebben
         PowerUpActions powerActions = currentPlayer.GetComponent<PowerUpActions>();
         if (powerActions != null && powerActions.IsWaitingForTile())
         {
@@ -54,25 +55,36 @@ public class GardenTile : MonoBehaviour
             return;
         }
 
+        // 🔥 NIEUW: Check of we een Sabotage item hebben geselecteerd
         ItemData selectedItem = actions.GetSelectedItem();
         if (selectedItem != null && selectedItem.type == ItemType.Sabotage)
         {
+            Debug.Log($"🔧 Using sabotage on tile!");
             actions.RemoveItem(this);
             return;
         }
 
-        if (selectedItem != null && selectedItem.type == ItemType.PowerUp)
+        // 🔥 NIEUW: Check of we een PowerUp item hebben geselecteerd (via InventoryUI)
+        InventoryUI inventoryUI = FindFirstObjectByType<InventoryUI>();
+        if (inventoryUI != null)
         {
-            actions.PlaceItem(this);
-            return;
+            ItemData uiSelectedItem = inventoryUI.GetSelectedItem();
+            if (uiSelectedItem != null && uiSelectedItem.type == ItemType.PowerUp)
+            {
+                // PowerUp wordt afgehandeld door PowerUpActions
+                Debug.Log($"⚡ PowerUp selected, but waiting for PowerUpActions to handle it");
+                return;
+            }
         }
 
+        // Check if this is the player's own garden
         if (currentPlayer.assignedGarden != parentGarden)
         {
             Debug.Log($"⚠️ {currentPlayer.gameObject.name} cannot place in {parentGarden.name}! This is not your garden.");
             return;
         }
 
+        // Place normal item
         actions.PlaceItem(this);
     }
 }

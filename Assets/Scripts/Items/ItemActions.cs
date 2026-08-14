@@ -83,7 +83,7 @@ public class ItemActions : MonoBehaviour
     public void SelectItem(ItemData item)
     {
         selectedItem = item;
-        Debug.Log($"✅ Item selected: {item.itemName}");
+        Debug.Log($"✅ Item selected: {item.itemName} (Type: {item.type})");
     }
 
     public ItemData GetSelectedItem()
@@ -94,6 +94,7 @@ public class ItemActions : MonoBehaviour
     public void ClearSelectedItem()
     {
         selectedItem = null;
+        Debug.Log($"🧹 Cleared selected item");
     }
 
     public void PlaceItem(GardenTile targetTile)
@@ -176,6 +177,7 @@ public class ItemActions : MonoBehaviour
         InventoryUI ui = FindFirstObjectByType<InventoryUI>();
         if (ui != null)
         {
+            ui.ClearSelectedItem();
             ui.RefreshUI();
         }
     }
@@ -235,6 +237,7 @@ public class ItemActions : MonoBehaviour
         InventoryUI ui = FindFirstObjectByType<InventoryUI>();
         if (ui != null)
         {
+            ui.ClearSelectedItem();
             ui.RefreshUI();
         }
     }
@@ -294,6 +297,7 @@ public class ItemActions : MonoBehaviour
         InventoryUI ui = FindFirstObjectByType<InventoryUI>();
         if (ui != null)
         {
+            ui.ClearSelectedItem();
             ui.RefreshUI();
         }
 
@@ -311,6 +315,7 @@ public class ItemActions : MonoBehaviour
             InventoryUI ui = FindFirstObjectByType<InventoryUI>();
             if (ui != null)
             {
+                ui.ClearSelectedItem();
                 ui.RefreshUI();
             }
 

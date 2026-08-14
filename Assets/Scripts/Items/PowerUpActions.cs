@@ -42,6 +42,7 @@ public class PowerUpActions : MonoBehaviour
     public void ClearSelectedPowerUp()
     {
         selectedPowerUp = null;
+        Debug.Log($"🧹 Cleared selected power-up");
     }
 
     public void UseExtraItem()
@@ -101,7 +102,11 @@ public class PowerUpActions : MonoBehaviour
         ClearSelectedPowerUp();
 
         InventoryUI ui = FindFirstObjectByType<InventoryUI>();
-        if (ui != null) ui.RefreshUI();
+        if (ui != null) 
+        {
+            ui.ClearSelectedItem();
+            ui.RefreshUI();
+        }
     }
 
     private void GiveRandomItem()
@@ -254,38 +259,38 @@ public class PowerUpActions : MonoBehaviour
     }
 
     private void AddProtectionVisual(GardenTile targetTile)
-{
-    if (targetTile.placedItem == null) return;
-
-    GameObject shield = new GameObject("ShieldIndicator");
-    shield.transform.parent = targetTile.placedItem.transform;
-
-    shield.transform.localPosition = new Vector3(-0.6f, 0.6f, 0f);
-
-    SpriteRenderer sr = shield.AddComponent<SpriteRenderer>();
-
-    if (shieldSprite != null)
     {
-        sr.sprite = shieldSprite;
-    }
-    else
-    {
-        Texture2D tex = new Texture2D(64, 64);
-        for (int x = 0; x < 64; x++)
+        if (targetTile.placedItem == null) return;
+
+        GameObject shield = new GameObject("ShieldIndicator");
+        shield.transform.parent = targetTile.placedItem.transform;
+
+        shield.transform.localPosition = new Vector3(-0.6f, 0.6f, 0f);
+
+        SpriteRenderer sr = shield.AddComponent<SpriteRenderer>();
+
+        if (shieldSprite != null)
         {
-            for (int y = 0; y < 64; y++)
-            {
-                tex.SetPixel(x, y, Color.white);
-            }
+            sr.sprite = shieldSprite;
         }
-        tex.Apply();
-        sr.sprite = Sprite.Create(tex, new Rect(0, 0, 64, 64), new Vector2(0.5f, 0.5f));
+        else
+        {
+            Texture2D tex = new Texture2D(64, 64);
+            for (int x = 0; x < 64; x++)
+            {
+                for (int y = 0; y < 64; y++)
+                {
+                    tex.SetPixel(x, y, Color.white);
+                }
+            }
+            tex.Apply();
+            sr.sprite = Sprite.Create(tex, new Rect(0, 0, 64, 64), new Vector2(0.5f, 0.5f));
+        }
+
+        sr.sortingOrder = 20;
+
+        Debug.Log($"🛡️ Shield indicator toegevoegd aan {targetTile.placedItem.name}");
     }
-
-    sr.sortingOrder = 20;
-
-    Debug.Log($"🛡️ Shield indicator toegevoegd aan {targetTile.placedItem.name}");
-}
 
     public bool IsWaitingForTile()
     {
