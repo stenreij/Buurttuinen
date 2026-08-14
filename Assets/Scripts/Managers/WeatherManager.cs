@@ -627,12 +627,3 @@ public class WeatherManager : MonoBehaviour
     public bool IsWeatherEventActive() => weatherEventActive;
     public List<int> GetWeatherRounds() => roundsWithWeather;
 }
-
-public enum WeatherType
-{
-    Tornado,
-    Hitte,
-    Regen,
-    Vorst,
-    Storm
-}

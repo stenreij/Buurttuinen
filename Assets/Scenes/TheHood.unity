@@ -2207,7 +2207,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 751633610}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e256635e73179f42b59c449a87a2d58, type: 3}
+  m_Script: {fileID: 11500000, guid: ec8eb057dad100a4087f3fc5e878d448, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   turnManager: {fileID: 2121273569}
@@ -2221,8 +2221,8 @@ MonoBehaviour:
   frostEffectPrefab: {fileID: 586419481338936572, guid: a6f05521a3a2a9d44b9e2e4e45c04712, type: 3}
   maxWeatherEvents: 3
   minWeatherEvents: 2
-  weatherAnnouncementDuration: 9
-  resultAnnouncementDuration: 2
+  weatherAnnouncementDuration: 3
+  resultAnnouncementDuration: 5
 --- !u!4 &751633612
 Transform:
   m_ObjectHideFlags: 0
@@ -2518,7 +2518,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 867545276}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a926d85baac84b449a5da10c04f0d85, type: 3}
+  m_Script: {fileID: 11500000, guid: d5538265493837e44b2d2cc729e978a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   turnManager: {fileID: 2121273569}
@@ -2532,6 +2532,11 @@ MonoBehaviour:
   announcementDuration: 4
   goalDisplayDuration: 6
   maxRounds: 10
+  biodiversityBaseValue: 15
+  waterStorageBaseValue: 12
+  soilHealthBaseValue: 10
+  aestheticsBaseValue: 8
+  totalScoreBaseValue: 30
 --- !u!4 &867545278
 Transform:
   m_ObjectHideFlags: 0
@@ -3087,7 +3092,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1337639597}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a48e3f5dfdfb92f4e8ff79e4a3758ae0, type: 3}
+  m_Script: {fileID: 11500000, guid: 4c8694a2639db3e489d935554dc89f1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   inventoryUI: {fileID: 746346862}
@@ -3881,7 +3886,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1668731314}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b6aba4f0f2fac04da22a28161a400ca, type: 3}
+  m_Script: {fileID: 11500000, guid: 422fa8ad4780e384ea34405a2c2e6433, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   gardenPrefab: {fileID: 1939054343258594106, guid: b94240e4486994444b2f9ba59a5e07ab, type: 3}
@@ -5361,7 +5366,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1967871652}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5295cf0dcc41b5458f8156ac441032a, type: 3}
+  m_Script: {fileID: 11500000, guid: 87caa78564d5987439da4b37f67387f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   turnManager: {fileID: 2121273569}
@@ -5480,7 +5485,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2121273568}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 233a356c91489584e887b63af8b86e4c, type: 3}
+  m_Script: {fileID: 11500000, guid: 27789e957c57b2b48a5f14b81ac25dc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   players: []
@@ -5497,7 +5502,7 @@ MonoBehaviour:
   powerUpDefaultColor: {r: 1, g: 1, b: 1, a: 1}
   powerUpSelectedColor: {r: 1, g: 0.8, b: 0.2, a: 1}
   powerUpDisabledColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
-  powerUpPulseSpeed: 2
+  powerUpPulseSpeed: 1
   maxRounds: 10
 --- !u!4 &2121273570
 Transform:
