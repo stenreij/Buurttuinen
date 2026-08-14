@@ -22,7 +22,7 @@ public class WeatherManager : MonoBehaviour
     [Header("Settings")]
     public int maxWeatherEvents = 3;
     public int minWeatherEvents = 2;
-    public float weatherAnnouncementDuration = 6f;
+    public float weatherAnnouncementDuration = 5f;
 
     private List<int> roundsWithWeather = new List<int>();
     private int weatherEventsTriggered = 0;
@@ -114,7 +114,7 @@ public class WeatherManager : MonoBehaviour
             case WeatherType.Tornado: return "Tornado! Items vliegen weg!";
             case WeatherType.Storm: return "Zware storm! Vernietigt items!";
             case WeatherType.Hitte: return "Hittegolf! Water verdampt!";
-            case WeatherType.Regen: return "Hevige regenval! Planten verzuipen!";
+            case WeatherType.Regen: return "Hevige regenval! Planten groeien en decoraties verzuipen!";
             case WeatherType.Vorst: return "Vorst! Planten bevriezen!";
             default: return "Weerswaarschuwing!";
         }
@@ -126,9 +126,7 @@ public class WeatherManager : MonoBehaviour
 
         switch (weatherType)
         {
-            // 🔥 OMGEDRAAID: Tornado verplaatst nu (was Storm)
             case WeatherType.Tornado: ExecuteTornado_MoveItems(); break;
-            // 🔥 OMGEDRAAID: Storm vernietigt nu (was Tornado)
             case WeatherType.Storm: ExecuteStorm_DestroyItems(); break;
             case WeatherType.Hitte: ExecuteHitte(); break;
             case WeatherType.Regen: ExecuteRegen(); break;
@@ -148,7 +146,7 @@ public class WeatherManager : MonoBehaviour
     }
 
     // ============================================
-    // TORNADO - VERPLAATST ITEMS (was Storm)
+    // TORNADO - VERPLAATST ITEMS
     // ============================================
 
     void ExecuteTornado_MoveItems()
@@ -230,7 +228,7 @@ public class WeatherManager : MonoBehaviour
     }
 
     // ============================================
-    // STORM - VERNIETIGT ITEMS (was Tornado)
+    // STORM - VERNIETIGT ITEMS
     // ============================================
 
     void ExecuteStorm_DestroyItems()
@@ -264,7 +262,7 @@ public class WeatherManager : MonoBehaviour
     }
 
     // ============================================
-    // HITTE IMPLEMENTATIE (ONGEWIJZGD)
+    // HITTE IMPLEMENTATIE
     // ============================================
 
     void ExecuteHitte()
@@ -310,7 +308,7 @@ public class WeatherManager : MonoBehaviour
     }
 
     // ============================================
-    // REGEN IMPLEMENTATIE (ONGEWIJZGD)
+    // REGEN IMPLEMENTATIE
     // ============================================
 
     void ExecuteRegen()
@@ -375,7 +373,7 @@ public class WeatherManager : MonoBehaviour
     }
 
     // ============================================
-    // VORST IMPLEMENTATIE (ONGEWIJZGD)
+    // VORST IMPLEMENTATIE
     // ============================================
 
     void ExecuteVorst()
