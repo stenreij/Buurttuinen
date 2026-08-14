@@ -22,7 +22,7 @@ public class WeatherManager : MonoBehaviour
     [Header("Settings")]
     public int maxWeatherEvents = 3;
     public int minWeatherEvents = 2;
-    public float weatherAnnouncementDuration = 5f;
+    public float weatherAnnouncementDuration = 3f;
 
     private List<int> roundsWithWeather = new List<int>();
     private int weatherEventsTriggered = 0;
@@ -122,7 +122,7 @@ public class WeatherManager : MonoBehaviour
 
     IEnumerator ExecuteWeatherEvent(WeatherType weatherType)
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(4f);
 
         switch (weatherType)
         {
@@ -133,7 +133,7 @@ public class WeatherManager : MonoBehaviour
             case WeatherType.Vorst: ExecuteVorst(); break;
         }
 
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(0f);
 
         weatherEventActive = false;
         isExecutingWeather = false;
