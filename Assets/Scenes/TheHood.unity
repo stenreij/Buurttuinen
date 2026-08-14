@@ -1939,7 +1939,7 @@ MonoBehaviour:
   stormEffectPrefab: {fileID: 6608656064761540521, guid: 6b3d342b61a6a0c4099d2bd5d3e40ebf, type: 3}
   heatEffectPrefab: {fileID: 0}
   rainEffectPrefab: {fileID: 0}
-  frostEffectPrefab: {fileID: 0}
+  frostEffectPrefab: {fileID: 586419481338936572, guid: a6f05521a3a2a9d44b9e2e4e45c04712, type: 3}
   maxWeatherEvents: 3
   minWeatherEvents: 2
   weatherAnnouncementDuration: 9
