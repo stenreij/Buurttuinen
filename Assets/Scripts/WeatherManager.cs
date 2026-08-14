@@ -96,23 +96,26 @@ public class WeatherManager : MonoBehaviour
         StartCoroutine(ExecuteWeatherEvent(weatherType));
     }
 
+    // 🔥 FIX: Nu willekeurig in plaats van hardcoded
     WeatherType GetRandomWeatherType()
     {
-        //WeatherType[] allTypes = System.Enum.GetValues(typeof(WeatherType)) as WeatherType[];
-        //return allTypes[Random.Range(0, allTypes.Length)];
-
-        return WeatherType.Hitte;
+        WeatherType[] allTypes = System.Enum.GetValues(typeof(WeatherType)) as WeatherType[];
+        WeatherType selectedType = allTypes[Random.Range(0, allTypes.Length)];
+        
+        Debug.Log($"🌤️ Willekeurig weer gekozen: {selectedType}");
+        return selectedType;
     }
 
     string GetWeatherAnnouncement(WeatherType weatherType)
     {
         switch (weatherType)
         {
-            case WeatherType.Tornado: return "Tornado waarschuwing!";
+            // 🔥 Aangepaste teksten voor de omgedraaide effecten
+            case WeatherType.Tornado: return "Tornado! Items vliegen weg!";
+            case WeatherType.Storm: return "Zware storm! Vernietigt items!";
             case WeatherType.Hitte: return "Hittegolf! Water verdampt!";
             case WeatherType.Regen: return "Hevige regenval! Planten verzuipen!";
             case WeatherType.Vorst: return "Vorst! Planten bevriezen!";
-            case WeatherType.Storm: return "Zware storm! Items waaien weg!";
             default: return "Weerswaarschuwing!";
         }
     }
@@ -123,11 +126,13 @@ public class WeatherManager : MonoBehaviour
 
         switch (weatherType)
         {
-            case WeatherType.Tornado: ExecuteTornado(); break;
+            // 🔥 OMGEDRAAID: Tornado verplaatst nu (was Storm)
+            case WeatherType.Tornado: ExecuteTornado_MoveItems(); break;
+            // 🔥 OMGEDRAAID: Storm vernietigt nu (was Tornado)
+            case WeatherType.Storm: ExecuteStorm_DestroyItems(); break;
             case WeatherType.Hitte: ExecuteHitte(); break;
             case WeatherType.Regen: ExecuteRegen(); break;
             case WeatherType.Vorst: ExecuteVorst(); break;
-            case WeatherType.Storm: ExecuteStorm(); break;
         }
 
         yield return new WaitForSeconds(2.5f);
@@ -143,23 +148,105 @@ public class WeatherManager : MonoBehaviour
     }
 
     // ============================================
-    // WEER EFFECTEN
+    // TORNADO - VERPLAATST ITEMS (was Storm)
     // ============================================
 
-    void ExecuteTornado()
+    void ExecuteTornado_MoveItems()
+    {
+        ShowWeatherAnnouncement("Tornado! Items waaien weg!");
+        PlayEffect(tornadoEffectPrefab);
+
+        List<Player> players = turnManager.players;
+        List<GardenTile> allOccupiedTiles = new List<GardenTile>();
+
+        foreach (Player player in players)
+        {
+            allOccupiedTiles.AddRange(GetOccupiedTiles(player));
+        }
+
+        int itemsToMove = Mathf.Min(Random.Range(1, 4), allOccupiedTiles.Count);
+        int movedCount = 0;
+
+        for (int i = 0; i < itemsToMove && allOccupiedTiles.Count > 0; i++)
+        {
+            int randomIndex = Random.Range(0, allOccupiedTiles.Count);
+            GardenTile sourceTile = allOccupiedTiles[randomIndex];
+            allOccupiedTiles.RemoveAt(randomIndex);
+
+            if (sourceTile.isProtected)
+            {
+                Debug.Log($"🛡️ Beschermd item overgeslagen door tornado!");
+                continue;
+            }
+
+            Player sourcePlayer = null;
+            foreach (Player player in players)
+            {
+                if (player.assignedGarden != null)
+                {
+                    GardenTile[] tiles = player.assignedGarden.GetComponentsInChildren<GardenTile>();
+                    if (tiles.Contains(sourceTile))
+                    {
+                        sourcePlayer = player;
+                        break;
+                    }
+                }
+            }
+
+            if (sourcePlayer == null) continue;
+
+            Player targetPlayer = players[Random.Range(0, players.Count)];
+            GardenTile targetTile = GetRandomEmptyTile(targetPlayer);
+
+            if (targetTile != null && sourceTile != null && sourceTile.placedItem != null)
+            {
+                targetTile.occupied = true;
+                targetTile.placedItem = sourceTile.placedItem;
+                targetTile.placedItemData = sourceTile.placedItemData;
+
+                if (sourceTile.placedItem != null)
+                {
+                    sourceTile.placedItem.transform.position = targetTile.transform.position;
+                    sourceTile.placedItem.transform.parent = targetTile.transform;
+                }
+
+                sourceTile.occupied = false;
+                sourceTile.placedItem = null;
+                sourceTile.placedItemData = null;
+                movedCount++;
+                Debug.Log($"🌪️ Tornado verplaatst item van {sourcePlayer.playerName} naar {targetPlayer.playerName}");
+            }
+        }
+
+        if (movedCount > 0)
+        {
+            ShowWeatherAnnouncement($"Tornado verplaatst {movedCount} item(s)!");
+        }
+        else
+        {
+            ShowWeatherAnnouncement($"Tornado! Geen items konden worden verplaatst!");
+        }
+        UpdateAllUI();
+    }
+
+    // ============================================
+    // STORM - VERNIETIGT ITEMS (was Tornado)
+    // ============================================
+
+    void ExecuteStorm_DestroyItems()
     {
         List<Player> players = turnManager.players;
         int gardensAffected = Random.Range(0, players.Count + 1);
 
         if (gardensAffected == 0)
         {
-            ShowWeatherAnnouncement("Tornado mist de buurt! Geluk gehad!");
+            ShowWeatherAnnouncement("Storm mist de buurt! Geluk gehad!");
             return;
         }
 
         List<int> affectedGardenIndices = GetRandomGardenIndices(gardensAffected);
-        ShowWeatherAnnouncement($"Tornado raast door {gardensAffected} tuinen!");
-        PlayEffect(tornadoEffectPrefab);
+        ShowWeatherAnnouncement($"Storm raast door {gardensAffected} tuinen!");
+        PlayEffect(stormEffectPrefab);
 
         int totalDestroyed = 0;
 
@@ -172,9 +259,13 @@ public class WeatherManager : MonoBehaviour
             totalDestroyed += DestroyTiles(tilesToDestroy, player);
         }
 
-        ShowWeatherAnnouncement($"Tornado vernietigde {totalDestroyed} item(s)!");
+        ShowWeatherAnnouncement($"Storm vernietigde {totalDestroyed} item(s)!");
         UpdateAllUI();
     }
+
+    // ============================================
+    // HITTE IMPLEMENTATIE (ONGEWIJZGD)
+    // ============================================
 
     void ExecuteHitte()
     {
@@ -217,6 +308,10 @@ public class WeatherManager : MonoBehaviour
         ShowWeatherAnnouncement($"Hitte verdampt {totalDestroyed} water item(s)!");
         UpdateAllUI();
     }
+
+    // ============================================
+    // REGEN IMPLEMENTATIE (ONGEWIJZGD)
+    // ============================================
 
     void ExecuteRegen()
     {
@@ -279,6 +374,10 @@ public class WeatherManager : MonoBehaviour
         UpdateAllUI();
     }
 
+    // ============================================
+    // VORST IMPLEMENTATIE (ONGEWIJZGD)
+    // ============================================
+
     void ExecuteVorst()
     {
         ShowWeatherAnnouncement("Vorst! Planten bevriezen!");
@@ -318,76 +417,6 @@ public class WeatherManager : MonoBehaviour
         }
 
         ShowWeatherAnnouncement($"Vorst vernietigt {totalDestroyed} plant(en)!");
-        UpdateAllUI();
-    }
-
-    void ExecuteStorm()
-    {
-        ShowWeatherAnnouncement("Zware storm! Items waaien weg!");
-        PlayEffect(stormEffectPrefab);
-
-        List<Player> players = turnManager.players;
-        List<GardenTile> allOccupiedTiles = new List<GardenTile>();
-
-        foreach (Player player in players)
-        {
-            allOccupiedTiles.AddRange(GetOccupiedTiles(player));
-        }
-
-        int itemsToMove = Mathf.Min(Random.Range(1, 4), allOccupiedTiles.Count);
-        int movedCount = 0;
-
-        for (int i = 0; i < itemsToMove && allOccupiedTiles.Count > 0; i++)
-        {
-            int randomIndex = Random.Range(0, allOccupiedTiles.Count);
-            GardenTile sourceTile = allOccupiedTiles[randomIndex];
-            allOccupiedTiles.RemoveAt(randomIndex);
-
-            if (sourceTile.isProtected)
-            {
-                Debug.Log($"🛡️ Beschermd item overgeslagen door storm!");
-                continue;
-            }
-
-            Player sourcePlayer = null;
-            foreach (Player player in players)
-            {
-                if (player.assignedGarden != null)
-                {
-                    GardenTile[] tiles = player.assignedGarden.GetComponentsInChildren<GardenTile>();
-                    if (tiles.Contains(sourceTile))
-                    {
-                        sourcePlayer = player;
-                        break;
-                    }
-                }
-            }
-
-            if (sourcePlayer == null) continue;
-
-            Player targetPlayer = players[Random.Range(0, players.Count)];
-            GardenTile targetTile = GetRandomEmptyTile(targetPlayer);
-
-            if (targetTile != null && sourceTile != null && sourceTile.placedItem != null)
-            {
-                targetTile.occupied = true;
-                targetTile.placedItem = sourceTile.placedItem;
-                targetTile.placedItemData = sourceTile.placedItemData;
-
-                if (sourceTile.placedItem != null)
-                {
-                    sourceTile.placedItem.transform.position = targetTile.transform.position;
-                    sourceTile.placedItem.transform.parent = targetTile.transform;
-                }
-
-                sourceTile.occupied = false;
-                sourceTile.placedItem = null;
-                sourceTile.placedItemData = null;
-                movedCount++;
-            }
-        }
-
-        ShowWeatherAnnouncement($"Storm verplaatst {movedCount} item(s)!");
         UpdateAllUI();
     }
 
@@ -493,7 +522,6 @@ public class WeatherManager : MonoBehaviour
     {
         if (tile == null || !tile.occupied || tile.placedItem == null) return;
 
-        // 🔥 Extra check voor de zekerheid
         if (tile.isProtected)
         {
             Debug.Log($"🛡️ Beschermd item in tuin van {player.playerName} overgeslagen!");
@@ -519,6 +547,8 @@ public class WeatherManager : MonoBehaviour
     {
         if (effectPrefab != null)
             StartCoroutine(PlayEffectCoroutine(effectPrefab));
+        else
+            Debug.Log("⚠️ Geen effect prefab toegevoegd voor dit weertype!");
     }
 
     IEnumerator PlayEffectCoroutine(GameObject effectPrefab)
