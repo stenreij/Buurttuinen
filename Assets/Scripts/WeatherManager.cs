@@ -22,13 +22,19 @@ public class WeatherManager : MonoBehaviour
     [Header("Settings")]
     public int maxWeatherEvents = 3;
     public int minWeatherEvents = 2;
-    public float weatherAnnouncementDuration = 3f;
+    
+    // 🔥 AANGEPAST: Verschillende duur voor verschillende meldingen
+    public float weatherAnnouncementDuration = 3f;        // Standaard duur
+    public float resultAnnouncementDuration = 5f;         // Duur voor resultaat meldingen (vernietigt x items)
 
     private List<int> roundsWithWeather = new List<int>();
     private int weatherEventsTriggered = 0;
     private bool weatherEventActive = false;
     private bool isExecutingWeather = false;
     private int currentRound = 0;
+    
+    // 🔥 NIEUW: Coroutine reference om te voorkomen dat meldingen overlappen
+    private Coroutine currentAnnouncementCoroutine;
 
     void Start()
     {
@@ -91,14 +97,13 @@ public class WeatherManager : MonoBehaviour
 
         WeatherType weatherType = GetRandomWeatherType();
         string announcement = GetWeatherAnnouncement(weatherType);
-        ShowWeatherAnnouncement(announcement);
+        ShowWeatherAnnouncement(announcement, weatherAnnouncementDuration);
 
         StartCoroutine(ExecuteWeatherEvent(weatherType));
     }
 
     WeatherType GetRandomWeatherType()
     {
-
         WeatherType[] allTypes = System.Enum.GetValues(typeof(WeatherType)) as WeatherType[];
         WeatherType selectedType = allTypes[Random.Range(0, allTypes.Length)];
         
@@ -110,11 +115,10 @@ public class WeatherManager : MonoBehaviour
     {
         switch (weatherType)
         {
-            // 🔥 Aangepaste teksten voor de omgedraaide effecten
             case WeatherType.Tornado: return "Tornado! Items vliegen weg!";
             case WeatherType.Storm: return "Zware storm! Vernietigt items!";
             case WeatherType.Hitte: return "Hittegolf! Water verdampt!";
-            case WeatherType.Regen: return "Hevige regenval! Planten groeien en decoraties verzuipen!";
+            case WeatherType.Regen: return "Hevige regenval! Planten groeien!";
             case WeatherType.Vorst: return "Vorst! Planten bevriezen!";
             default: return "Weerswaarschuwing!";
         }
@@ -122,7 +126,7 @@ public class WeatherManager : MonoBehaviour
 
     IEnumerator ExecuteWeatherEvent(WeatherType weatherType)
     {
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(2f);
 
         switch (weatherType)
         {
@@ -133,7 +137,7 @@ public class WeatherManager : MonoBehaviour
             case WeatherType.Vorst: ExecuteVorst(); break;
         }
 
-        yield return new WaitForSeconds(0f);
+        yield return new WaitForSeconds(1.5f);
 
         weatherEventActive = false;
         isExecutingWeather = false;
@@ -151,7 +155,7 @@ public class WeatherManager : MonoBehaviour
 
     void ExecuteTornado_MoveItems()
     {
-        ShowWeatherAnnouncement("Tornado! Items waaien weg!");
+        ShowWeatherAnnouncement("Tornado! Items waaien weg!", weatherAnnouncementDuration);
         PlayEffect(tornadoEffectPrefab);
 
         List<Player> players = turnManager.players;
@@ -173,7 +177,7 @@ public class WeatherManager : MonoBehaviour
 
             if (sourceTile.isProtected)
             {
-                Debug.Log($"🛡️ Beschermd item overgeslagen door tornado!");
+                Debug.Log($"Beschermd item overgeslagen door tornado!");
                 continue;
             }
 
@@ -212,17 +216,18 @@ public class WeatherManager : MonoBehaviour
                 sourceTile.placedItem = null;
                 sourceTile.placedItemData = null;
                 movedCount++;
-                Debug.Log($"🌪️ Tornado verplaatst item van {sourcePlayer.playerName} naar {targetPlayer.playerName}");
+                Debug.Log($"Tornado verplaatst item van {sourcePlayer.playerName} naar {targetPlayer.playerName}");
             }
         }
 
+        // 🔥 AANGEPAST: Resultaat melding met kortere duur
         if (movedCount > 0)
         {
-            ShowWeatherAnnouncement($"Tornado verplaatst {movedCount} item(s)!");
+            ShowWeatherAnnouncement($"Tornado verplaatst {movedCount} item(s)!", resultAnnouncementDuration);
         }
         else
         {
-            ShowWeatherAnnouncement($"Tornado! Geen items konden worden verplaatst!");
+            ShowWeatherAnnouncement($"Tornado! Geen items konden worden verplaatst!", resultAnnouncementDuration);
         }
         UpdateAllUI();
     }
@@ -238,12 +243,12 @@ public class WeatherManager : MonoBehaviour
 
         if (gardensAffected == 0)
         {
-            ShowWeatherAnnouncement("Storm mist de buurt! Geluk gehad!");
+            ShowWeatherAnnouncement("Storm mist de buurt! Geluk gehad!", resultAnnouncementDuration);
             return;
         }
 
         List<int> affectedGardenIndices = GetRandomGardenIndices(gardensAffected);
-        ShowWeatherAnnouncement($"Storm raast door {gardensAffected} tuinen!");
+        ShowWeatherAnnouncement($"Storm raast door {gardensAffected} tuinen!", weatherAnnouncementDuration);
         PlayEffect(stormEffectPrefab);
 
         int totalDestroyed = 0;
@@ -257,7 +262,8 @@ public class WeatherManager : MonoBehaviour
             totalDestroyed += DestroyTiles(tilesToDestroy, player);
         }
 
-        ShowWeatherAnnouncement($"Storm vernietigde {totalDestroyed} item(s)!");
+        // 🔥 AANGEPAST: Resultaat melding met kortere duur
+        ShowWeatherAnnouncement($"Storm vernietigde {totalDestroyed} item(s)!", resultAnnouncementDuration);
         UpdateAllUI();
     }
 
@@ -267,7 +273,7 @@ public class WeatherManager : MonoBehaviour
 
     void ExecuteHitte()
     {
-        ShowWeatherAnnouncement("Hittegolf! Water verdampt!");
+        ShowWeatherAnnouncement("Hittegolf! Water verdampt!", weatherAnnouncementDuration);
         PlayEffect(heatEffectPrefab);
 
         int totalDestroyed = 0;
@@ -303,7 +309,8 @@ public class WeatherManager : MonoBehaviour
             }
         }
 
-        ShowWeatherAnnouncement($"Hitte verdampt {totalDestroyed} water item(s)!");
+        // 🔥 AANGEPAST: Resultaat melding met kortere duur
+        ShowWeatherAnnouncement($"Hitte verdampt {totalDestroyed} water item(s)!", resultAnnouncementDuration);
         UpdateAllUI();
     }
 
@@ -313,7 +320,7 @@ public class WeatherManager : MonoBehaviour
 
     void ExecuteRegen()
     {
-        ShowWeatherAnnouncement("Hevige regenval! Planten verzuipen!");
+        ShowWeatherAnnouncement("Hevige regenval! Planten groeien!", weatherAnnouncementDuration);
         PlayEffect(rainEffectPrefab);
 
         int boostedPlants = 0;
@@ -368,7 +375,8 @@ public class WeatherManager : MonoBehaviour
             }
         }
 
-        ShowWeatherAnnouncement($"Regen boost {boostedPlants} planten, beschadigt {destroyedDecor} decoratie(s)!");
+        // 🔥 AANGEPAST: Resultaat melding met kortere duur
+        ShowWeatherAnnouncement($"Regen boost {boostedPlants} planten, beschadigt {destroyedDecor} decoratie(s)!", resultAnnouncementDuration);
         UpdateAllUI();
     }
 
@@ -378,7 +386,7 @@ public class WeatherManager : MonoBehaviour
 
     void ExecuteVorst()
     {
-        ShowWeatherAnnouncement("Vorst! Planten bevriezen!");
+        ShowWeatherAnnouncement("Vorst! Planten bevriezen!", weatherAnnouncementDuration);
         PlayEffect(frostEffectPrefab);
 
         int totalDestroyed = 0;
@@ -414,7 +422,8 @@ public class WeatherManager : MonoBehaviour
             }
         }
 
-        ShowWeatherAnnouncement($"Vorst vernietigt {totalDestroyed} plant(en)!");
+        // 🔥 AANGEPAST: Resultaat melding met kortere duur
+        ShowWeatherAnnouncement($"Vorst vernietigt {totalDestroyed} plant(en)!", resultAnnouncementDuration);
         UpdateAllUI();
     }
 
@@ -522,7 +531,7 @@ public class WeatherManager : MonoBehaviour
 
         if (tile.isProtected)
         {
-            Debug.Log($"🛡️ Beschermd item in tuin van {player.playerName} overgeslagen!");
+            Debug.Log($"Beschermd item in tuin van {player.playerName} overgeslagen!");
             return;
         }
 
@@ -530,7 +539,7 @@ public class WeatherManager : MonoBehaviour
         tile.occupied = false;
         tile.placedItem = null;
         tile.placedItemData = null;
-        Debug.Log($"🗑️ Item verwijderd uit tuin van {player.playerName} door weer!");
+        Debug.Log($"Item verwijderd uit tuin van {player.playerName} door weer!");
     }
 
     bool IsPlantType(ItemType type)
@@ -546,7 +555,7 @@ public class WeatherManager : MonoBehaviour
         if (effectPrefab != null)
             StartCoroutine(PlayEffectCoroutine(effectPrefab));
         else
-            Debug.Log("⚠️ Geen effect prefab toegevoegd voor dit weertype!");
+            Debug.Log("Geen effect prefab toegevoegd voor dit weertype!");
     }
 
     IEnumerator PlayEffectCoroutine(GameObject effectPrefab)
@@ -559,13 +568,17 @@ public class WeatherManager : MonoBehaviour
         }
     }
 
-    void ShowWeatherAnnouncement(string message)
+    // 🔥 AANGEPAST: ShowWeatherAnnouncement met custom duration
+    void ShowWeatherAnnouncement(string message, float duration = -1)
     {
         if (weatherAnnouncementText != null)
         {
             weatherAnnouncementText.text = message;
             weatherAnnouncementText.gameObject.SetActive(true);
-            StartCoroutine(HideAnnouncementAfterDelay(weatherAnnouncementDuration));
+            
+            // Gebruik de meegegeven duration, of de standaard als -1
+            float actualDuration = duration > 0 ? duration : weatherAnnouncementDuration;
+            StartCoroutine(HideAnnouncementAfterDelay(actualDuration));
         }
         else
         {
