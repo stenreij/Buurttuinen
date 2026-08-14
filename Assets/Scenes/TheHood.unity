@@ -1937,7 +1937,7 @@ MonoBehaviour:
   weatherAnnouncementText: {fileID: 1804482632}
   tornadoEffectPrefab: {fileID: 7548901137181223228, guid: d4c094dc51be1804fa49c3b713418854, type: 3}
   stormEffectPrefab: {fileID: 6608656064761540521, guid: 6b3d342b61a6a0c4099d2bd5d3e40ebf, type: 3}
-  heatEffectPrefab: {fileID: 0}
+  heatEffectPrefab: {fileID: 3197650426769754511, guid: fbc26b01bbb061a4fbd6e860b40bd482, type: 3}
   rainEffectPrefab: {fileID: 0}
   frostEffectPrefab: {fileID: 586419481338936572, guid: a6f05521a3a2a9d44b9e2e4e45c04712, type: 3}
   maxWeatherEvents: 3

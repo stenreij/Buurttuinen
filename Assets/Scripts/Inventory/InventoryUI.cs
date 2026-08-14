@@ -107,7 +107,7 @@ public class InventoryUI : MonoBehaviour
             GameObject newButton = Instantiate(itemButtonPrefab, contentParent);
             newButton.name = item.itemName;
 
-            Debug.Log($"✅ Created button for: {item.itemName} with count: {count}");
+            //Debug.Log($"✅ Created button for: {item.itemName} with count: {count}");
 
             SetButtonIcon(newButton, item);
             SetButtonCountText(newButton, count);
