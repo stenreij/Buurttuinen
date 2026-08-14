@@ -96,9 +96,9 @@ public class WeatherManager : MonoBehaviour
         StartCoroutine(ExecuteWeatherEvent(weatherType));
     }
 
-    // 🔥 FIX: Nu willekeurig in plaats van hardcoded
     WeatherType GetRandomWeatherType()
     {
+
         WeatherType[] allTypes = System.Enum.GetValues(typeof(WeatherType)) as WeatherType[];
         WeatherType selectedType = allTypes[Random.Range(0, allTypes.Length)];
         
