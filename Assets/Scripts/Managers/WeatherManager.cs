@@ -114,6 +114,7 @@ public class WeatherManager : MonoBehaviour
 
         if (turnManager != null)
         {
+            turnManager.SetGamePaused(true);
         }
 
         WeatherType weatherType = GetRandomWeatherType();
@@ -165,6 +166,7 @@ public class WeatherManager : MonoBehaviour
 
         if (turnManager != null)
         {
+            turnManager.SetGamePaused(false);
             turnManager.UpdateActionButtons();
         }
 
