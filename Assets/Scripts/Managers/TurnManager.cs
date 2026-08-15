@@ -42,6 +42,7 @@ public class TurnManager : MonoBehaviour
     private Image powerUpButtonImage;
     private Text powerUpButtonText;
     private float pulseTimer = 0f;
+    private int lastProcessedRound = 0;
 
     void Update()
     {
@@ -129,16 +130,21 @@ public class TurnManager : MonoBehaviour
             inventoryUI.RefreshUI();
         }
 
-        CommunityManager communityManager = FindFirstObjectByType<CommunityManager>();
-        if (communityManager != null)
+        if (currentRound != lastProcessedRound)
         {
-            communityManager.OnRoundStarted(currentRound);
-        }
+            lastProcessedRound = currentRound;
 
-        WeatherManager weatherManager = FindFirstObjectByType<WeatherManager>();
-        if (weatherManager != null)
-        {
-            weatherManager.OnRoundStarted(currentRound);
+            CommunityManager communityManager = FindFirstObjectByType<CommunityManager>();
+            if (communityManager != null)
+            {
+                communityManager.OnRoundStarted(currentRound);
+            }
+
+            WeatherManager weatherManager = FindFirstObjectByType<WeatherManager>();
+            if (weatherManager != null)
+            {
+                weatherManager.OnRoundStarted(currentRound);
+            }
         }
 
         UpdateActionButtons();

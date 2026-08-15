@@ -21,7 +21,6 @@ public class CommunityManager : MonoBehaviour
     public float goalDisplayDuration = 6f;
     public int maxRounds = 10;
 
-    // 🔥 NIEUW: Base values voor goals - makkelijk aan te passen
     [Header("Goal Base Values (scaled by player count)")]
     public int biodiversityBaseValue = 15;
     public int waterStorageBaseValue = 12;
@@ -67,12 +66,10 @@ public class CommunityManager : MonoBehaviour
         InitializeGoals();
     }
 
-    // 🔥 VERBETERD: Goals initialiseren met base values
     void InitializeGoals()
     {
         possibleGoals.Clear();
 
-        // Voeg hier eenvoudig nieuwe goals toe of verwijder ze
         possibleGoals.Add(new CommunityGoal(
             CommunityGoalType.Biodiversity,
             "Biodiversity",
@@ -153,35 +150,13 @@ public class CommunityManager : MonoBehaviour
             GetScaledGoalValue(totalScoreBaseValue)
         ));
 
-        // 🔥 NIEUW: Voorbeeld van een extra goal die je kunt toevoegen
-        // possibleGoals.Add(new CommunityGoal(
-        //     CommunityGoalType.PlantCount,  // Voeg dit eerst toe aan de enum
-        //     "Plant Count",
-        //     "Place {0} plants in the neighborhood!",
-        //     (players) => {
-        //         int total = 0;
-        //         foreach (Player player in players)
-        //         {
-        //             total += GetPlantCount(player);
-        //         }
-        //         return total;
-        //     },
-        //     GetScaledGoalValue(8)
-        // ));
-
         Debug.Log($"Initialized {possibleGoals.Count} community goals for {playerCount} players");
     }
 
-    // 🔥 SCHALING: Past doelwaarden aan op basis van aantal spelers
     int GetScaledGoalValue(int baseValue)
     {
-        // 2 players = 50% van base
-        // 3 players = 75% van base
-        // 4 players = 100% van base
         float scale = 0.5f + ((playerCount - 2) * 0.25f);
         int scaledValue = Mathf.RoundToInt(baseValue * scale);
-
-        // Zorg dat de waarde minimaal 3 is (anders wordt het te makkelijk)
         return Mathf.Max(3, scaledValue);
     }
 
@@ -212,6 +187,8 @@ public class CommunityManager : MonoBehaviour
         }
     }
 
+    public bool IsExecutingCommunity() => isExecutingCommunity || isCommunityActive;
+
     public void StartNewGoal()
     {
         isCommunityActive = true;
@@ -224,7 +201,6 @@ public class CommunityManager : MonoBehaviour
 
         CommunityGoal newGoal = SelectUnusedGoal();
 
-        // Als alle goals gebruikt zijn, reset de lijst
         if (newGoal == null)
         {
             Debug.Log("All goals have been used! Resetting goal list...");
@@ -248,10 +224,8 @@ public class CommunityManager : MonoBehaviour
         StartCoroutine(ExecuteNewGoal());
     }
 
-    // 🔥 VERBETERD: Selecteert een ongebruikte goal
     CommunityGoal SelectUnusedGoal()
     {
-        // Filter goals die nog niet gebruikt zijn
         List<CommunityGoal> availableGoals = possibleGoals
             .Where(g => !usedGoalTypes.Contains(g.goalType))
             .ToList();
@@ -262,7 +236,6 @@ public class CommunityManager : MonoBehaviour
             return null;
         }
 
-        // Kies een willekeurige beschikbare goal
         CommunityGoal selected = availableGoals[Random.Range(0, availableGoals.Count)];
         usedGoalTypes.Add(selected.goalType);
 
@@ -275,7 +248,6 @@ public class CommunityManager : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
 
-        // 🔥 Aangepaste announcement text
         string goalDisplay = "Reach " + currentGoal.goalValue + " " + currentGoal.name.ToLower() + " points!";
         ShowCommunityAnnouncement(goalDisplay, goalDisplayDuration);
 
@@ -292,6 +264,11 @@ public class CommunityManager : MonoBehaviour
         }
 
         Debug.Log($"🏛️ Community goal active until round {goalEndRound}: {currentGoal.name} ({goalScoreAtStart}/{currentGoal.goalValue})");
+
+        if (weatherManager != null)
+        {
+            weatherManager.OnCommunityReady();
+        }
     }
 
     void CheckGoalResult()
@@ -358,10 +335,26 @@ public class CommunityManager : MonoBehaviour
 
         UpdateAllUI();
         Debug.Log("Community goal check completed!");
+
+        if (currentRound >= firstCommunityRound &&
+            (currentRound - firstCommunityRound) % communityInterval == 0 &&
+            !isCommunityActive &&
+            !isExecutingCommunity &&
+            !isWaitingForResult &&
+            currentRound <= maxRounds)
+        {
+            Debug.Log("🏛️ Starting new goal immediately after finishing previous");
+            StartNewGoal();
+        }
+
+        if (weatherManager != null)
+        {
+            weatherManager.OnCommunityReady();
+        }
     }
 
     // ============================================
-    // REWARDS (ongewijzigd)
+    // REWARDS
     // ============================================
 
     void GiveReward(List<Player> players)
@@ -466,7 +459,7 @@ public class CommunityManager : MonoBehaviour
     }
 
     // ============================================
-    // PENALTIES (ongewijzigd)
+    // PENALTIES
     // ============================================
 
     void GivePenalty(List<Player> players)
@@ -547,7 +540,7 @@ public class CommunityManager : MonoBehaviour
     }
 
     // ============================================
-    // SCORE CALCULATION (ongewijzigd)
+    // SCORE CALCULATION
     // ============================================
 
     int GetBiodiversityScore(Player player)

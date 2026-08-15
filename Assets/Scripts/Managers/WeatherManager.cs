@@ -33,6 +33,7 @@ public class WeatherManager : MonoBehaviour
     private int currentRound = 0;
 
     private List<int> processedRounds = new List<int>();
+    private Queue<int> pendingWeatherRounds = new Queue<int>();
 
     private Coroutine currentAnnouncementCoroutine;
 
@@ -53,6 +54,7 @@ public class WeatherManager : MonoBehaviour
         int numberOfEvents = Random.Range(minWeatherEvents, maxWeatherEvents + 1);
         roundsWithWeather.Clear();
         processedRounds.Clear();
+        pendingWeatherRounds.Clear();
 
         List<int> availableRounds = new List<int>();
         for (int i = 2; i < totalRounds - 1; i++)
@@ -76,23 +78,79 @@ public class WeatherManager : MonoBehaviour
     {
         currentRound = roundNumber;
 
-        if (processedRounds.Contains(roundNumber))
+        if (processedRounds.Contains(roundNumber) || weatherEventActive || isExecutingWeather)
         {
-            Debug.Log($"🌤️ Ronde {roundNumber} is al afgehandeld, skip...");
+            if (processedRounds.Contains(roundNumber))
+                Debug.Log($"🌤️ Ronde {roundNumber} is al afgehandeld, skip...");
+            else
+                Debug.Log($"🌤️ Weather event al actief in ronde {roundNumber}, skip...");
             return;
         }
 
-        if (weatherEventActive || isExecutingWeather)
+        if (!roundsWithWeather.Contains(roundNumber))
         {
-            Debug.Log($"🌤️ Weather event al actief in ronde {roundNumber}, skip...");
             return;
         }
 
-        if (roundsWithWeather.Contains(roundNumber) && weatherEventsTriggered < maxWeatherEvents)
+        CommunityManager community = FindFirstObjectByType<CommunityManager>();
+        if (community != null && community.IsExecutingCommunity())
+        {
+            Debug.Log($"🌤️ Community is busy, weather for round {roundNumber} will wait...");
+            pendingWeatherRounds.Enqueue(roundNumber);
+            return;
+        }
+
+        if (weatherEventsTriggered < maxWeatherEvents)
         {
             processedRounds.Add(roundNumber);
             TriggerWeatherEvent();
         }
+    }
+
+    public void OnCommunityReady()
+    {
+        CommunityManager community = FindFirstObjectByType<CommunityManager>();
+        if (community != null && community.IsExecutingCommunity())
+        {
+            Debug.Log("🌤️ Community is starting a new goal, weather will wait a bit...");
+            StartCoroutine(RetryCommunityReady());
+            return;
+        }
+
+        if (pendingWeatherRounds.Count > 0)
+        {
+            int nextRound = pendingWeatherRounds.Peek();
+
+            if (!roundsWithWeather.Contains(nextRound))
+            {
+                Debug.Log($"🌤️ Round {nextRound} is not a weather round, removing from queue...");
+                pendingWeatherRounds.Dequeue();
+                OnCommunityReady();
+                return;
+            }
+
+            if (weatherEventsTriggered >= maxWeatherEvents)
+            {
+                Debug.Log($"🌤️ Max weather events ({maxWeatherEvents}) reached, clearing queue...");
+                pendingWeatherRounds.Clear();
+                return;
+            }
+
+            nextRound = pendingWeatherRounds.Dequeue();
+            Debug.Log($"🌤️ Community ready, processing pending weather for round {nextRound}");
+
+            if (!processedRounds.Contains(nextRound))
+            {
+                processedRounds.Add(nextRound);
+                TriggerWeatherEvent();
+            }
+        }
+    }
+
+    private IEnumerator RetryCommunityReady()
+    {
+        yield return new WaitForSeconds(0.5f);
+        OnCommunityReady();
     }
 
     public bool CanWeatherTrigger()
@@ -168,6 +226,17 @@ public class WeatherManager : MonoBehaviour
         {
             turnManager.SetGamePaused(false);
             turnManager.UpdateActionButtons();
+        }
+
+        if (pendingWeatherRounds.Count > 0)
+        {
+            int nextRound = pendingWeatherRounds.Dequeue();
+            Debug.Log($"🌤️ Processing next pending weather for round {nextRound}");
+            if (!processedRounds.Contains(nextRound))
+            {
+                processedRounds.Add(nextRound);
+                TriggerWeatherEvent();
+            }
         }
 
         Debug.Log($"🌤️ Weather event {weatherType} voltooid!");
@@ -637,6 +706,7 @@ public class WeatherManager : MonoBehaviour
         currentRound = 0;
         roundsWithWeather.Clear();
         processedRounds.Clear();
+        pendingWeatherRounds.Clear();
 
         if (currentAnnouncementCoroutine != null)
         {
