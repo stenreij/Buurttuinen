@@ -213,6 +213,20 @@ public class CommunityManager : MonoBehaviour
         goalStartRound = currentRound;
         goalEndRound = currentRound + communityInterval;
 
+        if (goalEndRound > maxRounds)
+        {
+            Debug.Log($"🏛️ Goal would end after game ends ({goalEndRound} > {maxRounds}), skipping...");
+            isCommunityActive = false;
+            isExecutingCommunity = false;
+
+            if (turnManager != null)
+            {
+                turnManager.SetGamePaused(false);
+                turnManager.ResumeTurnAfterWeather();
+            }
+            return;
+        }
+
         List<Player> players = turnManager.players;
         goalScoreAtStart = currentGoal.CalculateScore(players);
 
