@@ -120,41 +120,30 @@ public class GameManager : MonoBehaviour
             Debug.Log("🔄 TurnManager started!");
         }
 
-        // 🔥 Initialize Weather system
         if (weatherManager != null)
         {
             weatherManager.InitializeWeatherSystem(10);
         }
 
-        // 🔥 Initialize Community system
         if (communityManager != null)
         {
-            communityManager = FindFirstObjectByType<CommunityManager>();
-            if (communityManager == null)
-            {
-                Debug.LogWarning("⚠️ CommunityManager not found! Add it to the scene.");
-            }
+            communityManager.InitializeGoals();
         }
     }
-
     void OnRoundStarted(int roundNumber)
     {
-        // Check if we should trigger community first
         bool communityTriggered = false;
 
         if (communityManager != null)
         {
-            // Community checks if it should start a new goal or check result
             communityManager.OnRoundStarted(roundNumber);
 
-            // Check if community is now active
             if (communityManager.IsCommunityActive())
             {
                 communityTriggered = true;
             }
         }
 
-        // Only trigger weather if community is not active
         if (!communityTriggered && weatherManager != null)
         {
             weatherManager.OnRoundStarted(roundNumber);

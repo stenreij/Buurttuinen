@@ -21,12 +21,17 @@ public class CommunityManager : MonoBehaviour
     public float goalDisplayDuration = 6f;
     public int maxRounds = 10;
 
-    [Header("Goal Base Values (scaled by player count)")]
-    public int biodiversityBaseValue = 15;
-    public int waterStorageBaseValue = 12;
-    public int soilHealthBaseValue = 10;
-    public int aestheticsBaseValue = 8;
-    public int totalScoreBaseValue = 30;
+    [Header("Goal Value Ranges (scaled by player count)")]
+    public int biodiversityMin = 20;
+    public int biodiversityMax = 60;
+    public int waterStorageMin = 12;
+    public int waterStorageMax = 42;
+    public int soilHealthMin = 10;
+    public int soilHealthMax = 45;
+    public int aestheticsMin = 10;
+    public int aestheticsMax = 45;
+    public int totalScoreMin = 20;
+    public int totalScoreMax = 60;
 
     private List<CommunityGoal> possibleGoals = new List<CommunityGoal>();
     private CommunityGoal currentGoal;
@@ -53,8 +58,11 @@ public class CommunityManager : MonoBehaviour
 
         if (weatherManager == null)
             weatherManager = FindFirstObjectByType<WeatherManager>();
+    }
 
-        if (turnManager != null && turnManager.players != null)
+    public void InitializeGoals()
+    {
+        if (turnManager != null && turnManager.players != null && turnManager.players.Count > 0)
         {
             playerCount = turnManager.players.Count;
         }
@@ -63,11 +71,6 @@ public class CommunityManager : MonoBehaviour
             playerCount = 2;
         }
 
-        InitializeGoals();
-    }
-
-    void InitializeGoals()
-    {
         possibleGoals.Clear();
 
         possibleGoals.Add(new CommunityGoal(
@@ -83,7 +86,7 @@ public class CommunityManager : MonoBehaviour
                 }
                 return total;
             },
-            GetScaledGoalValue(biodiversityBaseValue)
+            () => GetRandomScaledGoalValue(biodiversityMin, biodiversityMax)
         ));
 
         possibleGoals.Add(new CommunityGoal(
@@ -99,7 +102,7 @@ public class CommunityManager : MonoBehaviour
                 }
                 return total;
             },
-            GetScaledGoalValue(waterStorageBaseValue)
+            () => GetRandomScaledGoalValue(waterStorageMin, waterStorageMax)
         ));
 
         possibleGoals.Add(new CommunityGoal(
@@ -115,7 +118,7 @@ public class CommunityManager : MonoBehaviour
                 }
                 return total;
             },
-            GetScaledGoalValue(soilHealthBaseValue)
+            () => GetRandomScaledGoalValue(soilHealthMin, soilHealthMax)
         ));
 
         possibleGoals.Add(new CommunityGoal(
@@ -131,7 +134,7 @@ public class CommunityManager : MonoBehaviour
                 }
                 return total;
             },
-            GetScaledGoalValue(aestheticsBaseValue)
+            () => GetRandomScaledGoalValue(aestheticsMin, aestheticsMax)
         ));
 
         possibleGoals.Add(new CommunityGoal(
@@ -147,16 +150,19 @@ public class CommunityManager : MonoBehaviour
                 }
                 return total;
             },
-            GetScaledGoalValue(totalScoreBaseValue)
+            () => GetRandomScaledGoalValue(totalScoreMin, totalScoreMax)
         ));
 
         Debug.Log($"Initialized {possibleGoals.Count} community goals for {playerCount} players");
     }
 
-    int GetScaledGoalValue(int baseValue)
+    int GetRandomScaledGoalValue(int min, int max)
     {
-        float scale = 0.5f + ((playerCount - 2) * 0.25f);
+        int baseValue = Random.Range(min, max + 1);
+
+        float scale = 0.5f + ((playerCount -1) * 0.5f);
         int scaledValue = Mathf.RoundToInt(baseValue * scale);
+
         return Mathf.Max(3, scaledValue);
     }
 
@@ -209,6 +215,7 @@ public class CommunityManager : MonoBehaviour
         }
 
         currentGoal = newGoal;
+        currentGoal.GenerateValue();
 
         goalStartRound = currentRound;
         goalEndRound = currentRound + communityInterval;
@@ -373,103 +380,110 @@ public class CommunityManager : MonoBehaviour
 
     void GiveReward(List<Player> players)
     {
-        int rewardType = Random.Range(0, 3);
+        int rewardType = Random.Range(0, 2);
 
         switch (rewardType)
         {
             case 0:
-                GivePowerUpReward(players);
+                GiveRandomItemToAllPlayers(players);
                 break;
             case 1:
-                PlaceGoodItemReward(players);
-                break;
-            case 2:
-                GiveScoreBonusReward(players);
+                GiveScoreBoostToAllItems(players);
                 break;
         }
     }
 
-    void GivePowerUpReward(List<Player> players)
-    {
-        Player targetPlayer = players[Random.Range(0, players.Count)];
-        ItemData powerUpItem = FindItemByType(ItemType.PowerUp);
-
-        if (powerUpItem != null && targetPlayer != null)
-        {
-            Inventory inv = targetPlayer.GetComponent<Inventory>();
-            if (inv != null)
-            {
-                inv.AddItem(powerUpItem);
-                ShowCommunityAnnouncement(targetPlayer.playerName + " receives a power-up: " + powerUpItem.itemName + "!", announcementDuration);
-                Debug.Log("Community reward: " + targetPlayer.playerName + " receives " + powerUpItem.itemName);
-            }
-        }
-        else
-        {
-            ShowCommunityAnnouncement("No power-up available! Score bonus instead.", announcementDuration);
-            GiveScoreBonusReward(players);
-        }
-    }
-
-    void PlaceGoodItemReward(List<Player> players)
-    {
-        Player targetPlayer = players[Random.Range(0, players.Count)];
-        Garden garden = targetPlayer.assignedGarden;
-
-        if (garden != null)
-        {
-            ItemData goodItem = FindGoodItem();
-
-            if (goodItem != null)
-            {
-                GardenTile emptyTile = GetRandomEmptyTile(targetPlayer);
-                if (emptyTile != null)
-                {
-                    GameObject placed = Instantiate(goodItem.prefab, emptyTile.transform.position, Quaternion.identity);
-                    placed.transform.parent = emptyTile.transform;
-                    placed.transform.localPosition = Vector3.zero;
-
-                    SpriteRenderer sr = placed.GetComponent<SpriteRenderer>();
-                    if (sr != null)
-                    {
-                        sr.enabled = true;
-                        sr.sortingOrder = 10;
-                    }
-
-                    emptyTile.placedItem = placed;
-                    emptyTile.placedItemData = goodItem;
-                    emptyTile.occupied = true;
-
-                    ShowCommunityAnnouncement(targetPlayer.playerName + " receives a " + goodItem.itemName + " in their garden!", announcementDuration);
-                    Debug.Log("Community reward: " + goodItem.itemName + " placed in " + targetPlayer.playerName + "'s garden");
-                }
-                else
-                {
-                    ShowCommunityAnnouncement("No empty space! Score bonus instead.", announcementDuration);
-                    GiveScoreBonusReward(players);
-                }
-            }
-            else
-            {
-                ShowCommunityAnnouncement("No good item available! Score bonus.", announcementDuration);
-                GiveScoreBonusReward(players);
-            }
-        }
-        else
-        {
-            ShowCommunityAnnouncement("No garden available! Score bonus.", announcementDuration);
-            GiveScoreBonusReward(players);
-        }
-    }
-
-    void GiveScoreBonusReward(List<Player> players)
+    void GiveRandomItemToAllPlayers(List<Player> players)
     {
         foreach (Player player in players)
         {
-            player.score += 3;
+            Garden garden = player.assignedGarden;
+            if (garden == null) continue;
+
+            ItemData randomItem = FindRandomPlantOrDecoration();
+            if (randomItem == null)
+            {
+                Debug.Log($"No item available for {player.playerName}");
+                continue;
+            }
+
+            GardenTile emptyTile = GetRandomEmptyTile(player);
+            if (emptyTile == null)
+            {
+                Debug.Log($"No empty space in {player.playerName}'s garden");
+                continue;
+            }
+
+            GameObject placed = Instantiate(randomItem.prefab, emptyTile.transform.position, Quaternion.identity);
+            placed.transform.parent = emptyTile.transform;
+            placed.transform.localPosition = Vector3.zero;
+
+            SpriteRenderer sr = placed.GetComponent<SpriteRenderer>();
+            if (sr != null)
+            {
+                sr.enabled = true;
+                sr.sortingOrder = 10;
+            }
+
+            emptyTile.placedItem = placed;
+            emptyTile.placedItemData = randomItem;
+            emptyTile.occupied = true;
+
+            Debug.Log($"Community reward: {player.playerName} received {randomItem.itemName} in their garden");
         }
-        ShowCommunityAnnouncement("All players receive +3 score bonus!", announcementDuration);
-        Debug.Log("Community reward: All players +3 score");
+
+        ShowCommunityAnnouncement("All players received a random item in their garden!", announcementDuration);
+    }
+
+    void GiveScoreBoostToAllItems(List<Player> players)
+    {
+        int boostAmount = 2;
+
+        foreach (Player player in players)
+        {
+            Garden garden = player.assignedGarden;
+            if (garden == null) continue;
+
+            GardenTile[] allTiles = garden.GetComponentsInChildren<GardenTile>();
+            foreach (GardenTile tile in allTiles)
+            {
+                if (tile.occupied && tile.placedItemData != null)
+                {
+                    tile.placedItemData.score += boostAmount;
+                    Debug.Log($"🏛️ {tile.placedItemData.itemName} in {player.playerName}'s garden +{boostAmount} score (now: {tile.placedItemData.score})");
+                }
+            }
+        }
+
+        ShowCommunityAnnouncement($"All items in every garden get +{boostAmount} score!", announcementDuration);
+        Debug.Log($"Community reward: All items +{boostAmount} score");
+    }
+
+    ItemData FindRandomPlantOrDecoration()
+    {
+        ItemDatabase database = FindFirstObjectByType<ItemDatabase>();
+        if (database != null && database.allItems != null)
+        {
+            List<ItemData> goodItems = new List<ItemData>();
+            foreach (ItemData item in database.allItems)
+            {
+                if ((item.type == ItemType.Plant ||
+                     item.type == ItemType.Tree_Big ||
+                     item.type == ItemType.Tree_Small ||
+                     item.type == ItemType.Hedge ||
+                     item.type == ItemType.Water ||
+                     item.type == ItemType.Decoration) &&
+                    database.IsAvailable(item))
+                {
+                    goodItems.Add(item);
+                }
+            }
+            if (goodItems.Count > 0)
+            {
+                return goodItems[Random.Range(0, goodItems.Count)];
+            }
+        }
+        return null;
     }
 
     // ============================================
