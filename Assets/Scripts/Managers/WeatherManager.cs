@@ -188,7 +188,9 @@ public class WeatherManager : MonoBehaviour
         WeatherType selectedType = allTypes[Random.Range(0, allTypes.Length)];
 
         Debug.Log($"🌤️ Willekeurig weer gekozen: {selectedType}");
-        return selectedType;
+        //return selectedType;
+
+        return WeatherType.Tornado; // Voor testen, altijd tornado
     }
 
     string GetWeatherAnnouncement(WeatherType weatherType)
