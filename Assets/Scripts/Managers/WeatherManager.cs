@@ -190,7 +190,7 @@ public class WeatherManager : MonoBehaviour
         Debug.Log($"🌤️ Willekeurig weer gekozen: {selectedType}");
         //return selectedType;
 
-        return WeatherType.Tornado; // Voor testen, altijd tornado
+        return WeatherType.Storm; // Voor testen, altijd tornado
     }
 
     string GetWeatherAnnouncement(WeatherType weatherType)
