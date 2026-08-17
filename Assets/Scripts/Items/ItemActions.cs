@@ -134,6 +134,7 @@ public class ItemActions : MonoBehaviour
             return;
         }
 
+        InventoryUI ui = FindFirstObjectByType<InventoryUI>();
         playerInventory.RemoveItem(selectedItem);
 
         if (selectedItem.prefab != null)
@@ -180,7 +181,6 @@ public class ItemActions : MonoBehaviour
             communityManager.UpdateCommunityGoalScore();
         }
 
-        InventoryUI ui = FindFirstObjectByType<InventoryUI>();
         if (ui != null)
         {
             ui.ClearSelectedItem();
@@ -214,6 +214,7 @@ public class ItemActions : MonoBehaviour
             return;
         }
 
+        InventoryUI ui = FindFirstObjectByType<InventoryUI>();
         playerInventory.RemoveItem(selectedItem);
 
         if (selectedItem.prefab != null)
@@ -240,7 +241,6 @@ public class ItemActions : MonoBehaviour
 
         ScoreManager.RefreshScores();
 
-        InventoryUI ui = FindFirstObjectByType<InventoryUI>();
         if (ui != null)
         {
             ui.ClearSelectedItem();

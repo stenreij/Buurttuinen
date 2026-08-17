@@ -160,7 +160,7 @@ public class CommunityManager : MonoBehaviour
     {
         int baseValue = Random.Range(min, max + 1);
 
-        float scale = (playerCount  * 0.5f);
+        float scale = (playerCount * 0.5f);
         int scaledValue = Mathf.RoundToInt(baseValue * scale);
 
         return Mathf.Max(3, scaledValue);
@@ -404,6 +404,13 @@ public class CommunityManager : MonoBehaviour
             if (randomItem == null)
             {
                 Debug.Log($"No item available for {player.playerName}");
+                continue;
+            }
+
+            ItemDatabase database = FindFirstObjectByType<ItemDatabase>();
+            if (database != null && !database.TryTakeItem(randomItem))
+            {
+                Debug.LogWarning($"⚠️ {randomItem.itemName} is niet meer beschikbaar!");
                 continue;
             }
 
