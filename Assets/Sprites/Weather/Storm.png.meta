@@ -32,51 +32,6 @@ TextureImporter:
   - first:
       213: -2586867901415220737
     second: Storm_9
-  - first:
-      213: 1816347682516447057
-    second: Storm_10
-  - first:
-      213: -7342571815831099538
-    second: Storm_11
-  - first:
-      213: -7379402953668040248
-    second: Storm_12
-  - first:
-      213: 1328494515234805243
-    second: Storm_13
-  - first:
-      213: -6630975605478626880
-    second: Storm_14
-  - first:
-      213: 259908926833157364
-    second: Storm_15
-  - first:
-      213: 668533610939030678
-    second: Storm_16
-  - first:
-      213: -2184316568851151817
-    second: Storm_17
-  - first:
-      213: 8652861284279428286
-    second: Storm_18
-  - first:
-      213: -7146672481196532011
-    second: Storm_19
-  - first:
-      213: -1845233845024404046
-    second: Storm_20
-  - first:
-      213: -4885015069434889830
-    second: Storm_21
-  - first:
-      213: -7354930861862991401
-    second: Storm_22
-  - first:
-      213: 8231707562166933203
-    second: Storm_23
-  - first:
-      213: 4523894847627294908
-    second: Storm_24
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -188,10 +143,10 @@ TextureImporter:
       name: Storm_0
       rect:
         serializedVersion: 2
-        x: 4
-        y: 106
-        width: 173
-        height: 148
+        x: 11
+        y: 364
+        width: 283
+        height: 227
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -210,10 +165,10 @@ TextureImporter:
       name: Storm_1
       rect:
         serializedVersion: 2
-        x: 195
-        y: 88
-        width: 171
-        height: 173
+        x: 319
+        y: 324
+        width: 307
+        height: 288
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -232,10 +187,10 @@ TextureImporter:
       name: Storm_2
       rect:
         serializedVersion: 2
-        x: 362
-        y: 95
-        width: 181
-        height: 178
+        x: 15
+        y: 34
+        width: 317
+        height: 296
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -254,10 +209,10 @@ TextureImporter:
       name: Storm_3
       rect:
         serializedVersion: 2
-        x: 493
-        y: 91
-        width: 27
-        height: 31
+        x: 72
+        y: 21
+        width: 22
+        height: 19
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -276,10 +231,10 @@ TextureImporter:
       name: Storm_4
       rect:
         serializedVersion: 2
-        x: 546
-        y: 122
-        width: 166
-        height: 137
+        x: 121
+        y: 32
+        width: 23
+        height: 22
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -298,10 +253,10 @@ TextureImporter:
       name: Storm_5
       rect:
         serializedVersion: 2
-        x: 594
-        y: 107
-        width: 15
-        height: 20
+        x: 164
+        y: 5
+        width: 29
+        height: 29
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -320,10 +275,10 @@ TextureImporter:
       name: Storm_6
       rect:
         serializedVersion: 2
-        x: 608
-        y: 119
-        width: 8
-        height: 12
+        x: 196
+        y: 10
+        width: 48
+        height: 44
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -342,10 +297,10 @@ TextureImporter:
       name: Storm_7
       rect:
         serializedVersion: 2
-        x: 638
-        y: 115
-        width: 9
-        height: 13
+        x: 243
+        y: 21
+        width: 46
+        height: 52
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -364,10 +319,10 @@ TextureImporter:
       name: Storm_8
       rect:
         serializedVersion: 2
-        x: 659
-        y: 117
-        width: 7
-        height: 14
+        x: 375
+        y: 7
+        width: 257
+        height: 318
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -386,10 +341,10 @@ TextureImporter:
       name: Storm_9
       rect:
         serializedVersion: 2
-        x: 675
-        y: 113
-        width: 9
-        height: 12
+        x: 116
+        y: 10
+        width: 16
+        height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -400,336 +355,6 @@ TextureImporter:
       bones: []
       spriteID: ff919477959991cd0800000000000000
       internalID: -2586867901415220737
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Storm_10
-      rect:
-        serializedVersion: 2
-        x: 685
-        y: 120
-        width: 6
-        height: 9
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 15f2ff40896f43910800000000000000
-      internalID: 1816347682516447057
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Storm_11
-      rect:
-        serializedVersion: 2
-        x: 573
-        y: 112
-        width: 6
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: e67a79b06d1f91a90800000000000000
-      internalID: -7342571815831099538
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Storm_12
-      rect:
-        serializedVersion: 2
-        x: 586
-        y: 100
-        width: 7
-        height: 13
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 8c9e5248c18179990800000000000000
-      internalID: -7379402953668040248
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Storm_13
-      rect:
-        serializedVersion: 2
-        x: 612
-        y: 98
-        width: 15
-        height: 20
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: bf510a219b2cf6210800000000000000
-      internalID: 1328494515234805243
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Storm_14
-      rect:
-        serializedVersion: 2
-        x: 624
-        y: 113
-        width: 6
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 0c96a29b1da0af3a0800000000000000
-      internalID: -6630975605478626880
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Storm_15
-      rect:
-        serializedVersion: 2
-        x: 419
-        y: 97
-        width: 14
-        height: 13
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 4f4e7d9bac16b9300800000000000000
-      internalID: 259908926833157364
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Storm_16
-      rect:
-        serializedVersion: 2
-        x: 465
-        y: 85
-        width: 29
-        height: 26
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 69c1e60f6cb174900800000000000000
-      internalID: 668533610939030678
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Storm_17
-      rect:
-        serializedVersion: 2
-        x: 602
-        y: 90
-        width: 8
-        height: 13
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 73480a457afbfa1e0800000000000000
-      internalID: -2184316568851151817
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Storm_18
-      rect:
-        serializedVersion: 2
-        x: 645
-        y: 103
-        width: 6
-        height: 9
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: eb4a4344e73251870800000000000000
-      internalID: 8652861284279428286
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Storm_19
-      rect:
-        serializedVersion: 2
-        x: 660
-        y: 98
-        width: 9
-        height: 12
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 5de98383e3be1dc90800000000000000
-      internalID: -7146672481196532011
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Storm_20
-      rect:
-        serializedVersion: 2
-        x: 306
-        y: 86
-        width: 9
-        height: 12
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 2bdcacb28996466e0800000000000000
-      internalID: -1845233845024404046
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Storm_21
-      rect:
-        serializedVersion: 2
-        x: 390
-        y: 90
-        width: 13
-        height: 12
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a9937ef1da0f43cb0800000000000000
-      internalID: -4885015069434889830
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Storm_22
-      rect:
-        serializedVersion: 2
-        x: 416
-        y: 84
-        width: 10
-        height: 9
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 7d9491769590ee990800000000000000
-      internalID: -7354930861862991401
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Storm_23
-      rect:
-        serializedVersion: 2
-        x: 624
-        y: 91
-        width: 6
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 3d65bd11a66ec3270800000000000000
-      internalID: 8231707562166933203
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Storm_24
-      rect:
-        serializedVersion: 2
-        x: 647
-        y: 90
-        width: 6
-        height: 9
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: cb87b02356a18ce30800000000000000
-      internalID: 4523894847627294908
       vertices: []
       indices: 
       edges: []
@@ -750,22 +375,7 @@ TextureImporter:
     nameFileIdTable:
       Storm_0: -4657137086927492859
       Storm_1: 9213914455020511983
-      Storm_10: 1816347682516447057
-      Storm_11: -7342571815831099538
-      Storm_12: -7379402953668040248
-      Storm_13: 1328494515234805243
-      Storm_14: -6630975605478626880
-      Storm_15: 259908926833157364
-      Storm_16: 668533610939030678
-      Storm_17: -2184316568851151817
-      Storm_18: 8652861284279428286
-      Storm_19: -7146672481196532011
       Storm_2: 6839046701284067787
-      Storm_20: -1845233845024404046
-      Storm_21: -4885015069434889830
-      Storm_22: -7354930861862991401
-      Storm_23: 8231707562166933203
-      Storm_24: 4523894847627294908
       Storm_3: -5449914546293270277
       Storm_4: 6293996627497839161
       Storm_5: -1749610630507886013
