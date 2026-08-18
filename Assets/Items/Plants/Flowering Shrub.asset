@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2814edcf85886e144b058ce2a6d4161a, type: 3}
-  m_Name: Sandbox
+  m_Name: Flowering Shrub
   m_EditorClassIdentifier: 
-  icon: {fileID: 1683471383931198120, guid: 90520295a17d2574b8d4da71a77dd574, type: 3}
-  itemName: Sandbox
-  type: 5
-  score: 6
-  water: -2
-  soilHealth: -3
-  biodiversity: 1
-  esthetic: 5
-  color: {r: 0.990566, g: 0.9337177, b: 0.53733534, a: 0}
+  icon: {fileID: 3526332315067104744, guid: d310dc4f9be23a34baeed5dfaf36d19c, type: 3}
+  itemName: Flowering Shrub
+  type: 0
+  score: 18
+  water: 5
+  soilHealth: 4
+  biodiversity: 8
+  esthetic: 10
+  color: {r: 0.8584906, g: 0, b: 0.80704504, a: 0}
   maxAmount: 2
-  prefab: {fileID: 5428635684898487579, guid: cd8ec40640e5d974282924dbca6e87b5, type: 3}
+  prefab: {fileID: 8256234453272004352, guid: 27a47b176941b92499706ac5f61f01a8, type: 3}

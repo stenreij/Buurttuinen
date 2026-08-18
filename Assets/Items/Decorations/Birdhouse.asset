@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: -611183083183651722, guid: 305266c974f07bc42827e39e258b4a0b, type: 3}
   itemName: Birdhouse
-  type: 6
+  type: 5
   score: 14
   water: 0
   soilHealth: 0

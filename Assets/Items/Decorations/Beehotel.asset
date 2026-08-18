@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 5884615555693050259, guid: ce57717460c760042ae46c0daf7ea2ed, type: 3}
   itemName: Beehotel
-  type: 0
+  type: 5
   score: 18
   water: 0
   soilHealth: 2

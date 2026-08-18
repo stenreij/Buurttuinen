@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 4857335772653305134, guid: f090e8d8a1ccf0b43a60b14c7ca51bf9, type: 3}
   itemName: Slide
-  type: 6
+  type: 5
   score: 7
   water: 0
   soilHealth: 0

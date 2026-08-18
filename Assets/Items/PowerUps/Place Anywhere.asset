@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 3223481123120955672, guid: 0a63f8fa5d5554049bb9e94089fa336f, type: 3}
   itemName: Place Anywhere
-  type: 9
+  type: 8
   score: 0
   water: 0
   soilHealth: 0

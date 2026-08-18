@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2814edcf85886e144b058ce2a6d4161a, type: 3}
-  m_Name: Sandbox
+  m_Name: Gravel Tile
   m_EditorClassIdentifier: 
-  icon: {fileID: 1683471383931198120, guid: 90520295a17d2574b8d4da71a77dd574, type: 3}
-  itemName: Sandbox
-  type: 5
-  score: 6
+  icon: {fileID: -3578582641699816866, guid: 21416484ca3df8548880a3c521ff28ba, type: 3}
+  itemName: Gravel Tile
+  type: 4
+  score: 2
   water: -2
-  soilHealth: -3
-  biodiversity: 1
-  esthetic: 5
-  color: {r: 0.990566, g: 0.9337177, b: 0.53733534, a: 0}
-  maxAmount: 2
-  prefab: {fileID: 5428635684898487579, guid: cd8ec40640e5d974282924dbca6e87b5, type: 3}
+  soilHealth: -2
+  biodiversity: 0
+  esthetic: 4
+  color: {r: 0.5283019, g: 0.20902647, b: 0, a: 0}
+  maxAmount: 6
+  prefab: {fileID: 7613494001699832611, guid: cae7a1d3034419c4fb5ba1af02e36a50, type: 3}

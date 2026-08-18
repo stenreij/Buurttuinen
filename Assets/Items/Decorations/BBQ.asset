@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: -6036542359384570008, guid: cb6f1a9d03528434d82787445dc51022, type: 3}
   itemName: BBQ
-  type: 6
+  type: 5
   score: -5
   water: -1
   soilHealth: -2

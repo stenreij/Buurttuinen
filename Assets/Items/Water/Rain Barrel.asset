@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2814edcf85886e144b058ce2a6d4161a, type: 3}
-  m_Name: Sandbox
+  m_Name: Rain Barrel
   m_EditorClassIdentifier: 
-  icon: {fileID: 1683471383931198120, guid: 90520295a17d2574b8d4da71a77dd574, type: 3}
-  itemName: Sandbox
-  type: 5
-  score: 6
-  water: -2
-  soilHealth: -3
-  biodiversity: 1
-  esthetic: 5
-  color: {r: 0.990566, g: 0.9337177, b: 0.53733534, a: 0}
+  icon: {fileID: -3236073529271638162, guid: 8e3101d4addbb234388fe123ae14cbb2, type: 3}
+  itemName: Rain Barrel
+  type: 3
+  score: 14
+  water: 8
+  soilHealth: 2
+  biodiversity: 2
+  esthetic: 4
+  color: {r: 0.099110454, g: 0, b: 0.8679245, a: 0}
   maxAmount: 2
-  prefab: {fileID: 5428635684898487579, guid: cd8ec40640e5d974282924dbca6e87b5, type: 3}
+  prefab: {fileID: 5524732863707528453, guid: 93cef8424327a5c40a6b5e17152508ea, type: 3}

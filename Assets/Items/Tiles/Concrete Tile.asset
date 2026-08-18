@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: -1277951974594179671, guid: f91176c74887967448a80ea84415c49f, type: 3}
   itemName: Concrete Tile
-  type: 5
+  type: 4
   score: -8
   water: -5
   soilHealth: -8

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 57591053551863209, guid: 35fad9a7be8f65548a0fb9211058e817, type: 3}
   itemName: Shovel
-  type: 8
+  type: 7
   score: 0
   water: 0
   soilHealth: 0

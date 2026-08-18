@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: -3430851730698682744, guid: 54aeb321fb219dc41a5d8df6cd146be2, type: 3}
   itemName: Protection
-  type: 9
+  type: 8
   score: 0
   water: 0
   soilHealth: 0

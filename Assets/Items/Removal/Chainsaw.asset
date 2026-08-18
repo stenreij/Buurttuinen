@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 2513086883955787816, guid: f849bdc0ae5d51e44accd0e368c7a898, type: 3}
   itemName: Chainsaw
-  type: 8
+  type: 7
   score: 0
   water: 0
   soilHealth: 0
