@@ -477,7 +477,6 @@ public class CommunityManager : MonoBehaviour
                 if ((item.type == ItemType.Plant ||
                      item.type == ItemType.Tree_Big ||
                      item.type == ItemType.Tree_Small ||
-                     item.type == ItemType.Hedge ||
                      item.type == ItemType.Water ||
                      item.type == ItemType.Decoration) &&
                     database.IsAvailable(item))
@@ -557,7 +556,7 @@ public class CommunityManager : MonoBehaviour
 
     void BlockItemsPenalty(List<Player> players)
     {
-        ItemType[] types = { ItemType.Plant, ItemType.Tree_Big, ItemType.Tree_Small, ItemType.Hedge, ItemType.Water, ItemType.Decoration };
+        ItemType[] types = { ItemType.Plant, ItemType.Tree_Big, ItemType.Tree_Small, ItemType.Water, ItemType.Decoration };
         ItemType blockedType = types[Random.Range(0, types.Length)];
 
         ShowCommunityAnnouncement("Community blocks " + blockedType + " for 1 round!", announcementDuration);

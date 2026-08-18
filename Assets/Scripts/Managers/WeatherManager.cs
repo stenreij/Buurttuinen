@@ -634,8 +634,7 @@ public class WeatherManager : MonoBehaviour
     {
         return type == ItemType.Plant ||
                type == ItemType.Tree_Big ||
-               type == ItemType.Tree_Small ||
-               type == ItemType.Hedge;
+               type == ItemType.Tree_Small;
     }
 
     void PlayEffect(GameObject effectPrefab)
