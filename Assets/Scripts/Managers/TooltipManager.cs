@@ -27,7 +27,6 @@ public class TooltipManager : MonoBehaviour
         int soil,
         int biodiversity,
         int esthetic,
-        bool isProtected,
         int bonusScore = 0,
         int bonusWater = 0,
         int bonusSoil = 0,
@@ -85,7 +84,7 @@ public class TooltipManager : MonoBehaviour
             out mousePos
         );
 
-        rectTransform.anchoredPosition = mousePos + new Vector2(0, -100);
+        rectTransform.anchoredPosition = mousePos + new Vector2(0, -110);
     }
 
     public void HideTooltip()
