@@ -4,11 +4,11 @@ public class Player : MonoBehaviour
 {
     public int playerIndex;
     public string playerName;
-    public int score;
+    public int score = 0;
     public Garden assignedGarden;
 
     private Inventory inventory;
-    public int soilBoost;
+    public int soilBoost = 0;
 
     void Start()
     {
@@ -19,5 +19,10 @@ public class Player : MonoBehaviour
     {
         score += points;
         Debug.Log(playerName + " heeft nu " + score + " punten");
+    }
+
+    public void ResetBonuses()
+    {
+        soilBoost = 0;
     }
 }
