@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2814edcf85886e144b058ce2a6d4161a, type: 3}
+  m_Name: Vegetable Garden
+  m_EditorClassIdentifier: 
+  icon: {fileID: -6000262158800407320, guid: e8bed0cb9b0bec84abf708f8222385a1, type: 3}
+  itemName: Vegetable Garden
+  type: 0
+  score: 22
+  water: 8
+  soilHealth: 6
+  biodiversity: 4
+  esthetic: 8
+  color: {r: 0, g: 0, b: 0, a: 0}
+  maxAmount: 2
+  prefab: {fileID: 2267146140623151815, guid: aed0b54d2efb8d144aa12bec14204b4f, type: 3}

@@ -226,6 +226,14 @@ public class CommunityManager : MonoBehaviour
             isCommunityActive = false;
             isExecutingCommunity = false;
 
+            currentGoal = null;
+
+            if (communityGoalText != null)
+            {
+                communityGoalText.text = "";
+                communityGoalText.gameObject.SetActive(false);
+            }
+
             if (turnManager != null)
             {
                 turnManager.SetGamePaused(false);
