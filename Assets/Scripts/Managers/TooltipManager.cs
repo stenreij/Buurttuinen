@@ -87,7 +87,8 @@ public class TooltipManager : MonoBehaviour
         int biodiversity = 0,
         int esthetic = 0,
         bool isPowerUp = false,
-        bool isObstacle = false)
+        bool isObstacle = false,
+        bool isSabotage = false)
     {
         if (tooltipPanel == null) return;
 
@@ -108,9 +109,21 @@ public class TooltipManager : MonoBehaviour
             return;
         }
 
+        if (isSabotage)
+        {
+            itemTypeText.text = $"{itemType}";
+            scoreText.text = "";
+            waterText.text = "";
+            soilText.text = "";
+            biodiversityText.text = "";
+            estheticText.text = "";
+            PositionTooltipAbove();
+            return;
+        }
+
         if (isObstacle)
         {
-            itemTypeText.text = $"{itemType} (removes points!)";
+            itemTypeText.text = $"{itemType}";
         }
         else
         {

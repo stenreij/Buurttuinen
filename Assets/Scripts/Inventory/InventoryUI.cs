@@ -152,7 +152,6 @@ public class InventoryUI : MonoBehaviour
         trigger.triggers.Add(exitEntry);
     }
 
-    // 🔥 NIEUW: Tooltip tonen voor inventory
     void ShowInventoryTooltip(ItemData item)
     {
         if (tooltipManager == null || item == null) return;
@@ -161,8 +160,18 @@ public class InventoryUI : MonoBehaviour
         {
             tooltipManager.ShowInventoryTooltip(
                 item.itemName,
-                $"Power Up",
+                "PowerUp",
                 isPowerUp: true
+            );
+            return;
+        }
+
+        if (item.type == ItemType.Sabotage)
+        {
+            tooltipManager.ShowInventoryTooltip(
+                item.itemName,
+                item.type.ToString(),
+                isSabotage: true
             );
             return;
         }
@@ -181,7 +190,6 @@ public class InventoryUI : MonoBehaviour
         );
     }
 
-    // 🔥 NIEUW: Tooltip verbergen voor inventory
     void HideInventoryTooltip()
     {
         if (tooltipManager != null)
