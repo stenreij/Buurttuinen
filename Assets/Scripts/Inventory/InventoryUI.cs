@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 
 public class InventoryUI : MonoBehaviour
 {
@@ -9,10 +11,10 @@ public class InventoryUI : MonoBehaviour
     public GameObject itemButtonPrefab;
     public Transform contentParent;
     private ItemData selectedItem;
+    public TooltipManager tooltipManager;
 
-    // Kleur voor selectie indicator
     [Header("Selection Visuals")]
-    public Color selectedColor = new Color(1f, 1f, 0.5f, 1f);  // Geelachtig
+    public Color selectedColor = new Color(1f, 1f, 0.5f, 1f);
     public Color defaultColor = Color.white;
     public float selectedScale = 1.15f;
     public float defaultScale = 1f;
@@ -118,10 +120,73 @@ public class InventoryUI : MonoBehaviour
             SetButtonCountText(newButton, count);
             SetButtonClickEvent(newButton, item);
 
-            // 🔥 NIEUW: Voeg een background image toe voor selectie feedback als die er niet is
             EnsureButtonHasBackground(newButton);
+            AddHoverEvents(newButton, item);
 
             buttonIndex++;
+        }
+    }
+
+    void AddHoverEvents(GameObject buttonObj, ItemData item)
+    {
+        EventTrigger trigger = buttonObj.GetComponent<EventTrigger>();
+        if (trigger == null)
+        {
+            trigger = buttonObj.AddComponent<EventTrigger>();
+        }
+
+        EventTrigger.Entry enterEntry = new EventTrigger.Entry();
+        enterEntry.eventID = EventTriggerType.PointerEnter;
+        enterEntry.callback.AddListener((data) =>
+        {
+            ShowInventoryTooltip(item);
+        });
+        trigger.triggers.Add(enterEntry);
+
+        EventTrigger.Entry exitEntry = new EventTrigger.Entry();
+        exitEntry.eventID = EventTriggerType.PointerExit;
+        exitEntry.callback.AddListener((data) =>
+        {
+            HideInventoryTooltip();
+        });
+        trigger.triggers.Add(exitEntry);
+    }
+
+    // 🔥 NIEUW: Tooltip tonen voor inventory
+    void ShowInventoryTooltip(ItemData item)
+    {
+        if (tooltipManager == null || item == null) return;
+
+        if (item.type == ItemType.PowerUp)
+        {
+            tooltipManager.ShowInventoryTooltip(
+                item.itemName,
+                $"Power Up",
+                isPowerUp: true
+            );
+            return;
+        }
+
+        bool isObstacle = (item.type == ItemType.Obstacle);
+
+        tooltipManager.ShowInventoryTooltip(
+            item.itemName,
+            item.type.ToString(),
+            item.score,
+            item.water,
+            item.soilHealth,
+            item.biodiversity,
+            item.esthetic,
+            isObstacle: isObstacle
+        );
+    }
+
+    // 🔥 NIEUW: Tooltip verbergen voor inventory
+    void HideInventoryTooltip()
+    {
+        if (tooltipManager != null)
+        {
+            tooltipManager.HideTooltip();
         }
     }
 
@@ -227,14 +292,14 @@ public class InventoryUI : MonoBehaviour
         {
             Debug.Log($"🔓 Deselecting: {item.itemName}");
             selectedItem = null;
-            
+
             // Clear selection in actions
             ItemActions actions = currentPlayer.GetComponent<ItemActions>();
             if (actions != null) actions.ClearSelectedItem();
-            
+
             PowerUpActions powerActions = currentPlayer.GetComponent<PowerUpActions>();
             if (powerActions != null) powerActions.ClearSelectedPowerUp();
-            
+
             UpdateUI();
             turnManager.UpdateActionButtons();
             return;
@@ -250,7 +315,7 @@ public class InventoryUI : MonoBehaviour
         if (item.type == ItemType.PowerUp)
         {
             Debug.Log($"⚡ PowerUp detected! Selecting power-up...");
-            
+
             PowerUpActions powerActions = currentPlayer.GetComponent<PowerUpActions>();
             if (powerActions != null)
             {
@@ -265,7 +330,7 @@ public class InventoryUI : MonoBehaviour
         else if (item.type == ItemType.Sabotage)
         {
             Debug.Log($"🔧 Sabotage item detected! Selecting sabotage...");
-            
+
             ItemActions actions = currentPlayer.GetComponent<ItemActions>();
             if (actions != null)
             {

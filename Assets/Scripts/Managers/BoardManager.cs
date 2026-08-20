@@ -66,6 +66,20 @@ public class BoardManager : MonoBehaviour
             gardenScript.CreateGarden();
             gardens.Add(gardenScript);
 
+            GardenTile[] allTiles = garden.GetComponentsInChildren<GardenTile>();
+            foreach (GardenTile tile in allTiles)
+            {
+                SpriteRenderer sr = tile.GetComponentInChildren<SpriteRenderer>();
+                if (sr != null && sr.gameObject != tile.gameObject)
+                {
+                    tile.tileVisual = sr.gameObject;
+                }
+                else
+                {
+                    tile.tileVisual = tile.gameObject;
+                }
+            }
+
             if (itemDatabase != null)
             {
                 PlaceStartItems(gardenScript, itemDatabase);

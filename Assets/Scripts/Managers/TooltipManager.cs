@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class TooltipManager : MonoBehaviour
@@ -13,10 +14,35 @@ public class TooltipManager : MonoBehaviour
     public TextMeshProUGUI biodiversityText;
     public TextMeshProUGUI estheticText;
 
+    private bool isInventoryTooltip = false;
+
     void Start()
     {
         if (tooltipPanel != null)
+        {
             tooltipPanel.SetActive(false);
+
+            Canvas canvas = tooltipPanel.GetComponentInParent<Canvas>();
+            if (canvas != null)
+            {
+                canvas.sortingOrder = 100;
+            }
+        }
+    }
+
+    void Update()
+    {
+        if (tooltipPanel != null && tooltipPanel.activeSelf)
+        {
+            if (isInventoryTooltip)
+            {
+                PositionTooltipAbove();
+            }
+            else
+            {
+                PositionTooltipUnder();
+            }
+        }
     }
 
     public void ShowTooltip(
@@ -27,15 +53,12 @@ public class TooltipManager : MonoBehaviour
         int soil,
         int biodiversity,
         int esthetic,
-        int bonusScore = 0,
-        int bonusWater = 0,
-        int bonusSoil = 0,
-        int bonusBiodiversity = 0,
-        int bonusEsthetic = 0)
+        int bonusScore = 0)
     {
         if (tooltipPanel == null) return;
 
         tooltipPanel.SetActive(true);
+        isInventoryTooltip = false;
 
         itemNameText.text = itemName;
         itemTypeText.text = $"Type: {itemType}";
@@ -47,34 +70,64 @@ public class TooltipManager : MonoBehaviour
         }
         scoreText.text = $"Score: {scoreDisplay}";
 
-        string waterDisplay = water.ToString();
-        if (bonusWater != 0)
-        {
-            waterDisplay += $" (+{bonusWater})";
-        }
-        waterText.text = $"Water: {waterDisplay}";
+        waterText.text = $"Water: {water}";
+        soilText.text = $"Soil: {soil}";
+        biodiversityText.text = $"Biodiversity: {biodiversity}";
+        estheticText.text = $"Esthetic: {esthetic}";
 
-        string soilDisplay = soil.ToString();
-        if (bonusSoil != 0)
-        {
-            soilDisplay += $" (+{bonusSoil})";
-        }
-        soilText.text = $"Soil: {soilDisplay}";
+        PositionTooltipUnder();
+    }
 
-        string biodiversityDisplay = biodiversity.ToString();
-        if (bonusBiodiversity != 0)
-        {
-            biodiversityDisplay += $" (+{bonusBiodiversity})";
-        }
-        biodiversityText.text = $"Biodiversity: {biodiversityDisplay}";
+    public void ShowInventoryTooltip(
+        string itemName,
+        string itemType,
+        int score = 0,
+        int water = 0,
+        int soil = 0,
+        int biodiversity = 0,
+        int esthetic = 0,
+        bool isPowerUp = false,
+        bool isObstacle = false)
+    {
+        if (tooltipPanel == null) return;
 
-        string estheticDisplay = esthetic.ToString();
-        if (bonusEsthetic != 0)
-        {
-            estheticDisplay += $" (+{bonusEsthetic})";
-        }
-        estheticText.text = $"Esthetic: {estheticDisplay}";
+        tooltipPanel.SetActive(true);
+        isInventoryTooltip = true;
 
+        itemNameText.text = itemName;
+
+        if (isPowerUp)
+        {
+            itemTypeText.text = $"{itemType}";
+            scoreText.text = "";
+            waterText.text = "";
+            soilText.text = "";
+            biodiversityText.text = "";
+            estheticText.text = "";
+            PositionTooltipAbove();
+            return;
+        }
+
+        if (isObstacle)
+        {
+            itemTypeText.text = $"{itemType} (removes points!)";
+        }
+        else
+        {
+            itemTypeText.text = $"{itemType}";
+        }
+
+        scoreText.text = $"Score: {score}";
+        waterText.text = $"Water: {water}";
+        soilText.text = $"Soil: {soil}";
+        biodiversityText.text = $"Biodiversity: {biodiversity}";
+        estheticText.text = $"Esthetic: {esthetic}";
+
+        PositionTooltipAbove();
+    }
+
+    void PositionTooltipUnder()
+    {
         RectTransform rectTransform = tooltipPanel.GetComponent<RectTransform>();
         Vector2 mousePos;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
@@ -87,9 +140,24 @@ public class TooltipManager : MonoBehaviour
         rectTransform.anchoredPosition = mousePos + new Vector2(0, -110);
     }
 
+    void PositionTooltipAbove()
+    {
+        RectTransform rectTransform = tooltipPanel.GetComponent<RectTransform>();
+        Vector2 mousePos;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            rectTransform.parent as RectTransform,
+            Input.mousePosition,
+            null,
+            out mousePos
+        );
+
+        rectTransform.anchoredPosition = mousePos + new Vector2(0, 110);
+    }
+
     public void HideTooltip()
     {
         if (tooltipPanel != null)
             tooltipPanel.SetActive(false);
+        isInventoryTooltip = false;
     }
 }
