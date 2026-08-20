@@ -13,9 +13,52 @@ public class GardenTile : MonoBehaviour
     [Header("Tooltip")]
     public TooltipManager tooltipManager;
 
+    [Header("Hover Effects")]
+    public GameObject tileVisual;
+    public float hoverScale = 1.05f;
+    public float animationSpeed = 8f;
+
+    private Vector3 originalScale;
+    private bool isHovering = false;
+    private float currentScale = 1f;
+
     void Start()
     {
         tooltipManager = FindFirstObjectByType<TooltipManager>();
+
+        if (tileVisual == null)
+        {
+            SpriteRenderer[] children = GetComponentsInChildren<SpriteRenderer>();
+            foreach (SpriteRenderer sr in children)
+            {
+                if (sr.gameObject != gameObject && sr.gameObject != placedItem)
+                {
+                    tileVisual = sr.gameObject;
+                    break;
+                }
+            }
+
+            if (tileVisual == null)
+            {
+                tileVisual = gameObject;
+                Debug.LogWarning($"⚠️ No tile visual found for {gameObject.name}, using self (item will scale too!)");
+            }
+        }
+
+        originalScale = tileVisual.transform.localScale;
+    }
+
+    void Update()
+    {
+        if (isHovering)
+        {
+            currentScale = Mathf.Lerp(currentScale, hoverScale, Time.deltaTime * animationSpeed);
+        }
+        else
+        {
+            currentScale = Mathf.Lerp(currentScale, 1f, Time.deltaTime * animationSpeed);
+        }
+        tileVisual.transform.localScale = originalScale * currentScale;
     }
 
     private void OnMouseDown()
@@ -93,8 +136,18 @@ public class GardenTile : MonoBehaviour
 
     void OnMouseOver()
     {
+        isHovering = true;
+
         if (occupied && placedItemData != null && tooltipManager != null)
         {
+            if (placedItem != null)
+            {
+                SpriteRenderer sr = placedItem.GetComponent<SpriteRenderer>();
+                if (sr != null)
+                {
+                    sr.sortingOrder = 20;
+                }
+            }
             string itemName = placedItemData.itemName;
             string itemType = placedItemData.type.ToString();
             int score = placedItemData.score;
@@ -121,6 +174,17 @@ public class GardenTile : MonoBehaviour
 
     void OnMouseExit()
     {
+        isHovering = false;
+
+        if (placedItem != null)
+        {
+            SpriteRenderer sr = placedItem.GetComponent<SpriteRenderer>();
+            if (sr != null)
+            {
+                sr.sortingOrder = 10;
+            }
+        }
+
         if (tooltipManager != null)
         {
             tooltipManager.HideTooltip();

@@ -142,6 +142,7 @@ public class ItemActions : MonoBehaviour
             GameObject placed = Instantiate(selectedItem.prefab, targetTile.transform.position, Quaternion.identity);
             placed.transform.parent = targetTile.transform;
             placed.transform.localPosition = Vector3.zero;
+            placed.transform.localScale = Vector3.one;
 
             SpriteRenderer sr = placed.GetComponent<SpriteRenderer>();
             if (sr != null)
@@ -222,6 +223,7 @@ public class ItemActions : MonoBehaviour
             GameObject placed = Instantiate(selectedItem.prefab, targetTile.transform.position, Quaternion.identity);
             placed.transform.parent = targetTile.transform;
             placed.transform.localPosition = Vector3.zero;
+            placed.transform.localScale = Vector3.one;
 
             SpriteRenderer sr = placed.GetComponent<SpriteRenderer>();
             if (sr != null)
