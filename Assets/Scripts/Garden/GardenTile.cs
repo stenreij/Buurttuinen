@@ -41,7 +41,6 @@ public class GardenTile : MonoBehaviour
             if (tileVisual == null)
             {
                 tileVisual = gameObject;
-                Debug.LogWarning($"⚠️ No tile visual found for {gameObject.name}, using self (item will scale too!)");
             }
         }
 
@@ -63,41 +62,19 @@ public class GardenTile : MonoBehaviour
 
     private void OnMouseDown()
     {
-        Debug.Log($"🖱️ Tile clicked: {gameObject.name} ({xPosition}, {yPosition})");
-
         TurnManager turnManager = FindFirstObjectByType<TurnManager>();
-        if (turnManager == null)
-        {
-            Debug.Log("⚠️ TurnManager not found!");
-            return;
-        }
+        if (turnManager == null) return;
 
         Player currentPlayer = turnManager.GetCurrentPlayer();
-        if (currentPlayer == null)
-        {
-            Debug.Log("⚠️ No current player found!");
-            return;
-        }
+        if (currentPlayer == null) return;
 
         Garden parentGarden = GetComponentInParent<Garden>();
-        if (parentGarden == null)
-        {
-            Debug.Log("⚠️ Tile has no Garden parent!");
-            return;
-        }
+        if (parentGarden == null) return;
 
         ItemActions actions = currentPlayer.GetComponent<ItemActions>();
-        if (actions == null)
-        {
-            Debug.Log("⚠️ No ItemActions found on current player!");
-            return;
-        }
+        if (actions == null) return;
 
-        if (turnManager.IsGamePaused())
-        {
-            Debug.Log("⏸️ Game is gepauzeerd (weer), je kunt geen acties uitvoeren!");
-            return;
-        }
+        if (turnManager.IsGamePaused()) return;
 
         PowerUpActions powerActions = currentPlayer.GetComponent<PowerUpActions>();
         if (powerActions != null && powerActions.IsWaitingForTile())
@@ -109,7 +86,6 @@ public class GardenTile : MonoBehaviour
         ItemData selectedItem = actions.GetSelectedItem();
         if (selectedItem != null && selectedItem.type == ItemType.Sabotage)
         {
-            Debug.Log($"🔧 Using sabotage on tile!");
             actions.RemoveItem(this);
             return;
         }
@@ -120,14 +96,13 @@ public class GardenTile : MonoBehaviour
             ItemData uiSelectedItem = inventoryUI.GetSelectedItem();
             if (uiSelectedItem != null && uiSelectedItem.type == ItemType.PowerUp)
             {
-                Debug.Log($"⚡ PowerUp selected, but waiting for PowerUpActions to handle it");
                 return;
             }
         }
 
         if (currentPlayer.assignedGarden != parentGarden)
         {
-            Debug.Log($"⚠️ {currentPlayer.gameObject.name} cannot place in {parentGarden.name}! This is not your garden.");
+            Debug.Log($"{currentPlayer.gameObject.name} cannot place in {parentGarden.name} - not their garden.");
             return;
         }
 
@@ -148,26 +123,16 @@ public class GardenTile : MonoBehaviour
                     sr.sortingOrder = 20;
                 }
             }
-            string itemName = placedItemData.itemName;
-            string itemType = placedItemData.type.ToString();
-            int score = placedItemData.score;
-            int water = placedItemData.water;
-            int soil = placedItemData.soilHealth;
-            int biodiversity = placedItemData.biodiversity;
-            int aesthetic = placedItemData.aesthetic;
-            bool isProtected = this.isProtected;
-
-            int bonusScore = GetBonusScore();
 
             tooltipManager.ShowTooltip(
-                itemName,
-                itemType,
-                score,
-                water,
-                soil,
-                biodiversity,
-                aesthetic,
-                bonusScore
+                placedItemData.itemName,
+                placedItemData.type.ToString(),
+                placedItemData.score,
+                placedItemData.water,
+                placedItemData.soilHealth,
+                placedItemData.biodiversity,
+                placedItemData.aesthetic,
+                GetBonusScore()
             );
         }
     }
@@ -215,23 +180,8 @@ public class GardenTile : MonoBehaviour
         return bonus;
     }
 
-    int GetBonusWater()
-    {
-        return 0;
-    }
-
-    int GetBonusSoil()
-    {
-        return 0;
-    }
-
-    int GetBonusBiodiversity()
-    {
-        return 0;
-    }
-
-    int GetBonusAesthetic()
-    {
-        return 0;
-    }
+    int GetBonusWater() => 0;
+    int GetBonusSoil() => 0;
+    int GetBonusBiodiversity() => 0;
+    int GetBonusAesthetic() => 0;
 }

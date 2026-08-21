@@ -14,26 +14,23 @@ public class EndMenuManager : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("📋 EndScene Loaded!");
-
         if (backToMenuButton != null)
         {
             backToMenuButton.onClick.RemoveAllListeners();
             backToMenuButton.onClick.AddListener(BackToMenu);
-            //Debug.Log("🔘 Back to Menu button ready!");
         }
         else
         {
-            Debug.LogError("❌ backToMenuButton is NULL!");
+            Debug.LogError("BackToMenuButton is not assigned!");
             return;
         }
 
         GameSetup setup = FindFirstObjectByType<GameSetup>();
         if (setup == null || setup.finalScores == null || setup.finalScores.Count == 0)
         {
-            Debug.Log("⚠️ No scores found!");
+            Debug.LogWarning("No scores found to display.");
             if (scoreText != null)
-                scoreText.text = "Geen scores beschikbaar!";
+                scoreText.text = "No scores available!";
             return;
         }
 
@@ -41,19 +38,17 @@ public class EndMenuManager : MonoBehaviour
         DisplayNeighborhoodScore(setup.totalScore);
     }
 
-    void DisplayScores(Dictionary<string, int> scores)
+    private void DisplayScores(Dictionary<string, int> scores)
     {
         var sortedScores = scores.OrderByDescending(x => x.Value).ToList();
 
         string result = "";
         int rank = 1;
 
-        Debug.Log("🏆 EINDSTAND:");
         foreach (var entry in sortedScores)
         {
             string medal = GetMedal(rank);
-            Debug.Log($"{medal} {entry.Key} → {entry.Value} punten");
-            result += $"{entry.Key} | {entry.Value}\n";
+            result += $"{medal} {entry.Key}: {entry.Value}\n";
             rank++;
         }
 
@@ -63,29 +58,27 @@ public class EndMenuManager : MonoBehaviour
         }
     }
 
-    void DisplayNeighborhoodScore(int totalScore)
+    private void DisplayNeighborhoodScore(int totalScore)
     {
         if (neighborhoodScoreText != null)
         {
-            neighborhoodScoreText.text = $"Buurtscore | {totalScore}";
-            Debug.Log($"🌍 Buurtscore | {totalScore} punten");
+            neighborhoodScoreText.text = $"Neighborhood Score: {totalScore}";
         }
     }
 
-    string GetMedal(int rank)
+    private string GetMedal(int rank)
     {
         switch (rank)
         {
-            case 1: return "🥇";
-            case 2: return "🥈";
-            case 3: return "🥉";
-            default: return $"  {rank}.";
+            case 1: return "1st";
+            case 2: return "2nd";
+            case 3: return "3rd";
+            default: return $"{rank}.";
         }
     }
 
-    void BackToMenu()
+    private void BackToMenu()
     {
-        Debug.Log("🔙 Terug naar StartMenu...");
         GameSetup setup = FindFirstObjectByType<GameSetup>();
         if (setup != null)
         {

@@ -18,43 +18,22 @@ public class ItemActions : MonoBehaviour
         if (turnManager == null)
         {
             turnManager = FindFirstObjectByType<TurnManager>();
-            if (turnManager == null)
-            {
-                Debug.LogWarning("⚠️ TurnManager not found in ItemActions!");
-            }
         }
 
         if (playerInventory == null)
         {
             playerInventory = GetComponent<Inventory>();
-            if (playerInventory == null)
-            {
-                Debug.LogError($"❌ No Inventory found on {gameObject.name}!");
-            }
         }
     }
 
     public void GiveRandomItem()
     {
-        if (itemDatabase == null)
-        {
-            Debug.LogError("❌ ItemDatabase is NULL for " + gameObject.name);
-            return;
-        }
-
-        if (playerInventory == null)
-        {
-            Debug.LogError("❌ PlayerInventory is NULL for " + gameObject.name);
-            return;
-        }
+        if (itemDatabase == null) return;
+        if (playerInventory == null) return;
 
         List<ItemData> availableItems = itemDatabase.GetAvailableItems();
 
-        if (availableItems.Count == 0)
-        {
-            Debug.LogWarning("⚠️ No more items available for " + gameObject.name);
-            return;
-        }
+        if (availableItems.Count == 0) return;
 
         int randomIndex = Random.Range(0, availableItems.Count);
         ItemData randomItem = availableItems[randomIndex];
@@ -62,10 +41,6 @@ public class ItemActions : MonoBehaviour
         if (itemDatabase.TryTakeItem(randomItem))
         {
             playerInventory.AddItem(randomItem);
-        }
-        else
-        {
-            Debug.LogWarning($"⚠️ Could not take {randomItem.itemName} from pool!");
         }
     }
 
@@ -83,7 +58,7 @@ public class ItemActions : MonoBehaviour
     public void SelectItem(ItemData item)
     {
         selectedItem = item;
-        Debug.Log($"✅ Item selected: {item.itemName} (Type: {item.type})");
+        Debug.Log($"Item selected: {item.itemName} (Type: {item.type})");
     }
 
     public ItemData GetSelectedItem()
@@ -94,45 +69,21 @@ public class ItemActions : MonoBehaviour
     public void ClearSelectedItem()
     {
         selectedItem = null;
-        Debug.Log($"🧹 Cleared selected item");
     }
 
     public void PlaceItem(GardenTile targetTile)
     {
-        if (playerInventory == null)
-        {
-            Debug.LogError($"❌ PlayerInventory is NULL on {gameObject.name}!");
-            return;
-        }
-
-        if (selectedItem == null)
-        {
-            Debug.Log("⚠️ No item selected!");
-            return;
-        }
-
-        if (targetTile.occupied)
-        {
-            Debug.Log("⚠️ This tile is already occupied!");
-            return;
-        }
-
-        if (!playerInventory.HasItem(selectedItem))
-        {
-            Debug.Log($"⚠️ {gameObject.name} does not have {selectedItem.itemName} in inventory!");
-            return;
-        }
+        if (playerInventory == null) return;
+        if (selectedItem == null) return;
+        if (targetTile.occupied) return;
+        if (!playerInventory.HasItem(selectedItem)) return;
 
         if (turnManager == null)
         {
             turnManager = FindFirstObjectByType<TurnManager>();
         }
 
-        if (turnManager != null && turnManager.hasPlacedItemThisTurn)
-        {
-            Debug.Log("⚠️ You have already performed an action this turn!");
-            return;
-        }
+        if (turnManager != null && turnManager.hasPlacedItemThisTurn) return;
 
         InventoryUI ui = FindFirstObjectByType<InventoryUI>();
         playerInventory.RemoveItem(selectedItem);
@@ -150,17 +101,9 @@ public class ItemActions : MonoBehaviour
                 sr.enabled = true;
                 sr.sortingOrder = 10;
             }
-            else
-            {
-                Debug.LogWarning($"⚠️ Geen SpriteRenderer op prefab van {selectedItem.itemName}!");
-            }
 
             targetTile.placedItem = placed;
             targetTile.placedItemData = selectedItem;
-        }
-        else
-        {
-            Debug.LogWarning($"⚠️ No prefab for {selectedItem.itemName}!");
         }
 
         targetTile.occupied = true;
@@ -171,7 +114,8 @@ public class ItemActions : MonoBehaviour
             turnManager.UpdateActionButtons();
         }
 
-        Debug.Log($"✅ {selectedItem.itemName} placed on tile!");
+        Debug.Log($"{selectedItem.itemName} placed on tile by {gameObject.name}");
+
         ClearSelectedItem();
 
         ScoreManager.RefreshScores();
@@ -191,29 +135,10 @@ public class ItemActions : MonoBehaviour
 
     public void PlaceItemDirect(GardenTile targetTile)
     {
-        if (playerInventory == null)
-        {
-            Debug.LogError($"❌ PlayerInventory is NULL on {gameObject.name}!");
-            return;
-        }
-
-        if (selectedItem == null)
-        {
-            Debug.Log("⚠️ No item selected!");
-            return;
-        }
-
-        if (targetTile.occupied)
-        {
-            Debug.Log("⚠️ This tile is already occupied!");
-            return;
-        }
-
-        if (!playerInventory.HasItem(selectedItem))
-        {
-            Debug.Log($"⚠️ {gameObject.name} does not have {selectedItem.itemName} in inventory!");
-            return;
-        }
+        if (playerInventory == null) return;
+        if (selectedItem == null) return;
+        if (targetTile.occupied) return;
+        if (!playerInventory.HasItem(selectedItem)) return;
 
         InventoryUI ui = FindFirstObjectByType<InventoryUI>();
         playerInventory.RemoveItem(selectedItem);
@@ -238,7 +163,8 @@ public class ItemActions : MonoBehaviour
 
         targetTile.occupied = true;
 
-        Debug.Log($"✅ {selectedItem.itemName} placed on tile (PlaceAnywhere)!");
+        Debug.Log($"{selectedItem.itemName} placed on tile (PlaceAnywhere) by {gameObject.name}");
+
         ClearSelectedItem();
 
         ScoreManager.RefreshScores();
@@ -252,35 +178,11 @@ public class ItemActions : MonoBehaviour
 
     public void RemoveItem(GardenTile targetTile)
     {
-        if (playerInventory == null)
-        {
-            Debug.LogError($"❌ PlayerInventory is NULL on {gameObject.name}!");
-            return;
-        }
-
-        if (selectedItem == null)
-        {
-            Debug.Log("⚠️ No item selected to remove!");
-            return;
-        }
-
-        if (selectedItem.type != ItemType.Sabotage)
-        {
-            Debug.Log("⚠️ This is not a removal item!");
-            return;
-        }
-
-        if (!targetTile.occupied || targetTile.placedItemData == null)
-        {
-            Debug.Log("⚠️ There is nothing to be removed on this tile!");
-            return;
-        }
-
-        if (targetTile.isProtected)
-        {
-            Debug.Log("🛡️ This tile is protected and cannot be removed!");
-            return;
-        }
+        if (playerInventory == null) return;
+        if (selectedItem == null) return;
+        if (selectedItem.type != ItemType.Sabotage) return;
+        if (!targetTile.occupied || targetTile.placedItemData == null) return;
+        if (targetTile.isProtected) return;
 
         if (targetTile.placedItem != null)
         {
@@ -315,7 +217,7 @@ public class ItemActions : MonoBehaviour
             ui.RefreshUI();
         }
 
-        Debug.Log($"✅ {gameObject.name} removed an item from the garden!");
+        Debug.Log($"{gameObject.name} removed an item from the garden");
     }
 
     public void PassTurn()
@@ -324,7 +226,7 @@ public class ItemActions : MonoBehaviour
         if (turnManager != null)
         {
             GiveRandomItem();
-            Debug.Log($"⏭️ {gameObject.name} passed and received a random item!");
+            Debug.Log($"{gameObject.name} passed and received a random item");
 
             InventoryUI ui = FindFirstObjectByType<InventoryUI>();
             if (ui != null)
@@ -334,10 +236,6 @@ public class ItemActions : MonoBehaviour
             }
 
             turnManager.EndTurn();
-        }
-        else
-        {
-            Debug.LogWarning("⚠️ TurnManager not found!");
         }
     }
 }

@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 
 public class InventoryUI : MonoBehaviour
 {
@@ -42,31 +41,29 @@ public class InventoryUI : MonoBehaviour
         CreateButtons(itemCounts);
     }
 
-    // VALIDATE REFERENCES
     bool ValidateReferences()
     {
         if (contentParent == null)
         {
-            Debug.LogError("❌ Content Parent is NOT assigned!");
+            Debug.LogError("Content Parent is not assigned!");
             return false;
         }
 
         if (playerInventory == null)
         {
-            Debug.LogError("❌ No Inventory linked to InventoryUI!");
+            Debug.LogError("No Inventory linked to InventoryUI!");
             return false;
         }
 
         if (itemButtonPrefab == null)
         {
-            Debug.LogError("❌ Item Button Prefab is NOT assigned!");
+            Debug.LogError("Item Button Prefab is not assigned!");
             return false;
         }
 
         return true;
     }
 
-    // CLEAR OLD BUTTONS
     void ClearOldButtons()
     {
         int childCount = contentParent.childCount;
@@ -76,20 +73,17 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
-    // CHECK IF INVENTORY HAS ITEMS
     bool HasItems()
     {
         int totalItems = playerInventory.items.Count;
 
         if (totalItems == 0)
         {
-            Debug.LogWarning("⚠️ Inventory is empty! No buttons will be created.");
             return false;
         }
         return true;
     }
 
-    // GET ITEM COUNTS
     Dictionary<ItemData, int> GetItemCounts()
     {
         Dictionary<ItemData, int> itemCounts = new Dictionary<ItemData, int>();
@@ -104,7 +98,6 @@ public class InventoryUI : MonoBehaviour
         return itemCounts;
     }
 
-    // CREATE BUTTONS
     void CreateButtons(Dictionary<ItemData, int> itemCounts)
     {
         int buttonIndex = 0;
@@ -198,7 +191,6 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
-    // 🔥 NIEUW: Zorg dat de button een background Image heeft voor selectie
     void EnsureButtonHasBackground(GameObject button)
     {
         Image img = button.GetComponent<Image>();
@@ -210,7 +202,6 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
-    // SET BUTTON ICON
     void SetButtonIcon(GameObject button, ItemData item)
     {
         Image iconImage = button.GetComponent<Image>();
@@ -221,18 +212,9 @@ public class InventoryUI : MonoBehaviour
                 iconImage.sprite = item.icon;
                 iconImage.color = defaultColor;
             }
-            else
-            {
-                Debug.LogWarning($"⚠️ No icon found for: {item.itemName}");
-            }
-        }
-        else
-        {
-            Debug.LogWarning($"⚠️ No Image component on ItemButton prefab!");
         }
     }
 
-    // SET BUTTON COUNT TEXT
     void SetButtonCountText(GameObject button, int count)
     {
         Text countText = button.GetComponentInChildren<Text>();
@@ -247,13 +229,8 @@ public class InventoryUI : MonoBehaviour
                 countText.text = "";
             }
         }
-        else
-        {
-            Debug.LogError($"❌ No Text component found on ItemButton prefab!");
-        }
     }
 
-    // SET BUTTON CLICK EVENT
     void SetButtonClickEvent(GameObject button, ItemData item)
     {
         Button btn = button.GetComponent<Button>();
@@ -264,44 +241,22 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
-    // 🔥 AANGEPAST: ON ITEM CLICKED - Nu met betere feedback voor alle items
     void OnItemClicked(ItemData item)
     {
-        Debug.Log($"🖱️ CLICKED ON: {item.itemName} (Type: {item.type})");
-
         TurnManager turnManager = FindFirstObjectByType<TurnManager>();
-        if (turnManager == null)
-        {
-            Debug.Log("⚠️ TurnManager not found!");
-            return;
-        }
+        if (turnManager == null) return;
 
-        if (turnManager.IsGamePaused())
-        {
-            Debug.Log("⏸️ Game is gepauzeerd (weer), je kunt geen items selecteren!");
-            return;
-        }
+        if (turnManager.IsGamePaused()) return;
 
-        if (turnManager.hasPlacedItemThisTurn)
-        {
-            Debug.Log("⚠️ Je hebt deze beurt al een actie gedaan! Je kunt geen items meer selecteren.");
-            return;
-        }
+        if (turnManager.hasPlacedItemThisTurn) return;
 
         Player currentPlayer = turnManager.GetCurrentPlayer();
-        if (currentPlayer == null)
-        {
-            Debug.Log("⚠️ No current player!");
-            return;
-        }
+        if (currentPlayer == null) return;
 
-        // 🔥 NIEUW: Als we op hetzelfde item klikken, deselecteer het dan
         if (selectedItem == item)
         {
-            Debug.Log($"🔓 Deselecting: {item.itemName}");
             selectedItem = null;
 
-            // Clear selection in actions
             ItemActions actions = currentPlayer.GetComponent<ItemActions>();
             if (actions != null) actions.ClearSelectedItem();
 
@@ -313,60 +268,39 @@ public class InventoryUI : MonoBehaviour
             return;
         }
 
-        // 🔥 Selecteer het item
         selectedItem = item;
-
-        // Update de visuele selectie
         UpdateItemSelection(item);
 
-        // 🔥 Verwerk op basis van item type
         if (item.type == ItemType.PowerUp)
         {
-            Debug.Log($"⚡ PowerUp detected! Selecting power-up...");
-
             PowerUpActions powerActions = currentPlayer.GetComponent<PowerUpActions>();
             if (powerActions != null)
             {
                 powerActions.SelectPowerUp(item);
-                Debug.Log($"⚡ Power-up geselecteerd: {item.itemName}");
-            }
-            else
-            {
-                Debug.Log($"❌ PowerUpActions NOT found on {currentPlayer.gameObject.name}!");
+                Debug.Log($"Power-up selected: {item.itemName}");
             }
         }
         else if (item.type == ItemType.Sabotage)
         {
-            Debug.Log($"🔧 Sabotage item detected! Selecting sabotage...");
-
             ItemActions actions = currentPlayer.GetComponent<ItemActions>();
             if (actions != null)
             {
                 actions.SelectItem(item);
-                Debug.Log($"🔧 Sabotage item geselecteerd: {item.itemName}");
-            }
-            else
-            {
-                Debug.Log($"❌ ItemActions NOT found on {currentPlayer.gameObject.name}!");
+                Debug.Log($"Sabotage selected: {item.itemName}");
             }
         }
         else
         {
-            Debug.Log($"🌱 Normal item detected, using ItemActions");
             ItemActions actions = currentPlayer.GetComponent<ItemActions>();
-            if (actions == null)
-            {
-                Debug.Log("⚠️ No ItemActions found!");
-                return;
-            }
+            if (actions == null) return;
 
             actions.SelectItem(item);
+            Debug.Log($"Item selected: {item.itemName}");
         }
 
         turnManager.UpdateActionButtons();
     }
 
-    // 🔥 VERBETERD: Update item selection met kleur EN schaal
     private void UpdateItemSelection(ItemData selectedItem)
     {
         foreach (Transform child in contentParent)
@@ -376,13 +310,11 @@ public class InventoryUI : MonoBehaviour
             {
                 if (child.name == selectedItem.itemName)
                 {
-                    // Geselecteerd: gele highlight + groter
                     img.color = selectedColor;
                     child.localScale = new Vector3(selectedScale, selectedScale, 1f);
                 }
                 else
                 {
-                    // Niet geselecteerd: normale kleur + normale grootte
                     img.color = defaultColor;
                     child.localScale = new Vector3(defaultScale, defaultScale, 1f);
                 }
@@ -390,7 +322,6 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
-    // 🔥 NIEUW: Reset alle selectie visuals
     public void ClearAllSelections()
     {
         selectedItem = null;

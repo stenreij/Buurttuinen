@@ -24,14 +24,10 @@ public class PowerUpActions : MonoBehaviour
 
     public void SelectPowerUp(ItemData powerUpItem)
     {
-        if (powerUpItem.type != ItemType.PowerUp)
-        {
-            Debug.Log("⚠️ Dit is geen power-up!");
-            return;
-        }
+        if (powerUpItem.type != ItemType.PowerUp) return;
 
         selectedPowerUp = powerUpItem;
-        Debug.Log($"⚡ Power-up geselecteerd: {powerUpItem.itemName}");
+        Debug.Log($"Power-up selected: {powerUpItem.itemName}");
     }
 
     public ItemData GetSelectedPowerUp()
@@ -42,7 +38,6 @@ public class PowerUpActions : MonoBehaviour
     public void ClearSelectedPowerUp()
     {
         selectedPowerUp = null;
-        Debug.Log($"🧹 Cleared selected power-up");
     }
 
     public void UseExtraItem()
@@ -50,7 +45,7 @@ public class PowerUpActions : MonoBehaviour
         if (!ValidatePowerUp("Extra Item")) return;
 
         GiveRandomItem();
-        Debug.Log($"🎁 {gameObject.name} gebruikt Extra Item en kreeg een nieuw item!");
+        Debug.Log($"{gameObject.name} used Extra Item and received a new item");
 
         ConsumePowerUp();
     }
@@ -63,13 +58,12 @@ public class PowerUpActions : MonoBehaviour
         if (currentPlayer == null) return;
 
         currentPlayer.soilBoost += 2;
-        Debug.Log($"🌱 Soil boost geactiveerd! +{currentPlayer.soilBoost} punten per item.");
+        Debug.Log($"Soil boost activated! +{currentPlayer.soilBoost} points per item");
 
         if (turnManager != null)
         {
             turnManager.hasPlacedItemThisTurn = true;
             turnManager.UpdateActionButtons();
-            Debug.Log($"⏹️ Actie uitgevoerd! Geen andere acties meer deze beurt.");
         }
 
         ScoreManager.RefreshScores();
@@ -85,18 +79,8 @@ public class PowerUpActions : MonoBehaviour
 
     private bool ValidatePowerUp(string expectedName)
     {
-        if (selectedPowerUp == null)
-        {
-            Debug.Log("⚠️ Geen power-up geselecteerd!");
-            return false;
-        }
-
-        if (selectedPowerUp.itemName != expectedName)
-        {
-            Debug.Log($"⚠️ Dit is geen {expectedName} power-up!");
-            return false;
-        }
-
+        if (selectedPowerUp == null) return false;
+        if (selectedPowerUp.itemName != expectedName) return false;
         return true;
     }
 
@@ -120,11 +104,7 @@ public class PowerUpActions : MonoBehaviour
         if (playerInventory == null || itemDatabase == null) return;
 
         List<ItemData> availableItems = itemDatabase.GetAvailableItems();
-        if (availableItems.Count == 0)
-        {
-            Debug.Log("⚠️ Geen items meer beschikbaar!");
-            return;
-        }
+        if (availableItems.Count == 0) return;
 
         int randomIndex = Random.Range(0, availableItems.Count);
         ItemData randomItem = availableItems[randomIndex];
@@ -140,11 +120,7 @@ public class PowerUpActions : MonoBehaviour
         if (itemDatabase == null) return;
 
         List<ItemData> availableItems = itemDatabase.GetAvailableItems();
-        if (availableItems.Count == 0)
-        {
-            Debug.Log("⚠️ Geen items meer beschikbaar!");
-            return;
-        }
+        if (availableItems.Count == 0) return;
 
         int randomIndex = Random.Range(0, availableItems.Count);
         ItemData randomItem = availableItems[randomIndex];
@@ -166,44 +142,40 @@ public class PowerUpActions : MonoBehaviour
             targetTile.placedItemData = randomItem;
             targetTile.occupied = true;
 
-            Debug.Log($"✅ {randomItem.itemName} geplaatst op {targetTile.name}!");
+            Debug.Log($"{randomItem.itemName} placed on {targetTile.name}");
         }
     }
 
     public void ExecuteSelectedPowerUp()
     {
-        if (selectedPowerUp == null)
-        {
-            Debug.Log("⚠️ Geen power-up geselecteerd!");
-            return;
-        }
+        if (selectedPowerUp == null) return;
 
         switch (selectedPowerUp.itemName)
         {
             case "Extra Item":
-                Debug.Log("🎁 Extra Item gebruikt! Je krijgt een nieuw item.");
+                UseExtraItem();
                 break;
             case "Place Anywhere":
                 isWaitingForTile = true;
                 pendingPowerUpName = "Place Anywhere";
-                Debug.Log("📍 Klik op een lege tile om PlaceAnywhere te gebruiken!");
+                Debug.Log("Click on an empty tile to use Place Anywhere");
                 break;
             case "Swap Items":
-                Debug.Log("🔄 Klik op twee tiles om te wisselen!");
+                Debug.Log("Swap Items: Click on two tiles to swap");
                 break;
             case "Protection":
                 isWaitingForTile = true;
                 pendingPowerUpName = "Protection";
-                Debug.Log("🛡️ Klik op een item om te beschermen!");
+                Debug.Log("Click on an item to protect it");
                 break;
             case "Soil":
                 UseSoilBoost();
                 break;
             case "Double Placing":
-                Debug.Log("⚡ Double Placing gebruikt! Je mag twee items plaatsen deze beurt.");
+                Debug.Log("Double Placing activated - you can place two items this turn");
                 break;
             default:
-                Debug.Log($"⚠️ Onbekende power-up: {selectedPowerUp.itemName}");
+                Debug.Log($"Unknown power-up: {selectedPowerUp.itemName}");
                 break;
         }
     }
@@ -211,22 +183,13 @@ public class PowerUpActions : MonoBehaviour
     public void UsePlaceAnywhere(GardenTile targetTile)
     {
         if (!ValidatePowerUp("Place Anywhere")) return;
-
-        if (targetTile == null || targetTile.occupied)
-        {
-            Debug.Log("⚠️ Kies een lege tile om een item te plaatsen!");
-            return;
-        }
+        if (targetTile == null || targetTile.occupied) return;
 
         ItemActions actions = GetComponent<ItemActions>();
         if (actions != null)
         {
             ItemData selectedItem = actions.GetSelectedItem();
-            if (selectedItem == null)
-            {
-                Debug.Log("⚠️ Selecteer eerst een item uit je inventory om te plaatsen!");
-                return;
-            }
+            if (selectedItem == null) return;
             actions.PlaceItemDirect(targetTile);
         }
 
@@ -234,7 +197,6 @@ public class PowerUpActions : MonoBehaviour
         {
             turnManager.hasPlacedItemThisTurn = true;
             turnManager.UpdateActionButtons();
-            Debug.Log($"⏹️ PlaceAnywhere gebruikt! Geen andere acties meer deze beurt.");
         }
 
         ConsumePowerUp();
@@ -243,15 +205,10 @@ public class PowerUpActions : MonoBehaviour
     public void UseProtection(GardenTile targetTile)
     {
         if (!ValidatePowerUp("Protection")) return;
-
-        if (targetTile == null || !targetTile.occupied)
-        {
-            Debug.Log("⚠️ Kies een geplaatst item om te beschermen!");
-            return;
-        }
+        if (targetTile == null || !targetTile.occupied) return;
 
         targetTile.isProtected = true;
-        Debug.Log($"🛡️ {targetTile.placedItemData.itemName} is beschermd!");
+        Debug.Log($"{targetTile.placedItemData.itemName} is now protected");
 
         AddProtectionVisual(targetTile);
 
@@ -270,7 +227,6 @@ public class PowerUpActions : MonoBehaviour
 
         GameObject shield = new GameObject("ShieldIndicator");
         shield.transform.parent = targetTile.placedItem.transform;
-
         shield.transform.localPosition = new Vector3(-0.6f, 0.6f, 0f);
 
         SpriteRenderer sr = shield.AddComponent<SpriteRenderer>();
@@ -294,8 +250,6 @@ public class PowerUpActions : MonoBehaviour
         }
 
         sr.sortingOrder = 20;
-
-        Debug.Log($"🛡️ Shield indicator toegevoegd aan {targetTile.placedItem.name}");
     }
 
     public bool IsWaitingForTile()

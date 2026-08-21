@@ -8,7 +8,7 @@ public class PlayerTagManager : MonoBehaviour
     public GameObject tagPrefab;
     public RectTransform canvasRect;
 
-    [Header("Posities (boven elke tuin)")]
+    [Header("Positions (above each garden)")]
     public Vector3[] worldPositions = new Vector3[4];
 
     private List<RectTransform> activeTags = new List<RectTransform>();
@@ -27,11 +27,7 @@ public class PlayerTagManager : MonoBehaviour
         }
         activeTags.Clear();
 
-        if (worldPositions.Length < playerNames.Count)
-        {
-            Debug.LogWarning("⚠️ Niet genoeg posities!");
-            return;
-        }
+        if (worldPositions.Length < playerNames.Count) return;
 
         for (int i = 0; i < playerNames.Count; i++)
         {

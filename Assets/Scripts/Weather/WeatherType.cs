@@ -1,8 +1,8 @@
 public enum WeatherType
 {
     Tornado,
-    Hitte,
-    Regen,
-    Vorst,
+    Heatwave,
+    Rain,
+    Frost,
     Storm
 }

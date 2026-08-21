@@ -21,14 +21,12 @@ public class GameManager : MonoBehaviour
         if (itemDatabase != null)
         {
             itemDatabase.ResetPool();
-            Debug.Log("🔄 ItemDatabase pool reset!");
         }
 
         ScoreManager scoreManager = FindFirstObjectByType<ScoreManager>();
         if (scoreManager != null)
         {
             scoreManager.ResetScores();
-            Debug.Log("🔄 Scores reset!");
         }
 
         GameSetup setup = FindFirstObjectByType<GameSetup>();
@@ -45,7 +43,7 @@ public class GameManager : MonoBehaviour
 
     void StartGame(List<string> playerNames)
     {
-        Debug.Log("🎮 GAME STARTING...");
+        Debug.Log("Game starting...");
 
         CreatePlayers(playerNames);
 
@@ -54,11 +52,10 @@ public class GameManager : MonoBehaviour
         {
             board.numberOfGardens = playerNames.Count;
             board.CreateBoard();
-            Debug.Log("✅ Board created!");
         }
         else
         {
-            Debug.LogError("❌ BoardManager not found!");
+            Debug.LogError("BoardManager not found!");
             return;
         }
 
@@ -89,12 +86,12 @@ public class GameManager : MonoBehaviour
                         itemList += item.itemName + ", ";
                     }
                     itemList = itemList.TrimEnd(',', ' ');
-                    Debug.Log($"📦 {player.gameObject.name} received: {itemList}");
+                    Debug.Log($"{player.gameObject.name} received: {itemList}");
                 }
             }
             else
             {
-                Debug.LogError($"❌ No ItemActions found on {player.gameObject.name}!");
+                Debug.LogError($"No ItemActions found on {player.gameObject.name}!");
             }
         }
 
@@ -110,14 +107,11 @@ public class GameManager : MonoBehaviour
             tagManager.SetPlayerTags(playerNames);
         }
 
-        Debug.Log("🎮 GAME READY!");
-
         turnManager = FindFirstObjectByType<TurnManager>();
         if (turnManager != null)
         {
             turnManager.Initialize(players);
             turnManager.OnRoundStarted += OnRoundStarted;
-            Debug.Log("🔄 TurnManager started!");
         }
 
         if (weatherManager != null)
@@ -129,9 +123,14 @@ public class GameManager : MonoBehaviour
         {
             communityManager.InitializeGoals();
         }
+
+        Debug.Log("Game ready");
     }
+
     void OnRoundStarted(int roundNumber)
     {
+        Debug.Log($"Round {roundNumber} started");
+
         bool communityTriggered = false;
 
         if (communityManager != null)

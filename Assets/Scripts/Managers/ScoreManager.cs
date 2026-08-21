@@ -24,10 +24,6 @@ public class ScoreManager : MonoBehaviour
         {
             instance.UpdateScores();
         }
-        else
-        {
-            Debug.LogWarning("⚠️ ScoreManager niet gevonden!");
-        }
     }
 
     public void ResetScores()
@@ -39,7 +35,7 @@ public class ScoreManager : MonoBehaviour
 
         if (neighborhoodScoreText != null)
         {
-            neighborhoodScoreText.text = "Buurt score: 0";
+            neighborhoodScoreText.text = "Neighborhood score: 0";
         }
 
         if (turnManager != null && turnManager.players != null)
@@ -50,7 +46,7 @@ public class ScoreManager : MonoBehaviour
             }
         }
 
-        Debug.Log("🔄 Alle scores gereset naar 0!");
+        Debug.Log("All scores reset to 0");
     }
 
     public void UpdateScores()
@@ -76,7 +72,7 @@ public class ScoreManager : MonoBehaviour
 
         if (neighborhoodScoreText != null)
         {
-            neighborhoodScoreText.text = $"Buurt score: {totalScore}";
+            neighborhoodScoreText.text = $"Neighborhood score: {totalScore}";
         }
     }
 
@@ -130,7 +126,7 @@ public class ScoreManager : MonoBehaviour
 
         if (turnManager == null || turnManager.players == null)
         {
-            Debug.LogWarning("⚠️ No players found to save scores for!");
+            Debug.LogWarning("No players found to save scores for!");
             return;
         }
 

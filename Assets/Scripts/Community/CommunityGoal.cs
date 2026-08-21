@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-[System.Serializable]
+[Serializable]
 public class CommunityGoal
 {
     public CommunityGoalType goalType;
@@ -11,7 +11,8 @@ public class CommunityGoal
     public int goalValue;
     public Func<int> generateValue;
 
-    public CommunityGoal(CommunityGoalType goalType, string name, string goalText, Func<List<Player>, int> calculateScore, Func<int> generateValue)
+    public CommunityGoal(CommunityGoalType goalType, string name, string goalText,
+                         Func<List<Player>, int> calculateScore, Func<int> generateValue)
     {
         this.goalType = goalType;
         this.name = name;

@@ -84,14 +84,6 @@ public class BoardManager : MonoBehaviour
             {
                 PlaceStartItems(gardenScript, itemDatabase);
             }
-            else
-            {
-                Debug.LogWarning($"⚠️ No ItemDatabase found, skipping start items for {garden.name}");
-            }
-        }
-        else
-        {
-            Debug.LogError($"❌ No Garden script on {garden.name}!");
         }
     }
 
@@ -114,11 +106,7 @@ public class BoardManager : MonoBehaviour
                 }
             }
 
-            if (emptyTiles.Count == 0)
-            {
-                Debug.LogWarning($"⚠️ No empty tiles left in {garden.name}");
-                break;
-            }
+            if (emptyTiles.Count == 0) break;
 
             int randomTileIndex = Random.Range(0, emptyTiles.Count);
             GardenTile targetTile = emptyTiles[randomTileIndex];
@@ -132,11 +120,7 @@ public class BoardManager : MonoBehaviour
                 }
             }
 
-            if (availableItems.Count == 0)
-            {
-                Debug.LogWarning("⚠️ No more normal items available in the pool!");
-                break;
-            }
+            if (availableItems.Count == 0) break;
 
             int randomItemIndex = Random.Range(0, availableItems.Count);
             ItemData randomItem = availableItems[randomItemIndex];
@@ -164,7 +148,6 @@ public class BoardManager : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning($"⚠️ Could not take {randomItem.itemName} from pool!");
                 i--;
             }
         }

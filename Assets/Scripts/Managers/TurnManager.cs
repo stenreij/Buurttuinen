@@ -65,7 +65,7 @@ public class TurnManager : MonoBehaviour
         players = playerList;
         if (players.Count == 0)
         {
-            Debug.LogError("❌ No players found in TurnManager!");
+            Debug.LogError("No players found in TurnManager!");
             return;
         }
 
@@ -86,19 +86,17 @@ public class TurnManager : MonoBehaviour
     {
         if (players == null || players.Count == 0)
         {
-            Debug.LogError("❌ No players in TurnManager!");
+            Debug.LogError("No players in TurnManager!");
             return;
         }
 
         if (currentRound > maxRounds)
         {
-            Debug.Log("🏁 Game is already over!");
             return;
         }
 
         if (isGamePaused)
         {
-            Debug.Log("⏸️ Game is paused (weather/community)");
             UpdateActionButtons();
             return;
         }
@@ -171,7 +169,7 @@ public class TurnManager : MonoBehaviour
             endTurnButton.onClick.AddListener(OnEndTurnClicked);
         }
 
-        Debug.Log($"🎮 {currentPlayer.gameObject.name} is now taking their turn.");
+        Debug.Log($"{currentPlayer.gameObject.name} taking their turn");
     }
 
     public void UpdateActionButtons()
@@ -207,7 +205,7 @@ public class TurnManager : MonoBehaviour
 
                         if (powerUpButtonText != null)
                         {
-                            powerUpButtonText.text = $"⚡ {selectedPowerUp.itemName}";
+                            powerUpButtonText.text = $"{selectedPowerUp.itemName}";
                         }
                     }
                     else
@@ -217,7 +215,7 @@ public class TurnManager : MonoBehaviour
 
                         if (powerUpButtonText != null)
                         {
-                            powerUpButtonText.text = "⚡ POWERUP";
+                            powerUpButtonText.text = "POWERUP";
                         }
                     }
                 }
@@ -229,7 +227,7 @@ public class TurnManager : MonoBehaviour
 
                     if (powerUpButtonText != null)
                     {
-                        powerUpButtonText.text = "⚡ POWERUP";
+                        powerUpButtonText.text = "POWERUP";
                     }
                 }
             }
@@ -241,7 +239,7 @@ public class TurnManager : MonoBehaviour
 
                 if (powerUpButtonText != null)
                 {
-                    powerUpButtonText.text = "⚡ POWERUP";
+                    powerUpButtonText.text = "POWERUP";
                 }
             }
         }
@@ -260,7 +258,7 @@ public class TurnManager : MonoBehaviour
 
         if (powerUpButtonText != null)
         {
-            powerUpButtonText.text = "⚡ POWERUP";
+            powerUpButtonText.text = "POWERUP";
         }
     }
 
@@ -268,15 +266,6 @@ public class TurnManager : MonoBehaviour
     {
         isGamePaused = paused;
         UpdateActionButtons();
-
-        if (paused)
-        {
-            Debug.Log("⏸️ Game paused");
-        }
-        else
-        {
-            Debug.Log("▶️ Game resumed");
-        }
     }
 
     public bool IsGamePaused()
@@ -286,19 +275,8 @@ public class TurnManager : MonoBehaviour
 
     public void OnPowerUpClicked()
     {
-        if (isGamePaused)
-        {
-            Debug.Log("⏸️ Game is paused, cannot use powerup!");
-            return;
-        }
-
-        if (hasPlacedItemThisTurn)
-        {
-            Debug.Log("⚠️ You have already performed an action this turn!");
-            return;
-        }
-
-        Debug.Log($"⚡ {currentPlayer.gameObject.name} clicked POWER UP!");
+        if (isGamePaused) return;
+        if (hasPlacedItemThisTurn) return;
 
         if (powerUpButtonImage != null)
         {
@@ -306,16 +284,11 @@ public class TurnManager : MonoBehaviour
         }
 
         PowerUpActions powerActions = currentPlayer.GetComponent<PowerUpActions>();
-        if (powerActions == null)
-        {
-            Debug.Log("⚠️ No PowerUpActions found!");
-            return;
-        }
+        if (powerActions == null) return;
 
         ItemData selectedPowerUp = powerActions.GetSelectedPowerUp();
         if (selectedPowerUp == null)
         {
-            Debug.Log("⚠️ Select a power-up from your inventory first!");
             StartCoroutine(ShowPowerUpWarning());
             return;
         }
@@ -364,13 +337,7 @@ public class TurnManager : MonoBehaviour
 
     public void OnPassClicked()
     {
-        if (isGamePaused)
-        {
-            Debug.Log("⏸️ Game is paused, cannot pass!");
-            return;
-        }
-
-        Debug.Log($"⏭️ {currentPlayer.gameObject.name} clicked PASS");
+        if (isGamePaused) return;
 
         isPowerUpSelected = false;
         ResetPowerUpButtonVisuals();
@@ -382,31 +349,19 @@ public class TurnManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("⚠️ No ItemActions found!");
             EndTurn();
         }
     }
 
     public void OnTradeClicked()
     {
-        if (isGamePaused)
-        {
-            Debug.Log("⏸️ Game is paused, cannot trade!");
-            return;
-        }
-
-        Debug.Log($"🔄 {currentPlayer.gameObject.name} clicked TRADE (not implemented yet)");
+        if (isGamePaused) return;
+        Debug.Log($"{currentPlayer.gameObject.name} clicked TRADE (not implemented)");
     }
 
     public void OnEndTurnClicked()
     {
-        if (isGamePaused)
-        {
-            Debug.Log("⏸️ Game is paused, cannot end turn!");
-            return;
-        }
-
-        Debug.Log($"⏹️ {currentPlayer.gameObject.name} clicked END TURN");
+        if (isGamePaused) return;
 
         isPowerUpSelected = false;
         ResetPowerUpButtonVisuals();
@@ -416,11 +371,7 @@ public class TurnManager : MonoBehaviour
 
     public void EndTurn()
     {
-        if (isGamePaused)
-        {
-            Debug.Log("⏸️ Game is paused, end turn delayed!");
-            return;
-        }
+        if (isGamePaused) return;
 
         hasPlacedItemThisTurn = false;
 
@@ -428,7 +379,7 @@ public class TurnManager : MonoBehaviour
         if (actions != null)
         {
             actions.GiveRandomItem();
-            Debug.Log($"🎁 {currentPlayer.gameObject.name} received a random item at end of turn!");
+            Debug.Log($"{currentPlayer.gameObject.name} received a random item");
         }
 
         currentPlayerIndex++;
@@ -441,7 +392,7 @@ public class TurnManager : MonoBehaviour
         {
             if (currentRound >= maxRounds)
             {
-                Debug.Log($"🏁 GAME HAS ENDED! Round {currentRound} completed!");
+                Debug.Log($"Game ended - Round {currentRound} completed");
 
                 ScoreManager scoreManager = FindFirstObjectByType<ScoreManager>();
                 if (scoreManager != null)
@@ -454,7 +405,7 @@ public class TurnManager : MonoBehaviour
             }
 
             currentRound++;
-            Debug.Log($"🔄 New round: {currentRound}/{maxRounds}");
+            Debug.Log($"Round {currentRound} started");
 
             OnRoundStarted?.Invoke(currentRound);
         }
@@ -481,7 +432,6 @@ public class TurnManager : MonoBehaviour
     public void SetMaxRounds(int rounds)
     {
         maxRounds = rounds;
-        Debug.Log($"📋 Max rounds set to: {maxRounds}");
     }
 
     private void RandomizeStartingPlayer()
@@ -492,20 +442,14 @@ public class TurnManager : MonoBehaviour
         currentPlayerIndex = randomStartIndex;
         startingPlayer = players[randomStartIndex];
 
-        Debug.Log($"🎲 {startingPlayer.gameObject.name} starts the game!");
+        Debug.Log($"{startingPlayer.gameObject.name} starts the game");
     }
-
-    // ============================================
-    // RESUME TURN AFTER WEATHER/COMMUNITY
-    // ============================================
 
     public void ResumeTurnAfterWeather()
     {
-        // Reset powerup selection after weather/community event
         isPowerUpSelected = false;
         ResetPowerUpButtonVisuals();
 
-        // Update UI to reflect current state
         if (inventoryUI != null)
         {
             inventoryUI.RefreshUI();
@@ -517,6 +461,6 @@ public class TurnManager : MonoBehaviour
         }
 
         StartTurn();
-        Debug.Log($"🔄 Turn resumed for {currentPlayer.gameObject.name} after event");
+        Debug.Log($"Turn resumed for {currentPlayer.gameObject.name}");
     }
 }

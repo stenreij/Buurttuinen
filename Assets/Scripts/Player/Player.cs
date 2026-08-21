@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
     public void AddScore(int points)
     {
         score += points;
-        Debug.Log(playerName + " heeft nu " + score + " punten");
+        Debug.Log($"{playerName} now has {score} points");
     }
 
     public void ResetBonuses()

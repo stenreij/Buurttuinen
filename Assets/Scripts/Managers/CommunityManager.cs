@@ -159,10 +159,8 @@ public class CommunityManager : MonoBehaviour
     int GetRandomScaledGoalValue(int min, int max)
     {
         int baseValue = Random.Range(min, max + 1);
-
         float scale = (playerCount * 0.5f);
         int scaledValue = Mathf.RoundToInt(baseValue * scale);
-
         return Mathf.Max(3, scaledValue);
     }
 
@@ -170,11 +168,7 @@ public class CommunityManager : MonoBehaviour
     {
         currentRound = roundNumber;
 
-        if (weatherManager != null && weatherManager.IsWeatherEventActive())
-        {
-            Debug.Log("🏛️ Weather is active, community will wait...");
-            return;
-        }
+        if (weatherManager != null && weatherManager.IsWeatherEventActive()) return;
 
         if (isWaitingForResult && currentRound >= goalEndRound)
         {
@@ -209,7 +203,6 @@ public class CommunityManager : MonoBehaviour
 
         if (newGoal == null)
         {
-            Debug.Log("All goals have been used! Resetting goal list...");
             usedGoalTypes.Clear();
             newGoal = SelectUnusedGoal();
         }
@@ -222,10 +215,8 @@ public class CommunityManager : MonoBehaviour
 
         if (goalEndRound > maxRounds)
         {
-            Debug.Log($"🏛️ Goal would end after game ends ({goalEndRound} > {maxRounds}), skipping...");
             isCommunityActive = false;
             isExecutingCommunity = false;
-
             currentGoal = null;
 
             if (communityGoalText != null)
@@ -259,16 +250,12 @@ public class CommunityManager : MonoBehaviour
             .Where(g => !usedGoalTypes.Contains(g.goalType))
             .ToList();
 
-        if (availableGoals.Count == 0)
-        {
-            Debug.Log("No unused goals available!");
-            return null;
-        }
+        if (availableGoals.Count == 0) return null;
 
         CommunityGoal selected = availableGoals[Random.Range(0, availableGoals.Count)];
         usedGoalTypes.Add(selected.goalType);
 
-        Debug.Log($"Selected community goal: {selected.goalType} (Used: {usedGoalTypes.Count}/{possibleGoals.Count})");
+        Debug.Log($"Community goal selected: {selected.goalType} ({usedGoalTypes.Count}/{possibleGoals.Count})");
 
         return selected;
     }
@@ -292,7 +279,7 @@ public class CommunityManager : MonoBehaviour
             turnManager.ResumeTurnAfterWeather();
         }
 
-        Debug.Log($"🏛️ Community goal active until round {goalEndRound}: {currentGoal.name} ({goalScoreAtStart}/{currentGoal.goalValue})");
+        Debug.Log($"Community goal active until round {goalEndRound}: {currentGoal.name} ({goalScoreAtStart}/{currentGoal.goalValue})");
 
         if (weatherManager != null)
         {
@@ -363,7 +350,7 @@ public class CommunityManager : MonoBehaviour
         }
 
         UpdateAllUI();
-        Debug.Log("Community goal check completed!");
+        Debug.Log("Community goal check completed");
 
         if (currentRound >= firstCommunityRound &&
             (currentRound - firstCommunityRound) % communityInterval == 0 &&
@@ -372,7 +359,6 @@ public class CommunityManager : MonoBehaviour
             !isWaitingForResult &&
             currentRound <= maxRounds)
         {
-            Debug.Log("🏛️ Starting new goal immediately after finishing previous");
             StartNewGoal();
         }
 
@@ -409,25 +395,13 @@ public class CommunityManager : MonoBehaviour
             if (garden == null) continue;
 
             ItemData randomItem = FindRandomPlantOrDecoration();
-            if (randomItem == null)
-            {
-                Debug.Log($"No item available for {player.playerName}");
-                continue;
-            }
+            if (randomItem == null) continue;
 
             ItemDatabase database = FindFirstObjectByType<ItemDatabase>();
-            if (database != null && !database.TryTakeItem(randomItem))
-            {
-                Debug.LogWarning($"⚠️ {randomItem.itemName} is niet meer beschikbaar!");
-                continue;
-            }
+            if (database != null && !database.TryTakeItem(randomItem)) continue;
 
             GardenTile emptyTile = GetRandomEmptyTile(player);
-            if (emptyTile == null)
-            {
-                Debug.Log($"No empty space in {player.playerName}'s garden");
-                continue;
-            }
+            if (emptyTile == null) continue;
 
             GameObject placed = Instantiate(randomItem.prefab, emptyTile.transform.position, Quaternion.identity);
             placed.transform.parent = emptyTile.transform;
@@ -444,7 +418,7 @@ public class CommunityManager : MonoBehaviour
             emptyTile.placedItemData = randomItem;
             emptyTile.occupied = true;
 
-            Debug.Log($"Community reward: {player.playerName} received {randomItem.itemName} in their garden");
+            Debug.Log($"Community reward: {player.playerName} received {randomItem.itemName}");
         }
 
         ShowCommunityAnnouncement("All players received a random item in their garden!", announcementDuration);
@@ -465,7 +439,6 @@ public class CommunityManager : MonoBehaviour
                 if (tile.occupied && tile.placedItemData != null)
                 {
                     tile.placedItemData.score += boostAmount;
-                    Debug.Log($"🏛️ {tile.placedItemData.itemName} in {player.playerName}'s garden +{boostAmount} score (now: {tile.placedItemData.score})");
                 }
             }
         }
@@ -568,7 +541,7 @@ public class CommunityManager : MonoBehaviour
         ItemType blockedType = types[Random.Range(0, types.Length)];
 
         ShowCommunityAnnouncement("Community blocks " + blockedType + " for 1 round!", announcementDuration);
-        Debug.Log("Community penalty: " + blockedType + " is blocked for 1 round");
+        Debug.Log("Community penalty: " + blockedType + " blocked for 1 round");
     }
 
     void ReduceScorePenalty(List<Player> players)
@@ -766,7 +739,7 @@ public class CommunityManager : MonoBehaviour
         if (communityGoalText != null && communityGoalText.gameObject.activeSelf)
         {
             ShowGoalText(currentGoal, currentScore);
-            Debug.Log($"📊 Community goal score updated: {currentScore} / {currentGoal.goalValue}");
+            Debug.Log($"Community goal score updated: {currentScore}/{currentGoal.goalValue}");
         }
     }
 
