@@ -375,7 +375,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Speler 3
+  m_text: Player 3
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c85142738ac7865458cb7b5ba9ab6142, type: 2}
   m_sharedMaterial: {fileID: 8935027512786042166, guid: c85142738ac7865458cb7b5ba9ab6142, type: 2}
@@ -1674,7 +1674,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Start spel
+  m_text: Start game
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c85142738ac7865458cb7b5ba9ab6142, type: 2}
   m_sharedMaterial: {fileID: 8935027512786042166, guid: c85142738ac7865458cb7b5ba9ab6142, type: 2}
@@ -2771,7 +2771,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Speler 1
+  m_text: Player 1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c85142738ac7865458cb7b5ba9ab6142, type: 2}
   m_sharedMaterial: {fileID: 8935027512786042166, guid: c85142738ac7865458cb7b5ba9ab6142, type: 2}
@@ -2928,7 +2928,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Speler 2
+  m_text: Player 2
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c85142738ac7865458cb7b5ba9ab6142, type: 2}
   m_sharedMaterial: {fileID: 8935027512786042166, guid: c85142738ac7865458cb7b5ba9ab6142, type: 2}
@@ -3085,7 +3085,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Speler 4
+  m_text: Player 4
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c85142738ac7865458cb7b5ba9ab6142, type: 2}
   m_sharedMaterial: {fileID: 8935027512786042166, guid: c85142738ac7865458cb7b5ba9ab6142, type: 2}
@@ -3357,7 +3357,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Aantal spelers: '
+  m_text: 'Player Count: '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c85142738ac7865458cb7b5ba9ab6142, type: 2}
   m_sharedMaterial: {fileID: 8935027512786042166, guid: c85142738ac7865458cb7b5ba9ab6142, type: 2}
