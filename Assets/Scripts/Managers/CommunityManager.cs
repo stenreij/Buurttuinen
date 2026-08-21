@@ -647,7 +647,7 @@ public class CommunityManager : MonoBehaviour
         {
             if (tile.occupied && tile.placedItemData != null)
             {
-                total += tile.placedItemData.esthetic;
+                total += tile.placedItemData.aesthetic;
             }
         }
         return total;

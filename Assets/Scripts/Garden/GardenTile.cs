@@ -154,7 +154,7 @@ public class GardenTile : MonoBehaviour
             int water = placedItemData.water;
             int soil = placedItemData.soilHealth;
             int biodiversity = placedItemData.biodiversity;
-            int esthetic = placedItemData.esthetic;
+            int aesthetic = placedItemData.aesthetic;
             bool isProtected = this.isProtected;
 
             int bonusScore = GetBonusScore();
@@ -166,7 +166,7 @@ public class GardenTile : MonoBehaviour
                 water,
                 soil,
                 biodiversity,
-                esthetic,
+                aesthetic,
                 bonusScore
             );
         }
@@ -230,7 +230,7 @@ public class GardenTile : MonoBehaviour
         return 0;
     }
 
-    int GetBonusEsthetic()
+    int GetBonusAesthetic()
     {
         return 0;
     }

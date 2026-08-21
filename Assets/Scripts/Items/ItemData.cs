@@ -10,7 +10,7 @@ public class ItemData : ScriptableObject
     public int water;
     public int soilHealth;
     public int biodiversity;
-    public int esthetic;
+    public int aesthetic;
     public Color color;
     public int maxAmount;
     public GameObject prefab;

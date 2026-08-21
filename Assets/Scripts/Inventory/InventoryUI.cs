@@ -185,7 +185,7 @@ public class InventoryUI : MonoBehaviour
             item.water,
             item.soilHealth,
             item.biodiversity,
-            item.esthetic,
+            item.aesthetic,
             isObstacle: isObstacle
         );
     }

@@ -12,7 +12,7 @@ public class TooltipManager : MonoBehaviour
     public TextMeshProUGUI waterText;
     public TextMeshProUGUI soilText;
     public TextMeshProUGUI biodiversityText;
-    public TextMeshProUGUI estheticText;
+    public TextMeshProUGUI aestheticText;
 
     private bool isInventoryTooltip = false;
 
@@ -52,7 +52,7 @@ public class TooltipManager : MonoBehaviour
         int water,
         int soil,
         int biodiversity,
-        int esthetic,
+        int aesthetic,
         int bonusScore = 0)
     {
         if (tooltipPanel == null) return;
@@ -73,7 +73,7 @@ public class TooltipManager : MonoBehaviour
         waterText.text = $"Water: {water}";
         soilText.text = $"Soil: {soil}";
         biodiversityText.text = $"Biodiversity: {biodiversity}";
-        estheticText.text = $"Esthetic: {esthetic}";
+        aestheticText.text = $"Aesthetic: {aesthetic}";
 
         PositionTooltipUnder();
     }
@@ -85,7 +85,7 @@ public class TooltipManager : MonoBehaviour
         int water = 0,
         int soil = 0,
         int biodiversity = 0,
-        int esthetic = 0,
+        int aesthetic = 0,
         bool isPowerUp = false,
         bool isObstacle = false,
         bool isSabotage = false)
@@ -104,7 +104,7 @@ public class TooltipManager : MonoBehaviour
             waterText.text = "";
             soilText.text = "";
             biodiversityText.text = "";
-            estheticText.text = "";
+            aestheticText.text = "";
             PositionTooltipAbove();
             return;
         }
@@ -116,7 +116,7 @@ public class TooltipManager : MonoBehaviour
             waterText.text = "";
             soilText.text = "";
             biodiversityText.text = "";
-            estheticText.text = "";
+            aestheticText.text = "";
             PositionTooltipAbove();
             return;
         }
@@ -134,7 +134,7 @@ public class TooltipManager : MonoBehaviour
         waterText.text = $"Water: {water}";
         soilText.text = $"Soil: {soil}";
         biodiversityText.text = $"Biodiversity: {biodiversity}";
-        estheticText.text = $"Esthetic: {esthetic}";
+        aestheticText.text = $"Aesthetic: {aesthetic}";
 
         PositionTooltipAbove();
     }

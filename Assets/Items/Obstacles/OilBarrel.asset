@@ -19,7 +19,7 @@ MonoBehaviour:
   water: -8
   soilHealth: -10
   biodiversity: -5
-  esthetic: -6
+  aesthetic: -6
   color: {r: 0, g: 0, b: 0, a: 0}
   maxAmount: 3
   prefab: {fileID: 2884628401271543900, guid: 060efd9a9e0b92743a4d183dfef1fdb7, type: 3}
