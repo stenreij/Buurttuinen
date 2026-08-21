@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: HedgeShears
   m_EditorClassIdentifier: 
   icon: {fileID: 7131620550270696929, guid: 9bfce304701853045afd33a361fd63d0, type: 3}
-  itemName: HedgeShears
+  itemName: Hedge Shears
   type: 7
   score: 0
   water: 0
   soilHealth: 0
   biodiversity: 0
-  esthetic: 0
+  aesthetic: 0
   color: {r: 0, g: 0, b: 0, a: 0}
   maxAmount: 1
   prefab: {fileID: 0}

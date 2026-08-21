@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: RootPoison
   m_EditorClassIdentifier: 
   icon: {fileID: -2983170937712533466, guid: 7436d8c7287518e4fa717af4dde55b08, type: 3}
-  itemName: RootPoison
+  itemName: Root Poison
   type: 7
   score: 0
   water: 0
   soilHealth: 0
   biodiversity: 0
-  esthetic: 0
+  aesthetic: 0
   color: {r: 0, g: 0, b: 0, a: 0}
   maxAmount: 1
   prefab: {fileID: 0}
