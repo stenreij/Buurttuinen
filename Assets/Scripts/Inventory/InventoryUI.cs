@@ -253,6 +253,27 @@ public class InventoryUI : MonoBehaviour
         Player currentPlayer = turnManager.GetCurrentPlayer();
         if (currentPlayer == null) return;
 
+        // ----- Trade integration -----
+        if (TradeManager.Instance != null && TradeManager.Instance.IsTradeActive())
+        {
+            // If we are in the "SelectingItem" state, handle it
+            if (TradeManager.Instance.GetState() == TradeManager.TradeState.SelectingItem)
+            {
+                TradeManager.Instance.SelectItem(item);
+                Debug.Log($"Item {item.itemName} selected for trade.");
+                // Optionally clear the selection in inventory
+                // We don't want to deselect normal item, but we can refresh UI to show no selected item
+                // But we keep the trade selection separate, so we just return.
+                return;
+            }
+            else
+            {
+                Debug.Log("Trade is active but not in selecting item state.");
+                return;
+            }
+        }
+
+        // Normal selection logic
         if (selectedItem == item)
         {
             selectedItem = null;

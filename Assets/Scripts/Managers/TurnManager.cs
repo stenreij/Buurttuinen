@@ -44,6 +44,8 @@ public class TurnManager : MonoBehaviour
     private float pulseTimer = 0f;
     private int lastProcessedRound = 0;
 
+    private bool isTradeActive = false;
+
     void Update()
     {
         if (isPowerUpSelected && powerUpButtonImage != null && powerUpButton != null)
@@ -105,6 +107,7 @@ public class TurnManager : MonoBehaviour
         ResetPowerUpButtonVisuals();
 
         hasPlacedItemThisTurn = false;
+        isTradeActive = false; // Reset trade state
         currentPlayer = players[currentPlayerIndex];
 
         if (roundText != null)
@@ -174,7 +177,7 @@ public class TurnManager : MonoBehaviour
 
     public void UpdateActionButtons()
     {
-        bool canAct = !hasPlacedItemThisTurn && !isGamePaused;
+        bool canAct = !hasPlacedItemThisTurn && !isGamePaused && !isTradeActive;
 
         if (passButton != null)
             passButton.interactable = canAct;
@@ -277,6 +280,7 @@ public class TurnManager : MonoBehaviour
     {
         if (isGamePaused) return;
         if (hasPlacedItemThisTurn) return;
+        if (isTradeActive) return;
 
         if (powerUpButtonImage != null)
         {
@@ -338,6 +342,7 @@ public class TurnManager : MonoBehaviour
     public void OnPassClicked()
     {
         if (isGamePaused) return;
+        if (isTradeActive) return;
 
         isPowerUpSelected = false;
         ResetPowerUpButtonVisuals();
@@ -356,12 +361,35 @@ public class TurnManager : MonoBehaviour
     public void OnTradeClicked()
     {
         if (isGamePaused) return;
-        Debug.Log($"{currentPlayer.gameObject.name} clicked TRADE (not implemented)");
+        if (hasPlacedItemThisTurn) return;
+        if (isTradeActive) return;
+
+        if (TradeManager.Instance == null)
+        {
+            Debug.LogWarning("TradeManager not found.");
+            return;
+        }
+
+        // Start trade
+        TradeManager.Instance.StartTrade(currentPlayer);
+
+        // Mark trade as active (disables other actions)
+        isTradeActive = true;
+        UpdateActionButtons();
+
+        Debug.Log($"{currentPlayer.gameObject.name} initiated a trade.");
     }
 
     public void OnEndTurnClicked()
     {
         if (isGamePaused) return;
+
+        // If trade is active, we don't allow ending turn until trade is complete or cancelled
+        if (isTradeActive)
+        {
+            Debug.Log("Cannot end turn while a trade is in progress.");
+            return;
+        }
 
         isPowerUpSelected = false;
         ResetPowerUpButtonVisuals();
@@ -374,6 +402,7 @@ public class TurnManager : MonoBehaviour
         if (isGamePaused) return;
 
         hasPlacedItemThisTurn = false;
+        isTradeActive = false;
 
         ItemActions actions = currentPlayer.GetComponent<ItemActions>();
         if (actions != null)
@@ -462,5 +491,19 @@ public class TurnManager : MonoBehaviour
 
         StartTurn();
         Debug.Log($"Turn resumed for {currentPlayer.gameObject.name}");
+    }
+
+    // Called by TradeManager when trade is completed or cancelled
+    public void OnTradeCompleted()
+    {
+        isTradeActive = false;
+        // The trade counts as an action, so we mark the turn as having placed an item (or performed an action)
+        hasPlacedItemThisTurn = true;
+        UpdateActionButtons();
+
+        if (inventoryUI != null)
+        {
+            inventoryUI.RefreshUI();
+        }
     }
 }
