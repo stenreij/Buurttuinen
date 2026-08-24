@@ -78,6 +78,12 @@ public class ItemActions : MonoBehaviour
         if (targetTile.occupied) return;
         if (!playerInventory.HasItem(selectedItem)) return;
 
+        if (IsItemBlocked(selectedItem))
+        {
+            Debug.Log($"🚫 Cannot place {selectedItem.itemName} - {selectedItem.type} is blocked this round!");
+            return;
+        }
+
         if (turnManager == null)
         {
             turnManager = FindFirstObjectByType<TurnManager>();
@@ -237,5 +243,17 @@ public class ItemActions : MonoBehaviour
 
             turnManager.EndTurn();
         }
+    }
+
+    bool IsItemBlocked(ItemData item)
+    {
+        if (turnManager == null) return false;
+
+        Player currentPlayer = turnManager.GetCurrentPlayer();
+        if (currentPlayer == null) return false;
+
+        //Debug.Log($"🔍🔍🔍 Checking: item={item.itemName}, type={item.type}, blockedType={currentPlayer.blockedItemType}, rounds={currentPlayer.blockRoundsRemaining}");
+
+        return currentPlayer.blockRoundsRemaining > 0 && currentPlayer.blockedItemType == item.type;
     }
 }

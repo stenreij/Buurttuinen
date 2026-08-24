@@ -46,7 +46,7 @@ public class ScoreManager : MonoBehaviour
             }
         }
 
-        Debug.Log("All scores reset to 0");
+        Debug.Log("🗑️ All scores reset to 0");
     }
 
     public void UpdateScores()

@@ -189,6 +189,18 @@ public class CommunityManager : MonoBehaviour
     {
         currentRound = roundNumber;
 
+        foreach (Player player in turnManager.players)
+        {
+            if (player.blockRoundsRemaining > 0)
+            {
+                player.blockRoundsRemaining--;
+                if (player.blockRoundsRemaining == 0)
+                {
+                    player.blockedItemType = ItemType.Plant;
+                }
+            }
+        }
+
         if (weatherManager != null && weatherManager.IsWeatherEventActive() && !isWaitingForResult) return;
 
         if (isWaitingForResult && currentRound >= goalEndRound)
@@ -556,6 +568,12 @@ public class CommunityManager : MonoBehaviour
     {
         ItemType[] types = { ItemType.Plant, ItemType.Tree_Big, ItemType.Tree_Small, ItemType.Water, ItemType.Decoration };
         ItemType blockedType = types[Random.Range(0, types.Length)];
+
+        foreach (Player player in players)
+        {
+            player.blockedItemType = blockedType;
+            player.blockRoundsRemaining = 2;
+        }
 
         ShowCommunityAnnouncement("Community blocks " + blockedType + " for 1 round!", announcementDuration);
         Debug.Log("🏛️🟥 Community penalty: " + blockedType + " blocked for 1 round");

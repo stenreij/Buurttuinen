@@ -278,6 +278,12 @@ public class InventoryUI : MonoBehaviour
         Player currentPlayer = turnManager.GetCurrentPlayer();
         if (currentPlayer == null) return;
 
+        if (currentPlayer.blockRoundsRemaining > 0 && currentPlayer.blockedItemType == item.type)
+        {
+            Debug.Log($"🚫 Cannot select {item.itemName} - {item.type} is blocked this round!");
+            return;
+        }
+
         // ----- Trade integration -----
         if (TradeManager.Instance != null && TradeManager.Instance.IsTradeActive())
         {

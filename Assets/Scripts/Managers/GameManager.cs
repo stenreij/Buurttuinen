@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour
 
     void StartGame(List<string> playerNames)
     {
-        Debug.Log("Game starting...");
+        Debug.Log("🎮 Game starting...");
 
         CreatePlayers(playerNames);
 
@@ -124,12 +124,12 @@ public class GameManager : MonoBehaviour
             communityManager.InitializeGoals();
         }
 
-        Debug.Log("Game ready");
+        Debug.Log("🎮 Game ready");
     }
 
     void OnRoundStarted(int roundNumber)
     {
-        Debug.Log($"Round {roundNumber} started");
+        Debug.Log($"🔄 Round {roundNumber} started");
 
         bool communityTriggered = false;
 

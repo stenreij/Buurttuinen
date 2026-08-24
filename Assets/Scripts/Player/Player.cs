@@ -12,6 +12,8 @@ public class Player : MonoBehaviour
     public int weatherBoost = 0;
     public int communityPenalty = 0;
     public int communityBoost = 0;
+    public ItemType blockedItemType = ItemType.Plant;
+    public int blockRoundsRemaining = 0;
 
     void Start()
     {

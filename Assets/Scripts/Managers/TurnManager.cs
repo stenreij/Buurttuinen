@@ -172,7 +172,7 @@ public class TurnManager : MonoBehaviour
             endTurnButton.onClick.AddListener(OnEndTurnClicked);
         }
 
-        Debug.Log($"{currentPlayer.gameObject.name} taking their turn");
+        Debug.Log($"👤 {currentPlayer.gameObject.name} taking their turn");
     }
 
     public void UpdateActionButtons()
@@ -421,7 +421,7 @@ public class TurnManager : MonoBehaviour
         {
             if (currentRound >= maxRounds)
             {
-                Debug.Log($"Game ended - Round {currentRound} completed");
+                Debug.Log($"🏁 Game ended - Round {currentRound} completed");
 
                 ScoreManager scoreManager = FindFirstObjectByType<ScoreManager>();
                 if (scoreManager != null)
@@ -434,7 +434,6 @@ public class TurnManager : MonoBehaviour
             }
 
             currentRound++;
-            Debug.Log($"Round {currentRound} started");
 
             OnRoundStarted?.Invoke(currentRound);
         }
