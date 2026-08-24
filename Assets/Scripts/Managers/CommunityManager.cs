@@ -189,7 +189,7 @@ public class CommunityManager : MonoBehaviour
     {
         currentRound = roundNumber;
 
-        if (weatherManager != null && weatherManager.IsWeatherEventActive()) return;
+        if (weatherManager != null && weatherManager.IsWeatherEventActive() && !isWaitingForResult) return;
 
         if (isWaitingForResult && currentRound >= goalEndRound)
         {
@@ -286,6 +286,8 @@ public class CommunityManager : MonoBehaviour
 
     IEnumerator ExecuteNewGoal()
     {
+        isWaitingForResult = true;
+
         yield return new WaitForSeconds(2f);
 
         string goalDisplay = "Reach " + currentGoal.goalValue + " " + currentGoal.name.ToLower() + " points!";
@@ -295,7 +297,6 @@ public class CommunityManager : MonoBehaviour
 
         isCommunityActive = false;
         isExecutingCommunity = false;
-        isWaitingForResult = true;
 
         if (turnManager != null)
         {
@@ -521,6 +522,7 @@ public class CommunityManager : MonoBehaviour
     void RemoveItemsPenalty(List<Player> players)
     {
         int totalRemoved = 0;
+        int itemsToRemovePerPlayer = 1;
 
         foreach (Player player in players)
         {
@@ -537,7 +539,7 @@ public class CommunityManager : MonoBehaviour
                 }
             }
 
-            int itemsToRemove = Mathf.Min(Random.Range(1, 3), occupiedTiles.Count);
+            int itemsToRemove = Mathf.Min(itemsToRemovePerPlayer, occupiedTiles.Count);
             for (int i = 0; i < itemsToRemove && occupiedTiles.Count > 0; i++)
             {
                 int randomIndex = Random.Range(0, occupiedTiles.Count);
@@ -554,8 +556,8 @@ public class CommunityManager : MonoBehaviour
             }
         }
 
-        ShowCommunityAnnouncement("Community removes " + totalRemoved + " item(s) from the neighborhood!", announcementDuration);
-        Debug.Log("🏛️🟥 Community penalty: " + totalRemoved + " items removed");
+        ShowCommunityAnnouncement($"Community removes {totalRemoved} item(s) from the neighborhood!", announcementDuration);
+        Debug.Log($"🏛️🟥 Community penalty: {totalRemoved} items removed");
     }
 
     void BlockItemsPenalty(List<Player> players)
