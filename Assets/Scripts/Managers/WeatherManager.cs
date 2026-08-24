@@ -71,7 +71,7 @@ public class WeatherManager : MonoBehaviour
 
         roundsWithWeather.Sort();
 
-        Debug.Log($"Weather events planned on rounds: {string.Join(", ", roundsWithWeather)}");
+        Debug.Log($"☁️ Weather events planned on rounds: {string.Join(", ", roundsWithWeather)}");
     }
 
     public void OnRoundStarted(int roundNumber)
@@ -167,7 +167,7 @@ public class WeatherManager : MonoBehaviour
     {
         WeatherType[] allTypes = System.Enum.GetValues(typeof(WeatherType)) as WeatherType[];
         WeatherType selectedType = allTypes[Random.Range(0, allTypes.Length)];
-        Debug.Log($"Weather selected: {selectedType}");
+        Debug.Log($"☁️Weather selected: {selectedType}");
         return selectedType;
     }
 
@@ -218,7 +218,7 @@ public class WeatherManager : MonoBehaviour
             }
         }
 
-        Debug.Log($"Weather event {weatherType} completed");
+        Debug.Log($"☁️ Weather event {weatherType} completed");
     }
 
     // ============================================
@@ -284,7 +284,7 @@ public class WeatherManager : MonoBehaviour
                 sourceTile.placedItem = null;
                 sourceTile.placedItemData = null;
                 movedCount++;
-                Debug.Log($"Tornado moved item from {sourcePlayer.playerName} to {targetPlayer.playerName}");
+                Debug.Log($"☁️🌪️ Tornado moved item from {sourcePlayer.playerName} to {targetPlayer.playerName}");
             }
         }
 
@@ -598,7 +598,7 @@ public class WeatherManager : MonoBehaviour
         tile.occupied = false;
         tile.placedItem = null;
         tile.placedItemData = null;
-        Debug.Log($"Item removed from {player.playerName}'s garden by weather");
+        Debug.Log($"☁️ Item removed from {player.playerName}'s garden by weather");
     }
 
     bool IsPlantType(ItemType type)
@@ -636,7 +636,7 @@ public class WeatherManager : MonoBehaviour
         }
         else
         {
-            Debug.Log($"Weather: {message}");
+            Debug.Log($"☁️ Weather: {message}");
         }
     }
 

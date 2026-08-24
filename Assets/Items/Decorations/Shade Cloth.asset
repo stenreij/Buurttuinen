@@ -15,7 +15,7 @@ MonoBehaviour:
   icon: {fileID: -6543121303664946846, guid: e091435ea370d5043af787caf8be1071, type: 3}
   itemName: Shade Cloth
   type: 5
-  score: 8
+  score: 7
   water: 0
   soilHealth: 0
   biodiversity: 0

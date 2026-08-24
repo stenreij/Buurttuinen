@@ -17,8 +17,8 @@ MonoBehaviour:
   type: 5
   score: 20
   water: 2
-  soilHealth: 1
-  biodiversity: 6
+  soilHealth: 2
+  biodiversity: 7
   aesthetic: 12
   color: {r: 0, g: 0, b: 0, a: 0}
   maxAmount: 3

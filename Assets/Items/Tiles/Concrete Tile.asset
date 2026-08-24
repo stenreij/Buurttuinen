@@ -15,9 +15,9 @@ MonoBehaviour:
   icon: {fileID: -1277951974594179671, guid: f91176c74887967448a80ea84415c49f, type: 3}
   itemName: Concrete Tile
   type: 4
-  score: -8
-  water: -5
-  soilHealth: -8
+  score: 0
+  water: -3
+  soilHealth: -3
   biodiversity: 0
   aesthetic: 1
   color: {r: 0, g: 0, b: 0, a: 0}

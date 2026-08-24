@@ -153,7 +153,7 @@ public class CommunityManager : MonoBehaviour
             () => GetRandomScaledGoalValue(totalScoreMin, totalScoreMax)
         ));
 
-        Debug.Log($"Initialized {possibleGoals.Count} community goals for {playerCount} players");
+        Debug.Log($"🏛️ Initialized {possibleGoals.Count} community goals for {playerCount} players");
     }
 
     int GetRandomScaledGoalValue(int min, int max)
@@ -255,7 +255,7 @@ public class CommunityManager : MonoBehaviour
         CommunityGoal selected = availableGoals[Random.Range(0, availableGoals.Count)];
         usedGoalTypes.Add(selected.goalType);
 
-        Debug.Log($"Community goal selected: {selected.goalType} ({usedGoalTypes.Count}/{possibleGoals.Count})");
+        Debug.Log($"🏛️ Community goal selected: {selected.goalType} ({usedGoalTypes.Count}/{possibleGoals.Count})");
 
         return selected;
     }
@@ -279,7 +279,7 @@ public class CommunityManager : MonoBehaviour
             turnManager.ResumeTurnAfterWeather();
         }
 
-        Debug.Log($"Community goal active until round {goalEndRound}: {currentGoal.name} ({goalScoreAtStart}/{currentGoal.goalValue})");
+        Debug.Log($"🏛️ Community goal active until round {goalEndRound}: {currentGoal.name} ({goalScoreAtStart}/{currentGoal.goalValue})");
 
         if (weatherManager != null)
         {
@@ -350,7 +350,7 @@ public class CommunityManager : MonoBehaviour
         }
 
         UpdateAllUI();
-        Debug.Log("Community goal check completed");
+        Debug.Log("🏛️ Community goal check completed");
 
         if (currentRound >= firstCommunityRound &&
             (currentRound - firstCommunityRound) % communityInterval == 0 &&
@@ -418,7 +418,7 @@ public class CommunityManager : MonoBehaviour
             emptyTile.placedItemData = randomItem;
             emptyTile.occupied = true;
 
-            Debug.Log($"Community reward: {player.playerName} received {randomItem.itemName}");
+            Debug.Log($"🏛️🎁 Community reward: {player.playerName} received {randomItem.itemName}");
         }
 
         ShowCommunityAnnouncement("All players received a random item in their garden!", announcementDuration);
@@ -444,7 +444,7 @@ public class CommunityManager : MonoBehaviour
         }
 
         ShowCommunityAnnouncement($"All items in every garden get +{boostAmount} score!", announcementDuration);
-        Debug.Log($"Community reward: All items +{boostAmount} score");
+        Debug.Log($"🏛️🎁 Community reward: All items +{boostAmount} score");
     }
 
     ItemData FindRandomPlantOrDecoration()
@@ -532,7 +532,7 @@ public class CommunityManager : MonoBehaviour
         }
 
         ShowCommunityAnnouncement("Community removes " + totalRemoved + " item(s) from the neighborhood!", announcementDuration);
-        Debug.Log("Community penalty: " + totalRemoved + " items removed");
+        Debug.Log("🏛️🟥 Community penalty: " + totalRemoved + " items removed");
     }
 
     void BlockItemsPenalty(List<Player> players)
@@ -541,7 +541,7 @@ public class CommunityManager : MonoBehaviour
         ItemType blockedType = types[Random.Range(0, types.Length)];
 
         ShowCommunityAnnouncement("Community blocks " + blockedType + " for 1 round!", announcementDuration);
-        Debug.Log("Community penalty: " + blockedType + " blocked for 1 round");
+        Debug.Log("🏛️🟥 Community penalty: " + blockedType + " blocked for 1 round");
     }
 
     void ReduceScorePenalty(List<Player> players)
@@ -551,7 +551,7 @@ public class CommunityManager : MonoBehaviour
             player.score = Mathf.Max(0, player.score - 2);
         }
         ShowCommunityAnnouncement("All players lose 2 score points!", announcementDuration);
-        Debug.Log("Community penalty: All players -2 score");
+        Debug.Log("🏛️🟥 Community penalty: All players -2 score");
     }
 
     // ============================================
@@ -712,7 +712,7 @@ public class CommunityManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Community: " + message);
+            Debug.Log("🏛️ Community: " + message);
         }
     }
 
@@ -739,7 +739,7 @@ public class CommunityManager : MonoBehaviour
         if (communityGoalText != null && communityGoalText.gameObject.activeSelf)
         {
             ShowGoalText(currentGoal, currentScore);
-            Debug.Log($"Community goal score updated: {currentScore}/{currentGoal.goalValue}");
+            Debug.Log($"🏛️ Community goal score updated: {currentScore}/{currentGoal.goalValue}");
         }
     }
 
