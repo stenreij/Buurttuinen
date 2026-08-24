@@ -156,8 +156,7 @@ public class WeatherManager : MonoBehaviour
             turnManager.SetGamePaused(true);
         }
 
-        //WeatherType weatherType = GetRandomWeatherType();
-        WeatherType weatherType = WeatherType.Rain; // For testing, force Rain event
+        WeatherType weatherType = GetRandomWeatherType();
         string announcement = GetWeatherAnnouncement(weatherType);
         ShowWeatherAnnouncement(announcement, weatherAnnouncementDuration);
 
