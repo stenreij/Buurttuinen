@@ -11,6 +11,7 @@ public class InventoryUI : MonoBehaviour
     public Transform contentParent;
     private ItemData selectedItem;
     public TooltipManager tooltipManager;
+    public TurnManager turnManager;
 
     [Header("Selection Visuals")]
     public Color selectedColor = new Color(1f, 1f, 0.5f, 1f);
@@ -171,6 +172,22 @@ public class InventoryUI : MonoBehaviour
 
         bool isObstacle = (item.type == ItemType.Obstacle);
 
+        int bonusScore = 0;
+        TurnManager turnManager = FindFirstObjectByType<TurnManager>();
+        if (turnManager != null)
+        {
+            Player currentPlayer = turnManager.GetCurrentPlayer();
+            if (currentPlayer != null)
+            {
+                bonusScore += currentPlayer.soilBoost;
+
+                if (IsPlantType(item.type))
+                {
+                    bonusScore += currentPlayer.weatherBoost;
+                }
+            }
+        }
+
         tooltipManager.ShowInventoryTooltip(
             item.itemName,
             item.type.ToString(),
@@ -179,8 +196,14 @@ public class InventoryUI : MonoBehaviour
             item.soilHealth,
             item.biodiversity,
             item.aesthetic,
+            bonusScore,
             isObstacle: isObstacle
         );
+    }
+
+    bool IsPlantType(ItemType type)
+    {
+        return type == ItemType.Plant;
     }
 
     void HideInventoryTooltip()

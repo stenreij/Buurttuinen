@@ -2267,6 +2267,7 @@ MonoBehaviour:
   itemButtonPrefab: {fileID: 8843217308203691002, guid: 7776f2e3d5eeb1648ad1d81e13f35416, type: 3}
   contentParent: {fileID: 989023272}
   tooltipManager: {fileID: 1322153032}
+  turnManager: {fileID: 0}
   selectedColor: {r: 1, g: 1, b: 0.5, a: 1}
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
   selectedScale: 1.15
@@ -2658,16 +2659,19 @@ MonoBehaviour:
   announcementDuration: 4
   goalDisplayDuration: 6
   maxRounds: 10
-  biodiversityMin: 10
-  biodiversityMax: 20
-  waterStorageMin: 8
-  waterStorageMax: 16
-  soilHealthMin: 6
-  soilHealthMax: 14
-  aestheticsMin: 5
-  aestheticsMax: 12
-  totalScoreMin: 20
-  totalScoreMax: 40
+  baseScaleMultiplier: 1
+  scaleIncreasePerInterval: 0.5
+  maxScaleMultiplier: 3
+  biodiversityMin: 25
+  biodiversityMax: 50
+  waterStorageMin: 25
+  waterStorageMax: 50
+  soilHealthMin: 20
+  soilHealthMax: 40
+  aestheticsMin: 20
+  aestheticsMax: 40
+  totalScoreMin: 40
+  totalScoreMax: 80
 --- !u!4 &867545278
 Transform:
   m_ObjectHideFlags: 0
@@ -3728,7 +3732,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: xx
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c85142738ac7865458cb7b5ba9ab6142, type: 2}
   m_sharedMaterial: {fileID: 8935027512786042166, guid: c85142738ac7865458cb7b5ba9ab6142, type: 2}

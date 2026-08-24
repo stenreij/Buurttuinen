@@ -88,7 +88,7 @@ public class ScoreManager : MonoBehaviour
         {
             if (tile.occupied && tile.placedItemData != null)
             {
-                total += tile.placedItemData.score + player.soilBoost;
+                total += tile.placedItemData.score + player.soilBoost + player.weatherBoost;
             }
         }
 
@@ -99,7 +99,7 @@ public class ScoreManager : MonoBehaviour
     {
         int total = 0;
         if (turnManager == null || turnManager.players == null) return 0;
-        
+
         foreach (Player player in turnManager.players)
         {
             total += CalculatePlayerScore(player);

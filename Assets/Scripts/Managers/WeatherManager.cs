@@ -156,7 +156,8 @@ public class WeatherManager : MonoBehaviour
             turnManager.SetGamePaused(true);
         }
 
-        WeatherType weatherType = GetRandomWeatherType();
+        //WeatherType weatherType = GetRandomWeatherType();
+        WeatherType weatherType = WeatherType.Rain; // For testing, force Rain event
         string announcement = GetWeatherAnnouncement(weatherType);
         ShowWeatherAnnouncement(announcement, weatherAnnouncementDuration);
 
@@ -388,16 +389,14 @@ public class WeatherManager : MonoBehaviour
         ShowWeatherAnnouncement("Heavy rain! Plants grow!", weatherAnnouncementDuration);
         PlayEffect(rainEffectPrefab);
 
-        int boostedPlants = 0;
         int destroyedDecor = 0;
         List<Player> players = turnManager.players;
 
         foreach (Player player in players)
         {
-            List<GardenTile> plantTiles = new List<GardenTile>();
-            List<GardenTile> decoratieTiles = new List<GardenTile>();
-            Garden garden = player.assignedGarden;
+            player.weatherBoost = 1;
 
+            Garden garden = player.assignedGarden;
             if (garden != null)
             {
                 GardenTile[] allTiles = garden.GetComponentsInChildren<GardenTile>();
@@ -405,42 +404,17 @@ public class WeatherManager : MonoBehaviour
                 {
                     if (tile.occupied && tile.placedItemData != null)
                     {
-                        if (IsPlantType(tile.placedItemData.type))
-                            plantTiles.Add(tile);
-                        else if (tile.placedItemData.type == ItemType.Decoration)
-                            decoratieTiles.Add(tile);
+                        if (tile.placedItemData.type == ItemType.Decoration && !tile.isProtected)
+                        {
+                            DestroyItemInGarden(tile, player);
+                            destroyedDecor++;
+                        }
                     }
                 }
             }
-
-            foreach (GardenTile tile in plantTiles)
-            {
-                if (tile.placedItemData != null)
-                {
-                    tile.placedItemData.score += 1;
-                    boostedPlants++;
-                }
-            }
-
-            List<GardenTile> unprotectedDecor = new List<GardenTile>();
-            foreach (GardenTile tile in decoratieTiles)
-            {
-                if (!tile.isProtected)
-                    unprotectedDecor.Add(tile);
-            }
-
-            int decorToDestroy = Mathf.Min(Random.Range(0, 2), unprotectedDecor.Count);
-            for (int i = 0; i < decorToDestroy && unprotectedDecor.Count > 0; i++)
-            {
-                int randomIndex = Random.Range(0, unprotectedDecor.Count);
-                GardenTile targetTile = unprotectedDecor[randomIndex];
-                unprotectedDecor.RemoveAt(randomIndex);
-                DestroyItemInGarden(targetTile, player);
-                destroyedDecor++;
-            }
         }
 
-        ShowWeatherAnnouncement($"Rain boosted {boostedPlants} plants, damaged {destroyedDecor} decoration(s)!", resultAnnouncementDuration);
+        ShowWeatherAnnouncement($"Rain boost active! Plants get +1 each! {destroyedDecor} decorations damaged.", resultAnnouncementDuration);
         UpdateAllUI();
     }
 

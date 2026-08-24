@@ -79,16 +79,17 @@ public class TooltipManager : MonoBehaviour
     }
 
     public void ShowInventoryTooltip(
-        string itemName,
-        string itemType,
-        int score = 0,
-        int water = 0,
-        int soil = 0,
-        int biodiversity = 0,
-        int aesthetic = 0,
-        bool isPowerUp = false,
-        bool isObstacle = false,
-        bool isSabotage = false)
+    string itemName,
+    string itemType,
+    int score = 0,
+    int water = 0,
+    int soil = 0,
+    int biodiversity = 0,
+    int aesthetic = 0,
+    int bonusScore = 0,
+    bool isPowerUp = false,
+    bool isObstacle = false,
+    bool isSabotage = false)
     {
         if (tooltipPanel == null) return;
 
@@ -130,7 +131,13 @@ public class TooltipManager : MonoBehaviour
             itemTypeText.text = $"{itemType}";
         }
 
-        scoreText.text = $"Score: {score}";
+        string scoreDisplay = score.ToString();
+        if (bonusScore != 0)
+        {
+            scoreDisplay += $" (+{bonusScore})";
+        }
+        scoreText.text = $"Score: {scoreDisplay}";
+
         waterText.text = $"Water: {water}";
         soilText.text = $"Soil: {soil}";
         biodiversityText.text = $"Biodiversity: {biodiversity}";

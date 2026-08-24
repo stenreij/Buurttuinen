@@ -168,9 +168,11 @@ public class GardenTile : MonoBehaviour
             {
                 if (player.assignedGarden == garden)
                 {
-                    if (player.soilBoost > 0)
+                    bonus += player.soilBoost;
+
+                    if (placedItemData != null && IsPlantType(placedItemData.type))
                     {
-                        bonus += player.soilBoost;
+                        bonus += player.weatherBoost;
                     }
                     break;
                 }
@@ -178,6 +180,11 @@ public class GardenTile : MonoBehaviour
         }
 
         return bonus;
+    }
+
+    bool IsPlantType(ItemType type)
+    {
+        return type == ItemType.Plant;
     }
 
     int GetBonusWater() => 0;

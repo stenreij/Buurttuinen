@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
 
     private Inventory inventory;
     public int soilBoost = 0;
+    public int weatherBoost = 0;
 
     void Start()
     {

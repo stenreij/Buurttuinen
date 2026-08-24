@@ -21,6 +21,11 @@ public class CommunityManager : MonoBehaviour
     public float goalDisplayDuration = 6f;
     public int maxRounds = 10;
 
+    [Header("Goal Scaling")]
+    public float baseScaleMultiplier = 1.0f;
+    public float scaleIncreasePerInterval = 0.5f;
+    public float maxScaleMultiplier = 3.0f;
+
     [Header("Goal Value Ranges (scaled by player count)")]
     public int biodiversityMin = 20;
     public int biodiversityMax = 60;
@@ -158,10 +163,26 @@ public class CommunityManager : MonoBehaviour
 
     int GetRandomScaledGoalValue(int min, int max)
     {
+        float roundScale = GetRoundScaleFactor();
+
         int baseValue = Random.Range(min, max + 1);
-        float scale = (playerCount * 0.5f);
-        int scaledValue = Mathf.RoundToInt(baseValue * scale);
+        float playerScale = (playerCount * 0.5f);
+        float totalScale = playerScale * roundScale;
+
+        int scaledValue = Mathf.RoundToInt(baseValue * totalScale);
         return Mathf.Max(3, scaledValue);
+    }
+
+    float GetRoundScaleFactor()
+    {
+        int intervalIndex = 0;
+        if (currentRound >= firstCommunityRound)
+        {
+            intervalIndex = (currentRound - firstCommunityRound) / communityInterval;
+        }
+
+        float scale = baseScaleMultiplier + (intervalIndex * scaleIncreasePerInterval);
+        return Mathf.Min(scale, maxScaleMultiplier);
     }
 
     public void OnRoundStarted(int roundNumber)
@@ -235,6 +256,9 @@ public class CommunityManager : MonoBehaviour
 
         List<Player> players = turnManager.players;
         goalScoreAtStart = currentGoal.CalculateScore(players);
+
+        float roundScale = GetRoundScaleFactor();
+        Debug.Log($"🏛️ Community goal selected: {currentGoal.goalType} (Round {currentRound}, Scale: {roundScale:F1}x, Target: {currentGoal.goalValue})");
 
         string announcement = "COMMUNITY GOAL!";
         ShowCommunityAnnouncement(announcement, announcementDuration);
@@ -438,7 +462,6 @@ public class CommunityManager : MonoBehaviour
             {
                 if (tile.occupied && tile.placedItemData != null)
                 {
-                    tile.placedItemData.score += boostAmount;
                 }
             }
         }
