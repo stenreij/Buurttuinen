@@ -180,6 +180,8 @@ public class InventoryUI : MonoBehaviour
             if (currentPlayer != null)
             {
                 bonusScore += currentPlayer.soilBoost;
+                bonusScore += currentPlayer.communityPenalty;
+                bonusScore += currentPlayer.communityBoost;
 
                 if (IsPlantType(item.type))
                 {

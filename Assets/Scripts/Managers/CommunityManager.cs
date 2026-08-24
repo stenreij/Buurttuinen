@@ -214,6 +214,7 @@ public class CommunityManager : MonoBehaviour
     {
         isCommunityActive = true;
         isExecutingCommunity = true;
+        isWaitingForResult = true;
 
         if (turnManager != null)
         {
@@ -286,8 +287,6 @@ public class CommunityManager : MonoBehaviour
 
     IEnumerator ExecuteNewGoal()
     {
-        isWaitingForResult = true;
-
         yield return new WaitForSeconds(2f);
 
         string goalDisplay = "Reach " + currentGoal.goalValue + " " + currentGoal.name.ToLower() + " points!";
@@ -455,20 +454,13 @@ public class CommunityManager : MonoBehaviour
 
         foreach (Player player in players)
         {
-            Garden garden = player.assignedGarden;
-            if (garden == null) continue;
-
-            GardenTile[] allTiles = garden.GetComponentsInChildren<GardenTile>();
-            foreach (GardenTile tile in allTiles)
-            {
-                if (tile.occupied && tile.placedItemData != null)
-                {
-                }
-            }
+            player.communityBoost += boostAmount;
         }
 
-        ShowCommunityAnnouncement($"All items in every garden get +{boostAmount} score!", announcementDuration);
-        Debug.Log($"🏛️🎁 Community reward: All items +{boostAmount} score");
+        ShowCommunityAnnouncement($"All items in every garden get +{boostAmount} community boost!", announcementDuration);
+        Debug.Log($"🏛️🎁 Community reward: All items +{boostAmount} community boost");
+
+        UpdateAllUI();
     }
 
     ItemData FindRandomPlantOrDecoration()
@@ -571,12 +563,15 @@ public class CommunityManager : MonoBehaviour
 
     void ReduceScorePenalty(List<Player> players)
     {
+        int penaltyAmount = -2;
+
         foreach (Player player in players)
         {
-            player.score = Mathf.Max(0, player.score - 2);
+            player.communityPenalty += penaltyAmount;
         }
-        ShowCommunityAnnouncement("All players lose 2 score points!", announcementDuration);
-        Debug.Log("🏛️🟥 Community penalty: All players -2 score");
+
+        ShowCommunityAnnouncement($"All items in every garden get {penaltyAmount} score penalty!", announcementDuration);
+        Debug.Log($"🏛️🟥 Community penalty: All items {penaltyAmount} score (permanent penalty)");
     }
 
     // ============================================

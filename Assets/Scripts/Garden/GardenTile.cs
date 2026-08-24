@@ -169,11 +169,14 @@ public class GardenTile : MonoBehaviour
                 if (player.assignedGarden == garden)
                 {
                     bonus += player.soilBoost;
+                    bonus += player.communityPenalty;
+                    bonus += player.communityBoost;
 
                     if (placedItemData != null && IsPlantType(placedItemData.type))
                     {
                         bonus += player.weatherBoost;
                     }
+
                     break;
                 }
             }

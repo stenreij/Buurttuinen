@@ -66,7 +66,14 @@ public class TooltipManager : MonoBehaviour
         string scoreDisplay = score.ToString();
         if (bonusScore != 0)
         {
-            scoreDisplay += $" (+{bonusScore})";
+            if (bonusScore > 0)
+            {
+                scoreDisplay += $" (+{bonusScore})";
+            }
+            else
+            {
+                scoreDisplay += $" ({bonusScore})";
+            }
         }
         scoreText.text = $"Score: {scoreDisplay}";
 
@@ -134,7 +141,14 @@ public class TooltipManager : MonoBehaviour
         string scoreDisplay = score.ToString();
         if (bonusScore != 0)
         {
-            scoreDisplay += $" (+{bonusScore})";
+            if (bonusScore > 0)
+            {
+                scoreDisplay += $" (+{bonusScore})";
+            }
+            else
+            {
+                scoreDisplay += $" ({bonusScore})";
+            }
         }
         scoreText.text = $"Score: {scoreDisplay}";
 

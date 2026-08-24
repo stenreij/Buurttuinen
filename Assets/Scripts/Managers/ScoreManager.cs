@@ -88,7 +88,7 @@ public class ScoreManager : MonoBehaviour
         {
             if (tile.occupied && tile.placedItemData != null)
             {
-                total += tile.placedItemData.score + player.soilBoost + player.weatherBoost;
+                total += tile.placedItemData.score + player.soilBoost + player.weatherBoost + player.communityPenalty + player.communityBoost;
             }
         }
 

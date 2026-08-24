@@ -10,6 +10,8 @@ public class Player : MonoBehaviour
     private Inventory inventory;
     public int soilBoost = 0;
     public int weatherBoost = 0;
+    public int communityPenalty = 0;
+    public int communityBoost = 0;
 
     void Start()
     {
@@ -25,5 +27,8 @@ public class Player : MonoBehaviour
     public void ResetBonuses()
     {
         soilBoost = 0;
+        weatherBoost = 0;
+        communityPenalty = 0;
+        communityBoost = 0;
     }
 }
