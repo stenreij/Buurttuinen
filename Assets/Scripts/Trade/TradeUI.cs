@@ -78,14 +78,29 @@ public class TradeUI : MonoBehaviour
             targetInventory = targetPlayer.GetComponent<Inventory>();
             if (targetInventory != null && targetInventory.items.Count > 0)
             {
-                Debug.Log($"❗❗❗ Target has {targetInventory.items.Count} items in inventory:");
+                HashSet<ItemData> uniqueItems = new HashSet<ItemData>();
+
                 foreach (var item in targetInventory.items)
                 {
-                    Debug.Log($"❗❗❗ - {item.itemName}");
+                    if (uniqueItems.Contains(item))
+                        continue;
+                    uniqueItems.Add(item);
+
                     if (targetItemButtonPrefab != null && targetItemContainer != null)
                     {
                         GameObject btn = Instantiate(targetItemButtonPrefab, targetItemContainer);
-                        btn.GetComponentInChildren<TextMeshProUGUI>().text = item.itemName;
+
+                        TextMeshProUGUI nameText = btn.GetComponentInChildren<TextMeshProUGUI>();
+                        if (nameText != null)
+                            nameText.text = item.itemName;
+
+                        Image iconImage = btn.GetComponent<Image>();
+                        if (iconImage != null && item.icon != null)
+                        {
+                            iconImage.sprite = item.icon;
+                            iconImage.preserveAspect = true;
+                        }
+
                         ItemData captured = item;
                         btn.GetComponent<Button>().onClick.AddListener(() => SelectTargetItem(captured));
                     }
