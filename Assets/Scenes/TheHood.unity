@@ -1120,7 +1120,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 256741415}
-  - component: {fileID: 256741414}
+  - component: {fileID: 256741416}
   m_Layer: 0
   m_Name: TradeManager
   m_TagString: Untagged
@@ -1128,18 +1128,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &256741414
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 256741413}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8fd80b717902bc4c84dca773d63301b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &256741415
 Transform:
   m_ObjectHideFlags: 0
@@ -1155,6 +1143,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &256741416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 256741413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8fd80b717902bc4c84dca773d63301b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &293919839
 GameObject:
   m_ObjectHideFlags: 0
@@ -2181,6 +2181,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 515690479}
+  - component: {fileID: 515690480}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -2205,8 +2206,32 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 300}
+  m_SizeDelta: {x: 0, y: 150}
   m_Pivot: {x: 0, y: 1}
+--- !u!114 &515690480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 515690478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_StartCorner: 0
+  m_StartAxis: 0
+  m_CellSize: {x: 55, y: 55}
+  m_Spacing: {x: 5, y: 15}
+  m_Constraint: 0
+  m_ConstraintCount: 2
 --- !u!1 &518119797
 GameObject:
   m_ObjectHideFlags: 0
@@ -2591,6 +2616,7 @@ GameObject:
   - component: {fileID: 546781381}
   - component: {fileID: 546781380}
   - component: {fileID: 546781379}
+  - component: {fileID: 546781383}
   m_Layer: 5
   m_Name: TradeUI
   m_TagString: Untagged
@@ -2682,6 +2708,27 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &546781383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 546781378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7159f9804cd6aa047811e3591eeb1465, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tradeRequestPanel: {fileID: 992281161}
+  requestText: {fileID: 1323295054}
+  acceptButton: {fileID: 598824902}
+  declineButton: {fileID: 1692544429}
+  targetItemSelectionPanel: {fileID: 246029801}
+  targetItemContainer: {fileID: 518119798}
+  targetItemButtonPrefab: {fileID: 6306185569768613868, guid: fc98cb8f5183c1341b3443522a29db16, type: 3}
+  confirmButton: {fileID: 926947329}
+  cancelButton: {fileID: 345433656}
 --- !u!1 &598824900
 GameObject:
   m_ObjectHideFlags: 0
@@ -4023,7 +4070,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1198688118}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.27666667
+  m_Size: 0.55333334
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

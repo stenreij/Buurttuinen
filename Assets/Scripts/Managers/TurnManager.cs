@@ -370,6 +370,11 @@ public class TurnManager : MonoBehaviour
             return;
         }
 
+        if (TradeManager.Instance.GetState() != TradeManager.TradeState.Idle)
+        {
+            TradeManager.Instance.CancelTrade("Reset trade state.");
+        }
+
         ItemData selectedItem = inventoryUI.GetSelectedItem();
         if (selectedItem == null)
         {
@@ -384,6 +389,7 @@ public class TurnManager : MonoBehaviour
         UpdateActionButtons();
         Debug.Log($"{currentPlayer.gameObject.name} initiated a trade with {selectedItem.itemName}.");
     }
+
     public void OnEndTurnClicked()
     {
         if (isGamePaused) return;
@@ -496,12 +502,19 @@ public class TurnManager : MonoBehaviour
         Debug.Log($"Turn resumed for {currentPlayer.gameObject.name}");
     }
 
-    // Called by TradeManager when trade is completed or cancelled
-    public void OnTradeCompleted()
+    public void OnTradeCompleted(bool success)
     {
         isTradeActive = false;
-        // The trade counts as an action, so we mark the turn as having placed an item (or performed an action)
-        hasPlacedItemThisTurn = true;
+
+        if (success)
+        {
+            hasPlacedItemThisTurn = true;
+        }
+        else
+        {
+            hasPlacedItemThisTurn = false;
+        }
+
         UpdateActionButtons();
 
         if (inventoryUI != null)

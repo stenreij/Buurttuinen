@@ -41,7 +41,10 @@ public class TradeUI : MonoBehaviour
         if (declineButton != null)
             declineButton.onClick.AddListener(OnDeclineClicked);
         if (confirmButton != null)
+        {
             confirmButton.onClick.AddListener(ConfirmTargetItem);
+            confirmButton.interactable = false;
+        }
         if (cancelButton != null)
             cancelButton.onClick.AddListener(CancelTargetSelection);
     }
@@ -50,6 +53,9 @@ public class TradeUI : MonoBehaviour
     {
         onTargetResponse = callback;
         selectedTargetItem = null;
+
+        if (confirmButton != null)
+            confirmButton.interactable = false;
 
         if (tradeRequestPanel != null)
         {
@@ -72,8 +78,10 @@ public class TradeUI : MonoBehaviour
             targetInventory = targetPlayer.GetComponent<Inventory>();
             if (targetInventory != null && targetInventory.items.Count > 0)
             {
+                Debug.Log($"❗❗❗ Target has {targetInventory.items.Count} items in inventory:");
                 foreach (var item in targetInventory.items)
                 {
+                    Debug.Log($"❗❗❗ - {item.itemName}");
                     if (targetItemButtonPrefab != null && targetItemContainer != null)
                     {
                         GameObject btn = Instantiate(targetItemButtonPrefab, targetItemContainer);
@@ -94,6 +102,7 @@ public class TradeUI : MonoBehaviour
     private void SelectTargetItem(ItemData item)
     {
         selectedTargetItem = item;
+
         if (targetItemContainer != null)
         {
             foreach (Transform child in targetItemContainer)
@@ -101,11 +110,21 @@ public class TradeUI : MonoBehaviour
                 Image img = child.GetComponent<Image>();
                 if (img != null)
                 {
-                    bool isSelected = child.GetComponentInChildren<TextMeshProUGUI>().text == item.itemName;
-                    img.color = isSelected ? Color.yellow : Color.white;
+                    TextMeshProUGUI text = child.GetComponentInChildren<TextMeshProUGUI>();
+                    if (text != null && text.text == item.itemName)
+                    {
+                        img.color = Color.yellow;
+                    }
+                    else
+                    {
+                        img.color = Color.white;
+                    }
                 }
             }
         }
+
+        if (confirmButton != null)
+            confirmButton.interactable = true;
     }
 
     public void OnAcceptClicked()
@@ -133,6 +152,10 @@ public class TradeUI : MonoBehaviour
             tradeRequestPanel.SetActive(false);
         if (targetItemSelectionPanel != null)
             targetItemSelectionPanel.SetActive(false);
+
+        if (confirmButton != null)
+            confirmButton.interactable = false;
+
         onTargetResponse?.Invoke(false, null);
     }
 
@@ -146,6 +169,10 @@ public class TradeUI : MonoBehaviour
 
         if (targetItemSelectionPanel != null)
             targetItemSelectionPanel.SetActive(false);
+
+        if (confirmButton != null)
+            confirmButton.interactable = false;
+
         onTargetResponse?.Invoke(true, selectedTargetItem);
     }
 
@@ -153,6 +180,10 @@ public class TradeUI : MonoBehaviour
     {
         if (targetItemSelectionPanel != null)
             targetItemSelectionPanel.SetActive(false);
+
+        if (confirmButton != null)
+            confirmButton.interactable = false;
+
         DeclineTrade();
     }
 
@@ -162,5 +193,8 @@ public class TradeUI : MonoBehaviour
             tradeRequestPanel.SetActive(false);
         if (targetItemSelectionPanel != null)
             targetItemSelectionPanel.SetActive(false);
+
+        if (confirmButton != null)
+            confirmButton.interactable = false;
     }
 }

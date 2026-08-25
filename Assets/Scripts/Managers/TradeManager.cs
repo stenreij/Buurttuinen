@@ -157,7 +157,7 @@ public class TradeManager : MonoBehaviour
         TurnManager turnManager = FindFirstObjectByType<TurnManager>();
         if (turnManager != null)
         {
-            turnManager.OnTradeCompleted();
+            turnManager.OnTradeCompleted(true);
         }
 
         ResetTrade();
@@ -178,7 +178,7 @@ public class TradeManager : MonoBehaviour
         TurnManager turnManager = FindFirstObjectByType<TurnManager>();
         if (turnManager != null)
         {
-            turnManager.OnTradeCompleted();
+            turnManager.OnTradeCompleted(false);
         }
 
         TradeUI tradeUI = FindFirstObjectByType<TradeUI>();
