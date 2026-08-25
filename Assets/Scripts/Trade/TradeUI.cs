@@ -20,9 +20,15 @@ public class TradeUI : MonoBehaviour
     [SerializeField] private Button confirmButton;
     [SerializeField] private Button cancelButton;
 
+    [Header("Player Selection")]
+    [SerializeField] private GameObject playerSelectionPanel;
+    [SerializeField] private Transform playerContainer;
+    [SerializeField] private GameObject playerButtonPrefab;
+
     private Inventory targetInventory;
     private System.Action<bool, ItemData> onTargetResponse;
     private ItemData selectedTargetItem;
+    private Player selectedTargetPlayer;
 
     void Awake()
     {
@@ -35,6 +41,8 @@ public class TradeUI : MonoBehaviour
             tradeRequestPanel.SetActive(false);
         if (targetItemSelectionPanel != null)
             targetItemSelectionPanel.SetActive(false);
+        if (playerSelectionPanel != null)
+            playerSelectionPanel.SetActive(false);
 
         if (acceptButton != null)
             acceptButton.onClick.AddListener(OnAcceptClicked);
@@ -49,6 +57,57 @@ public class TradeUI : MonoBehaviour
             cancelButton.onClick.AddListener(CancelTargetSelection);
     }
 
+    public void ShowPlayerSelection(Player initiator, List<Player> allPlayers, System.Action<Player> onPlayerSelected)
+    {
+        if (playerSelectionPanel == null || playerContainer == null || playerButtonPrefab == null)
+        {
+            Debug.LogWarning("Player selection UI not fully configured in TradeUI Inspector!");
+            return;
+        }
+
+        playerSelectionPanel.SetActive(true);
+
+        // Clear existing buttons
+        foreach (Transform child in playerContainer)
+            Destroy(child.gameObject);
+
+        // Log how many players we have
+        Debug.Log($"Showing player selection. Total players: {allPlayers.Count}. Initiator: {initiator.playerName}");
+
+        // Create button for each player except the initiator
+        int playerCount = 0;
+        foreach (Player player in allPlayers)
+        {
+            if (player == initiator) continue;
+
+            playerCount++;
+            Debug.Log($"Creating button for player: {player.playerName}");
+
+            GameObject btn = Instantiate(playerButtonPrefab, playerContainer);
+            
+            // Set the button text
+            TextMeshProUGUI btnText = btn.GetComponentInChildren<TextMeshProUGUI>();
+            if (btnText != null)
+                btnText.text = player.playerName;
+
+            // Set the button click listener
+            Player captured = player;
+            Button btnComponent = btn.GetComponent<Button>();
+            if (btnComponent != null)
+            {
+                btnComponent.onClick.AddListener(() => {
+                    Debug.Log($"Player selected: {captured.playerName}");
+                    selectedTargetPlayer = captured;
+                    if (playerSelectionPanel != null)
+                        playerSelectionPanel.SetActive(false);
+                    onPlayerSelected?.Invoke(captured);
+                });
+            }
+        }
+
+        Debug.Log($"Created {playerCount} player buttons.");
+    }
+
     public void ShowTradeRequest(Player initiator, Player targetPlayer, ItemData offeredItem, System.Action<bool, ItemData> callback)
     {
         onTargetResponse = callback;
@@ -56,6 +115,10 @@ public class TradeUI : MonoBehaviour
 
         if (confirmButton != null)
             confirmButton.interactable = false;
+
+        selectedTargetPlayer = targetPlayer;
+
+        Debug.Log($"Showing trade request to: {targetPlayer.playerName} from {initiator.playerName}");
 
         if (tradeRequestPanel != null)
         {
@@ -110,6 +173,7 @@ public class TradeUI : MonoBehaviour
 
         if (targetInventory == null || targetInventory.items.Count == 0)
         {
+            Debug.Log($"Target {targetPlayer.playerName} has no items to trade.");
             DeclineTrade();
         }
     }
@@ -208,8 +272,15 @@ public class TradeUI : MonoBehaviour
             tradeRequestPanel.SetActive(false);
         if (targetItemSelectionPanel != null)
             targetItemSelectionPanel.SetActive(false);
+        if (playerSelectionPanel != null)
+            playerSelectionPanel.SetActive(false);
 
         if (confirmButton != null)
             confirmButton.interactable = false;
+    }
+
+    public Player GetSelectedTargetPlayer()
+    {
+        return selectedTargetPlayer;
     }
 }

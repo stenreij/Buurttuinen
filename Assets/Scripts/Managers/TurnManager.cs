@@ -107,7 +107,7 @@ public class TurnManager : MonoBehaviour
         ResetPowerUpButtonVisuals();
 
         hasPlacedItemThisTurn = false;
-        isTradeActive = false; // Reset trade state
+        isTradeActive = false;
         currentPlayer = players[currentPlayerIndex];
 
         if (roundText != null)
@@ -172,7 +172,7 @@ public class TurnManager : MonoBehaviour
             endTurnButton.onClick.AddListener(OnEndTurnClicked);
         }
 
-        Debug.Log($"👤 {currentPlayer.gameObject.name} taking their turn");
+        Debug.Log($"{currentPlayer.gameObject.name} taking their turn");
     }
 
     public void UpdateActionButtons()
@@ -361,7 +361,11 @@ public class TurnManager : MonoBehaviour
     public void OnTradeClicked()
     {
         if (isGamePaused) return;
-        if (hasPlacedItemThisTurn) return;
+        if (hasPlacedItemThisTurn)
+        {
+            Debug.Log("Already performed an action this turn.");
+            return;
+        }
         if (isTradeActive) return;
 
         if (TradeManager.Instance == null)
@@ -375,26 +379,19 @@ public class TurnManager : MonoBehaviour
             TradeManager.Instance.CancelTrade("Reset trade state.");
         }
 
-        ItemData selectedItem = inventoryUI.GetSelectedItem();
-        if (selectedItem == null)
-        {
-            Debug.Log("Select an item first before trading!");
-            return;
-        }
-
+        // Start trade - item selection will happen via inventory click
         TradeManager.Instance.StartTrade(currentPlayer);
-        TradeManager.Instance.SelectItem(selectedItem);
+
+        Debug.Log($"{currentPlayer.gameObject.name} initiated a trade. Select an item from your inventory.");
 
         isTradeActive = true;
         UpdateActionButtons();
-        Debug.Log($"{currentPlayer.gameObject.name} initiated a trade with {selectedItem.itemName}.");
     }
 
     public void OnEndTurnClicked()
     {
         if (isGamePaused) return;
 
-        // If trade is active, we don't allow ending turn until trade is complete or cancelled
         if (isTradeActive)
         {
             Debug.Log("Cannot end turn while a trade is in progress.");
@@ -431,7 +428,7 @@ public class TurnManager : MonoBehaviour
         {
             if (currentRound >= maxRounds)
             {
-                Debug.Log($"🏁 Game ended - Round {currentRound} completed");
+                Debug.Log($"Game ended - Round {currentRound} completed");
 
                 ScoreManager scoreManager = FindFirstObjectByType<ScoreManager>();
                 if (scoreManager != null)
@@ -444,6 +441,7 @@ public class TurnManager : MonoBehaviour
             }
 
             currentRound++;
+            Debug.Log($"Round {currentRound} started");
 
             OnRoundStarted?.Invoke(currentRound);
         }
@@ -521,5 +519,7 @@ public class TurnManager : MonoBehaviour
         {
             inventoryUI.RefreshUI();
         }
+
+        Debug.Log($"Trade completed (success: {success}) - turn action marked");
     }
 }

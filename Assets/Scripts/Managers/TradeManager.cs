@@ -14,7 +14,6 @@ public class TradeManager : MonoBehaviour
     private ItemData requestedItem;
 
     public System.Action<TradeState> OnStateChanged;
-    public System.Action OnTradeCompletedCallback;
 
     void Awake()
     {
@@ -58,18 +57,41 @@ public class TradeManager : MonoBehaviour
         OnStateChanged?.Invoke(currentState);
         Debug.Log($"{initiator.playerName} offered {item.itemName}.");
 
+        // Get all players
         TurnManager turnManager = FindFirstObjectByType<TurnManager>();
-        if (turnManager != null && turnManager.players.Count == 2)
+        if (turnManager == null)
         {
-            Player targetPlayer = turnManager.players.Find(p => p != initiator);
+            Debug.LogWarning("TurnManager not found!");
+            CancelTrade("TurnManager missing.");
+            return;
+        }
+
+        List<Player> allPlayers = turnManager.players;
+
+        // If only 2 players, auto-select the other player
+        if (allPlayers.Count == 2)
+        {
+            Player targetPlayer = allPlayers.Find(p => p != initiator);
             if (targetPlayer != null)
             {
                 SelectTarget(targetPlayer);
+                return;
             }
+        }
+
+        // With 3 or 4 players, show player selection UI
+        TradeUI tradeUI = FindFirstObjectByType<TradeUI>();
+        if (tradeUI != null)
+        {
+            tradeUI.ShowPlayerSelection(initiator, allPlayers, (selectedPlayer) =>
+            {
+                SelectTarget(selectedPlayer);
+            });
         }
         else
         {
-            Debug.Log("Select a target player.");
+            Debug.LogWarning("TradeUI not found.");
+            CancelTrade("TradeUI missing.");
         }
     }
 
@@ -84,9 +106,11 @@ public class TradeManager : MonoBehaviour
         OnStateChanged?.Invoke(currentState);
         Debug.Log($"{initiator.playerName} offered trade to {targetPlayer.playerName}.");
 
+        // Hide player selection panel if still visible
         TradeUI tradeUI = FindFirstObjectByType<TradeUI>();
         if (tradeUI != null)
         {
+            tradeUI.HideAllPanels();
             tradeUI.ShowTradeRequest(initiator, targetPlayer, offeredItem, OnTargetResponse);
         }
         else
@@ -140,9 +164,11 @@ public class TradeManager : MonoBehaviour
             return;
         }
 
+        // Remove items
         invInitiator.RemoveItem(offeredItem);
         invTarget.RemoveItem(requestedItem);
 
+        // Add swapped items
         invInitiator.AddItem(requestedItem);
         invTarget.AddItem(offeredItem);
 
@@ -151,9 +177,11 @@ public class TradeManager : MonoBehaviour
 
         Debug.Log($"Trade completed: {initiator.playerName} received {requestedItem.itemName}, {target.playerName} received {offeredItem.itemName}.");
 
+        // Refresh UI
         InventoryUI ui = FindFirstObjectByType<InventoryUI>();
         if (ui != null) ui.RefreshUI();
 
+        // Notify TurnManager that trade is complete (success)
         TurnManager turnManager = FindFirstObjectByType<TurnManager>();
         if (turnManager != null)
         {
@@ -175,12 +203,14 @@ public class TradeManager : MonoBehaviour
         else
             Debug.Log("Trade cancelled.");
 
+        // Notify TurnManager that trade is cancelled
         TurnManager turnManager = FindFirstObjectByType<TurnManager>();
         if (turnManager != null)
         {
             turnManager.OnTradeCompleted(false);
         }
 
+        // Hide all UI panels
         TradeUI tradeUI = FindFirstObjectByType<TradeUI>();
         if (tradeUI != null)
         {
