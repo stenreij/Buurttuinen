@@ -8,17 +8,17 @@ public class TradeUI : MonoBehaviour
     public static TradeUI Instance;
 
     [Header("Trade Request Panel")]
-    public GameObject tradeRequestPanel;
-    public TextMeshProUGUI requestText;
-    public Button acceptButton;
-    public Button declineButton;
+    [SerializeField] private GameObject tradeRequestPanel;
+    [SerializeField] private TextMeshProUGUI requestText;
+    [SerializeField] private Button acceptButton;
+    [SerializeField] private Button declineButton;
 
     [Header("Target Item Selection")]
-    public GameObject targetItemSelectionPanel;
-    public Transform targetItemContainer;
-    public GameObject targetItemButtonPrefab;
-    public Button confirmButton;
-    public Button cancelButton;
+    [SerializeField] private GameObject targetItemSelectionPanel;
+    [SerializeField] private Transform targetItemContainer;
+    [SerializeField] private GameObject targetItemButtonPrefab;
+    [SerializeField] private Button confirmButton;
+    [SerializeField] private Button cancelButton;
 
     private Inventory targetInventory;
     private System.Action<bool, ItemData> onTargetResponse;
@@ -61,14 +61,12 @@ public class TradeUI : MonoBehaviour
         if (targetItemSelectionPanel != null)
             targetItemSelectionPanel.SetActive(false);
 
-        // Clear previous items
         if (targetItemContainer != null)
         {
             foreach (Transform child in targetItemContainer)
                 Destroy(child.gameObject);
         }
 
-        // Get current player's inventory (the target)
         TurnManager turnManager = FindFirstObjectByType<TurnManager>();
         if (turnManager != null)
         {
@@ -92,7 +90,6 @@ public class TradeUI : MonoBehaviour
             }
         }
 
-        // If target has no items, auto-decline
         if (targetInventory == null || targetInventory.items.Count == 0)
         {
             DeclineTrade();
