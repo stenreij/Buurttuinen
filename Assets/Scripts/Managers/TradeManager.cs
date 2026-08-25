@@ -157,7 +157,7 @@ public class TradeManager : MonoBehaviour
         TurnManager turnManager = FindFirstObjectByType<TurnManager>();
         if (turnManager != null)
         {
-            turnManager.OnTradeCompleted(true);
+            turnManager.OnTradeCompleted(true); // true = trade success
         }
 
         ResetTrade();
