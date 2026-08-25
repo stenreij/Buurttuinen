@@ -15,7 +15,7 @@ public class TradeUI : MonoBehaviour
 
     [Header("Target Item Selection")]
     [SerializeField] private GameObject targetItemSelectionPanel;
-    [SerializeField] private Transform targetItemContainer;
+    [SerializeField] private Transform content; // ← DIRECT NAAR CONTENT
     [SerializeField] private GameObject targetItemButtonPrefab;
     [SerializeField] private Button confirmButton;
     [SerializeField] private Button cancelButton;
@@ -130,9 +130,10 @@ public class TradeUI : MonoBehaviour
         if (targetItemSelectionPanel != null)
             targetItemSelectionPanel.SetActive(false);
 
-        if (targetItemContainer != null)
+        // Clear de content (niet de targetItemContainer)
+        if (content != null)
         {
-            foreach (Transform child in targetItemContainer)
+            foreach (Transform child in content)
                 Destroy(child.gameObject);
         }
 
@@ -149,9 +150,11 @@ public class TradeUI : MonoBehaviour
                         continue;
                     uniqueItems.Add(item);
 
-                    if (targetItemButtonPrefab != null && targetItemContainer != null)
+                    if (targetItemButtonPrefab != null && content != null)
                     {
-                        GameObject btn = Instantiate(targetItemButtonPrefab, targetItemContainer);
+                        // Instantieer in content (de container van de ScrollView)
+                        GameObject btn = Instantiate(targetItemButtonPrefab, content);
+                        btn.transform.SetParent(content, false);
 
                         TextMeshProUGUI nameText = btn.GetComponentInChildren<TextMeshProUGUI>();
                         if (nameText != null)
@@ -168,6 +171,10 @@ public class TradeUI : MonoBehaviour
                         btn.GetComponent<Button>().onClick.AddListener(() => SelectTargetItem(captured));
                     }
                 }
+
+                // Forceer layout update
+                if (content != null)
+                    LayoutRebuilder.ForceRebuildLayoutImmediate(content as RectTransform);
             }
         }
 
@@ -182,9 +189,9 @@ public class TradeUI : MonoBehaviour
     {
         selectedTargetItem = item;
 
-        if (targetItemContainer != null)
+        if (content != null)
         {
-            foreach (Transform child in targetItemContainer)
+            foreach (Transform child in content)
             {
                 Image img = child.GetComponent<Image>();
                 if (img != null)
