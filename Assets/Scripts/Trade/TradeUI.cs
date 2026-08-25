@@ -46,7 +46,7 @@ public class TradeUI : MonoBehaviour
             cancelButton.onClick.AddListener(CancelTargetSelection);
     }
 
-    public void ShowTradeRequest(Player initiator, ItemData offeredItem, System.Action<bool, ItemData> callback)
+    public void ShowTradeRequest(Player initiator, Player targetPlayer, ItemData offeredItem, System.Action<bool, ItemData> callback)
     {
         onTargetResponse = callback;
         selectedTargetItem = null;
@@ -55,7 +55,7 @@ public class TradeUI : MonoBehaviour
         {
             tradeRequestPanel.SetActive(true);
             if (requestText != null)
-                requestText.text = $"{initiator.playerName} offers {offeredItem.itemName}. Do you accept?";
+                requestText.text = $"{initiator.playerName} offers {offeredItem.itemName}. Select an item to trade back.";
         }
 
         if (targetItemSelectionPanel != null)
@@ -67,24 +67,19 @@ public class TradeUI : MonoBehaviour
                 Destroy(child.gameObject);
         }
 
-        TurnManager turnManager = FindFirstObjectByType<TurnManager>();
-        if (turnManager != null)
+        if (targetPlayer != null)
         {
-            Player targetPlayer = turnManager.GetCurrentPlayer();
-            if (targetPlayer != null)
+            targetInventory = targetPlayer.GetComponent<Inventory>();
+            if (targetInventory != null && targetInventory.items.Count > 0)
             {
-                targetInventory = targetPlayer.GetComponent<Inventory>();
-                if (targetInventory != null && targetInventory.items.Count > 0)
+                foreach (var item in targetInventory.items)
                 {
-                    foreach (var item in targetInventory.items)
+                    if (targetItemButtonPrefab != null && targetItemContainer != null)
                     {
-                        if (targetItemButtonPrefab != null && targetItemContainer != null)
-                        {
-                            GameObject btn = Instantiate(targetItemButtonPrefab, targetItemContainer);
-                            btn.GetComponentInChildren<TextMeshProUGUI>().text = item.itemName;
-                            ItemData captured = item;
-                            btn.GetComponent<Button>().onClick.AddListener(() => SelectTargetItem(captured));
-                        }
+                        GameObject btn = Instantiate(targetItemButtonPrefab, targetItemContainer);
+                        btn.GetComponentInChildren<TextMeshProUGUI>().text = item.itemName;
+                        ItemData captured = item;
+                        btn.GetComponent<Button>().onClick.AddListener(() => SelectTargetItem(captured));
                     }
                 }
             }

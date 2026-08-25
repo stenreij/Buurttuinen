@@ -366,24 +366,24 @@ public class TurnManager : MonoBehaviour
 
         if (TradeManager.Instance == null)
         {
-            TradeManager found = FindFirstObjectByType<TradeManager>();
-            if (found != null)
-            {
-            }
-            else
-            {
-                Debug.LogWarning("TradeManager not found in scene!");
-                return;
-            }
+            Debug.LogWarning("TradeManager not found.");
+            return;
         }
 
-        // Start trade
+        ItemData selectedItem = inventoryUI.GetSelectedItem();
+        if (selectedItem == null)
+        {
+            Debug.Log("Select an item first before trading!");
+            return;
+        }
+
         TradeManager.Instance.StartTrade(currentPlayer);
+        TradeManager.Instance.SelectItem(selectedItem);
+
         isTradeActive = true;
         UpdateActionButtons();
-        Debug.Log($"{currentPlayer.gameObject.name} initiated a trade.");
+        Debug.Log($"{currentPlayer.gameObject.name} initiated a trade with {selectedItem.itemName}.");
     }
-
     public void OnEndTurnClicked()
     {
         if (isGamePaused) return;

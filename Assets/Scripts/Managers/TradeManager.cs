@@ -57,6 +57,20 @@ public class TradeManager : MonoBehaviour
         currentState = TradeState.SelectingTarget;
         OnStateChanged?.Invoke(currentState);
         Debug.Log($"{initiator.playerName} offered {item.itemName}.");
+
+        TurnManager turnManager = FindFirstObjectByType<TurnManager>();
+        if (turnManager != null && turnManager.players.Count == 2)
+        {
+            Player targetPlayer = turnManager.players.Find(p => p != initiator);
+            if (targetPlayer != null)
+            {
+                SelectTarget(targetPlayer);
+            }
+        }
+        else
+        {
+            Debug.Log("Select a target player.");
+        }
     }
 
     public void SelectTarget(Player targetPlayer)
@@ -73,7 +87,7 @@ public class TradeManager : MonoBehaviour
         TradeUI tradeUI = FindFirstObjectByType<TradeUI>();
         if (tradeUI != null)
         {
-            tradeUI.ShowTradeRequest(initiator, offeredItem, OnTargetResponse);
+            tradeUI.ShowTradeRequest(initiator, targetPlayer, offeredItem, OnTargetResponse);
         }
         else
         {
@@ -93,6 +107,15 @@ public class TradeManager : MonoBehaviour
         if (targetItem == null)
         {
             CancelTrade("Target did not select an item.");
+            return;
+        }
+
+        Inventory invInitiator = initiator.GetComponent<Inventory>();
+        Inventory invTarget = target.GetComponent<Inventory>();
+
+        if (!invInitiator.HasItem(offeredItem) || !invTarget.HasItem(targetItem))
+        {
+            CancelTrade("One of the items is no longer available.");
             return;
         }
 
