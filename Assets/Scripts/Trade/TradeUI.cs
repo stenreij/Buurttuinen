@@ -15,7 +15,7 @@ public class TradeUI : MonoBehaviour
 
     [Header("Target Item Selection")]
     [SerializeField] private GameObject targetItemSelectionPanel;
-    [SerializeField] private Transform targetItemContainer;
+    [SerializeField] private Transform content;
     [SerializeField] private GameObject targetItemButtonPrefab;
     [SerializeField] private Button confirmButton;
     [SerializeField] private Button cancelButton;
@@ -67,14 +67,11 @@ public class TradeUI : MonoBehaviour
 
         playerSelectionPanel.SetActive(true);
 
-        // Clear existing buttons
         foreach (Transform child in playerContainer)
             Destroy(child.gameObject);
 
-        // Log how many players we have
         Debug.Log($"Showing player selection. Total players: {allPlayers.Count}. Initiator: {initiator.playerName}");
 
-        // Create button for each player except the initiator
         int playerCount = 0;
         foreach (Player player in allPlayers)
         {
@@ -85,12 +82,10 @@ public class TradeUI : MonoBehaviour
 
             GameObject btn = Instantiate(playerButtonPrefab, playerContainer);
             
-            // Set the button text
             TextMeshProUGUI btnText = btn.GetComponentInChildren<TextMeshProUGUI>();
             if (btnText != null)
                 btnText.text = player.playerName;
 
-            // Set the button click listener
             Player captured = player;
             Button btnComponent = btn.GetComponent<Button>();
             if (btnComponent != null)
@@ -130,9 +125,9 @@ public class TradeUI : MonoBehaviour
         if (targetItemSelectionPanel != null)
             targetItemSelectionPanel.SetActive(false);
 
-        if (targetItemContainer != null)
+        if (content != null)
         {
-            foreach (Transform child in targetItemContainer)
+            foreach (Transform child in content)
                 Destroy(child.gameObject);
         }
 
@@ -149,9 +144,10 @@ public class TradeUI : MonoBehaviour
                         continue;
                     uniqueItems.Add(item);
 
-                    if (targetItemButtonPrefab != null && targetItemContainer != null)
+                    if (targetItemButtonPrefab != null && content != null)
                     {
-                        GameObject btn = Instantiate(targetItemButtonPrefab, targetItemContainer);
+                        GameObject btn = Instantiate(targetItemButtonPrefab, content);
+                        btn.transform.SetParent(content, false);
 
                         TextMeshProUGUI nameText = btn.GetComponentInChildren<TextMeshProUGUI>();
                         if (nameText != null)
@@ -168,6 +164,9 @@ public class TradeUI : MonoBehaviour
                         btn.GetComponent<Button>().onClick.AddListener(() => SelectTargetItem(captured));
                     }
                 }
+
+                if (content != null)
+                    LayoutRebuilder.ForceRebuildLayoutImmediate(content as RectTransform);
             }
         }
 
@@ -182,9 +181,9 @@ public class TradeUI : MonoBehaviour
     {
         selectedTargetItem = item;
 
-        if (targetItemContainer != null)
+        if (content != null)
         {
-            foreach (Transform child in targetItemContainer)
+            foreach (Transform child in content)
             {
                 Image img = child.GetComponent<Image>();
                 if (img != null)
