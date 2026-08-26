@@ -15,7 +15,7 @@ MonoBehaviour:
   icon: {fileID: 5817799449637031085, guid: 2d1c4ebb0a4cc08429be7c7dcb9bf1ac, type: 3}
   itemName: Pond
   type: 3
-  score: 20
+  score: 22
   water: 10
   soilHealth: 4
   biodiversity: 9

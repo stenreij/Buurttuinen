@@ -15,7 +15,7 @@ MonoBehaviour:
   icon: {fileID: 4347544937462273523, guid: e0c6aab690e893b459abbad3596af4bf, type: 3}
   itemName: Dead Tree
   type: 6
-  score: -9
+  score: -8
   water: -2
   soilHealth: -10
   biodiversity: -3

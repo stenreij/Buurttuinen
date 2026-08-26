@@ -15,10 +15,10 @@ MonoBehaviour:
   icon: {fileID: -6036542359384570008, guid: cb6f1a9d03528434d82787445dc51022, type: 3}
   itemName: BBQ
   type: 5
-  score: 2
-  water: 0
-  soilHealth: 0
-  biodiversity: 0
+  score: -5
+  water: -1
+  soilHealth: -2
+  biodiversity: -3
   aesthetic: 4
   color: {r: 1, g: 0, b: 0, a: 0}
   maxAmount: 3

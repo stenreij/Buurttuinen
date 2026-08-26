@@ -15,7 +15,7 @@ MonoBehaviour:
   icon: {fileID: 2497978353774294010, guid: e1b4f3788dde348428df71dde4fa8c47, type: 3}
   itemName: Big Apple Tree
   type: 1
-  score: 24
+  score: 22
   water: 8
   soilHealth: 3
   biodiversity: 7

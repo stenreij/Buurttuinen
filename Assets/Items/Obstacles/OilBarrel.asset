@@ -15,7 +15,7 @@ MonoBehaviour:
   icon: {fileID: 5711512529572764897, guid: 1eed0498be5eecc4a804087fffbc566a, type: 3}
   itemName: Oil Barrel
   type: 6
-  score: -14
+  score: -12
   water: -8
   soilHealth: -10
   biodiversity: -5

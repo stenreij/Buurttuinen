@@ -15,10 +15,10 @@ MonoBehaviour:
   icon: {fileID: -3578582641699816866, guid: 21416484ca3df8548880a3c521ff28ba, type: 3}
   itemName: Gravel Tile
   type: 4
-  score: 3
-  water: 1
-  soilHealth: 1
-  biodiversity: 1
+  score: 2
+  water: -2
+  soilHealth: -2
+  biodiversity: 0
   aesthetic: 4
   color: {r: 0.5283019, g: 0.20902647, b: 0, a: 0}
   maxAmount: 6
