@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2814edcf85886e144b058ce2a6d4161a, type: 3}
-  m_Name: Concrete Tile
+  m_Name: Sunflower
   m_EditorClassIdentifier: 
-  icon: {fileID: -1277951974594179671, guid: f91176c74887967448a80ea84415c49f, type: 3}
-  itemName: Concrete Tile
-  type: 4
-  score: 0
-  water: -3
-  soilHealth: -3
-  biodiversity: 0
-  aesthetic: 1
-  color: {r: 0, g: 0, b: 0, a: 0}
-  maxAmount: 7
-  prefab: {fileID: 5652263767925059034, guid: 9a33d3fd5f622cc44b94ae22b61e4f3c, type: 3}
+  icon: {fileID: -256329436847572505, guid: b9bafb51ca2f1bc4991e662554041726, type: 3}
+  itemName: Sunflower
+  type: 0
+  score: 14
+  water: 5
+  soilHealth: 4
+  biodiversity: 8
+  aesthetic: 14
+  color: {r: 1, g: 0.98314893, b: 0, a: 0}
+  maxAmount: 2
+  prefab: {fileID: 1228671249701953039, guid: 8632a24521667134aba1a8994fd38c52, type: 3}

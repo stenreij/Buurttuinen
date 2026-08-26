@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2814edcf85886e144b058ce2a6d4161a, type: 3}
-  m_Name: Slide
+  m_Name: Compost Bin
   m_EditorClassIdentifier: 
-  icon: {fileID: 4857335772653305134, guid: f090e8d8a1ccf0b43a60b14c7ca51bf9, type: 3}
-  itemName: Slide
+  icon: {fileID: -3354684456772930475, guid: dae6a99d478111c479ffa32c45706cf1, type: 3}
+  itemName: Compost Bin
   type: 5
-  score: 6
-  water: 0
-  soilHealth: 0
-  biodiversity: 1
-  aesthetic: 5
-  color: {r: 1, g: 1, b: 0, a: 0}
+  score: 14
+  water: 3
+  soilHealth: 12
+  biodiversity: 6
+  aesthetic: 4
+  color: {r: 0.2830189, g: 0.12630959, b: 0.07876469, a: 0}
   maxAmount: 2
-  prefab: {fileID: 853878544596494826, guid: 5a3c799acbf78cb44b84d25694174870, type: 3}
+  prefab: {fileID: 3023615165311031473, guid: 312ba4d8baf38be4491c88d706eebc20, type: 3}

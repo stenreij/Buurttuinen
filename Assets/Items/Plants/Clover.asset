@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2814edcf85886e144b058ce2a6d4161a, type: 3}
-  m_Name: Concrete Tile
+  m_Name: Clover
   m_EditorClassIdentifier: 
-  icon: {fileID: -1277951974594179671, guid: f91176c74887967448a80ea84415c49f, type: 3}
-  itemName: Concrete Tile
-  type: 4
-  score: 0
-  water: -3
-  soilHealth: -3
-  biodiversity: 0
-  aesthetic: 1
-  color: {r: 0, g: 0, b: 0, a: 0}
-  maxAmount: 7
-  prefab: {fileID: 5652263767925059034, guid: 9a33d3fd5f622cc44b94ae22b61e4f3c, type: 3}
+  icon: {fileID: -3890951754223521745, guid: cb94c84aa72d1ff4ea89e12632f82203, type: 3}
+  itemName: Clover
+  type: 0
+  score: 4
+  water: 2
+  soilHealth: 3
+  biodiversity: 5
+  aesthetic: 2
+  color: {r: 0, g: 1, b: 0.10077143, a: 0}
+  maxAmount: 4
+  prefab: {fileID: 4981125477484068588, guid: 5dbbfbfc91539fd4b8b6696cb2bd1241, type: 3}
