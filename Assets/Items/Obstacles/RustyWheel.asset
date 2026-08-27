@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RustyWheel
   m_EditorClassIdentifier: 
   icon: {fileID: -3749311034245604726, guid: 25a57664f8aeb304f8793205d2197a32, type: 3}
-  itemName: RustyWheel
+  itemName: Rusty Wheel
   type: 6
   score: -8
   water: -2

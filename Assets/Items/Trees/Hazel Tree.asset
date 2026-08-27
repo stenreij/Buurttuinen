@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2814edcf85886e144b058ce2a6d4161a, type: 3}
-  m_Name: Gravel Tile
+  m_Name: Hazel Tree
   m_EditorClassIdentifier: 
-  icon: {fileID: -3578582641699816866, guid: 21416484ca3df8548880a3c521ff28ba, type: 3}
-  itemName: Gravel Path
-  type: 4
-  score: 3
-  water: 1
-  soilHealth: 1
-  biodiversity: 1
-  aesthetic: 4
-  color: {r: 0.5283019, g: 0.20902647, b: 0, a: 0}
-  maxAmount: 6
-  prefab: {fileID: 7613494001699832611, guid: cae7a1d3034419c4fb5ba1af02e36a50, type: 3}
+  icon: {fileID: 3234334089713132326, guid: 808bd9a25f4ee5b42ad952beb6a6cbc6, type: 3}
+  itemName: Hazel Tree
+  type: 1
+  score: 16
+  water: 4
+  soilHealth: 9
+  biodiversity: 10
+  aesthetic: 8
+  color: {r: 0.764151, g: 0.25569096, b: 0, a: 0}
+  maxAmount: 2
+  prefab: {fileID: 677653032911958075, guid: 4aca5aebd1403fc4696ba17aaeb95dcc, type: 3}
