@@ -103,7 +103,7 @@ public class CommunityManager : MonoBehaviour
                 int total = 0;
                 foreach (Player player in players)
                 {
-                    total += GetWaterScore(player);
+                    total += ScoreCalculator.GetWaterScore(player);
                 }
                 return total;
             },
@@ -119,7 +119,7 @@ public class CommunityManager : MonoBehaviour
                 int total = 0;
                 foreach (Player player in players)
                 {
-                    total += GetSoilScore(player);
+                    total += ScoreCalculator.GetSoilScore(player);
                 }
                 return total;
             },
@@ -135,7 +135,7 @@ public class CommunityManager : MonoBehaviour
                 int total = 0;
                 foreach (Player player in players)
                 {
-                    total += GetAestheticScore(player);
+                    total += ScoreCalculator.GetAestheticScore(player);
                 }
                 return total;
             },
@@ -151,7 +151,7 @@ public class CommunityManager : MonoBehaviour
                 int total = 0;
                 foreach (Player player in players)
                 {
-                    total += GetTotalScore(player);
+                    total += ScoreCalculator.GetTotalScore(player);
                 }
                 return total;
             },
