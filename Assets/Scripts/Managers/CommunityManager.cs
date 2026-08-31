@@ -433,28 +433,13 @@ public class CommunityManager : MonoBehaviour
             ItemData randomItem = FindRandomPlantOrDecoration();
             if (randomItem == null) continue;
 
-            ItemDatabase database = FindFirstObjectByType<ItemDatabase>();
-            if (database != null && !database.TryTakeItem(randomItem)) continue;
-
-            GardenTile emptyTile = GetRandomEmptyTile(player);
+            GardenTile emptyTile = GardenHelper.GetRandomEmptyTile(player);
             if (emptyTile == null) continue;
 
-            GameObject placed = Instantiate(randomItem.prefab, emptyTile.transform.position, Quaternion.identity);
-            placed.transform.parent = emptyTile.transform;
-            placed.transform.localPosition = Vector3.zero;
-
-            SpriteRenderer sr = placed.GetComponent<SpriteRenderer>();
-            if (sr != null)
+            if (ItemPlacer.PlaceItemOnTile(emptyTile, randomItem, true))
             {
-                sr.enabled = true;
-                sr.sortingOrder = 10;
+                Debug.Log($"🏛️🎁 Community reward: {player.playerName} received {randomItem.itemName}");
             }
-
-            emptyTile.placedItem = placed;
-            emptyTile.placedItemData = randomItem;
-            emptyTile.occupied = true;
-
-            Debug.Log($"🏛️🎁 Community reward: {player.playerName} received {randomItem.itemName}");
         }
 
         ShowCommunityAnnouncement("All players received a random item in their garden!", announcementDuration);
@@ -530,18 +515,7 @@ public class CommunityManager : MonoBehaviour
 
         foreach (Player player in players)
         {
-            Garden garden = player.assignedGarden;
-            if (garden == null) continue;
-
-            List<GardenTile> occupiedTiles = new List<GardenTile>();
-            GardenTile[] allTiles = garden.GetComponentsInChildren<GardenTile>();
-            foreach (GardenTile tile in allTiles)
-            {
-                if (tile.occupied && tile.placedItem != null && !tile.isProtected)
-                {
-                    occupiedTiles.Add(tile);
-                }
-            }
+            List<GardenTile> occupiedTiles = GardenHelper.GetUnprotectedTiles(player);
 
             int itemsToRemove = Mathf.Min(itemsToRemovePerPlayer, occupiedTiles.Count);
             for (int i = 0; i < itemsToRemove && occupiedTiles.Count > 0; i++)
@@ -550,12 +524,7 @@ public class CommunityManager : MonoBehaviour
                 GardenTile targetTile = occupiedTiles[randomIndex];
                 occupiedTiles.RemoveAt(randomIndex);
 
-                if (targetTile.placedItem != null)
-                    Destroy(targetTile.placedItem);
-
-                targetTile.occupied = false;
-                targetTile.placedItem = null;
-                targetTile.placedItemData = null;
+                ItemPlacer.RemoveItemFromTile(targetTile);
                 totalRemoved++;
             }
         }
@@ -720,22 +689,6 @@ public class CommunityManager : MonoBehaviour
             }
         }
         return null;
-    }
-
-    GardenTile GetRandomEmptyTile(Player player)
-    {
-        Garden garden = player.assignedGarden;
-        if (garden == null) return null;
-
-        List<GardenTile> emptyTiles = new List<GardenTile>();
-        GardenTile[] allTiles = garden.GetComponentsInChildren<GardenTile>();
-        foreach (GardenTile tile in allTiles)
-        {
-            if (!tile.occupied) emptyTiles.Add(tile);
-        }
-
-        if (emptyTiles.Count == 0) return null;
-        return emptyTiles[Random.Range(0, emptyTiles.Count)];
     }
 
     void ShowCommunityAnnouncement(string message, float duration = -1)

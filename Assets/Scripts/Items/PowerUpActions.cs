@@ -125,23 +125,8 @@ public class PowerUpActions : MonoBehaviour
         int randomIndex = Random.Range(0, availableItems.Count);
         ItemData randomItem = availableItems[randomIndex];
 
-        if (itemDatabase.TryTakeItem(randomItem))
+        if (ItemPlacer.PlaceItemOnTile(targetTile, randomItem, true))
         {
-            GameObject placed = Instantiate(randomItem.prefab, targetTile.transform.position, Quaternion.identity);
-            placed.transform.parent = targetTile.transform;
-            placed.transform.localPosition = Vector3.zero;
-
-            SpriteRenderer sr = placed.GetComponent<SpriteRenderer>();
-            if (sr != null)
-            {
-                sr.enabled = true;
-                sr.sortingOrder = 10;
-            }
-
-            targetTile.placedItem = placed;
-            targetTile.placedItemData = randomItem;
-            targetTile.occupied = true;
-
             Debug.Log($"{randomItem.itemName} placed on {targetTile.name}");
         }
     }
@@ -208,7 +193,7 @@ public class PowerUpActions : MonoBehaviour
         if (targetTile == null || !targetTile.occupied) return;
 
         targetTile.isProtected = true;
-        Debug.Log($"{targetTile.placedItemData.itemName} is now protected");
+        Debug.Log($"{targetTile.placedItemData?.itemName ?? "item"} is now protected");
 
         AddProtectionVisual(targetTile);
 

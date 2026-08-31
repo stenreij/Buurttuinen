@@ -91,28 +91,15 @@ public class ItemActions : MonoBehaviour
 
         if (turnManager != null && turnManager.hasPlacedItemThisTurn) return;
 
-        InventoryUI ui = FindFirstObjectByType<InventoryUI>();
+        // Gebruik ItemPlacer
         playerInventory.RemoveItem(selectedItem);
 
-        if (selectedItem.prefab != null)
+        if (!ItemPlacer.PlaceItemOnTile(targetTile, selectedItem, false))
         {
-            GameObject placed = Instantiate(selectedItem.prefab, targetTile.transform.position, Quaternion.identity);
-            placed.transform.parent = targetTile.transform;
-            placed.transform.localPosition = Vector3.zero;
-            placed.transform.localScale = Vector3.one;
-
-            SpriteRenderer sr = placed.GetComponent<SpriteRenderer>();
-            if (sr != null)
-            {
-                sr.enabled = true;
-                sr.sortingOrder = 10;
-            }
-
-            targetTile.placedItem = placed;
-            targetTile.placedItemData = selectedItem;
+            // Als plaatsen mislukt, voeg item terug
+            playerInventory.AddItem(selectedItem);
+            return;
         }
-
-        targetTile.occupied = true;
 
         if (turnManager != null)
         {
@@ -132,6 +119,7 @@ public class ItemActions : MonoBehaviour
             communityManager.UpdateCommunityGoalScore();
         }
 
+        InventoryUI ui = FindFirstObjectByType<InventoryUI>();
         if (ui != null)
         {
             ui.ClearSelectedItem();
@@ -146,28 +134,13 @@ public class ItemActions : MonoBehaviour
         if (targetTile.occupied) return;
         if (!playerInventory.HasItem(selectedItem)) return;
 
-        InventoryUI ui = FindFirstObjectByType<InventoryUI>();
         playerInventory.RemoveItem(selectedItem);
 
-        if (selectedItem.prefab != null)
+        if (!ItemPlacer.PlaceItemOnTile(targetTile, selectedItem, false))
         {
-            GameObject placed = Instantiate(selectedItem.prefab, targetTile.transform.position, Quaternion.identity);
-            placed.transform.parent = targetTile.transform;
-            placed.transform.localPosition = Vector3.zero;
-            placed.transform.localScale = Vector3.one;
-
-            SpriteRenderer sr = placed.GetComponent<SpriteRenderer>();
-            if (sr != null)
-            {
-                sr.enabled = true;
-                sr.sortingOrder = 10;
-            }
-
-            targetTile.placedItem = placed;
-            targetTile.placedItemData = selectedItem;
+            playerInventory.AddItem(selectedItem);
+            return;
         }
-
-        targetTile.occupied = true;
 
         Debug.Log($"{selectedItem.itemName} placed on tile (PlaceAnywhere) by {gameObject.name}");
 
@@ -175,6 +148,7 @@ public class ItemActions : MonoBehaviour
 
         ScoreManager.RefreshScores();
 
+        InventoryUI ui = FindFirstObjectByType<InventoryUI>();
         if (ui != null)
         {
             ui.ClearSelectedItem();
@@ -190,14 +164,7 @@ public class ItemActions : MonoBehaviour
         if (!targetTile.occupied || targetTile.placedItemData == null) return;
         if (targetTile.isProtected) return;
 
-        if (targetTile.placedItem != null)
-        {
-            Destroy(targetTile.placedItem);
-        }
-
-        targetTile.occupied = false;
-        targetTile.placedItem = null;
-        targetTile.placedItemData = null;
+        ItemPlacer.RemoveItemFromTile(targetTile);
 
         playerInventory.RemoveItem(selectedItem);
         ClearSelectedItem();

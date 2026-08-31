@@ -270,40 +270,30 @@ public class WeatherManager : MonoBehaviour
 
             if (targetTile != null && sourceTile != null && sourceTile.placedItem != null)
             {
-                targetTile.occupied = true;
-                targetTile.placedItem = sourceTile.placedItem;
-                targetTile.placedItemData = sourceTile.placedItemData;
-
-                if (sourceTile.placedItem != null)
+                if (ItemPlacer.MoveItem(sourceTile, targetTile))
                 {
-                    sourceTile.placedItem.transform.position = targetTile.transform.position;
-                    sourceTile.placedItem.transform.parent = targetTile.transform;
+                    movedCount++;
+                    Debug.Log($"☁️🌪️ Tornado moved item from {sourcePlayer.playerName} to {targetPlayer.playerName}");
                 }
-
-                sourceTile.occupied = false;
-                sourceTile.placedItem = null;
-                sourceTile.placedItemData = null;
-                movedCount++;
-                Debug.Log($"☁️🌪️ Tornado moved item from {sourcePlayer.playerName} to {targetPlayer.playerName}");
             }
-        }
 
-        if (movedCount > 0)
-        {
-            ShowWeatherAnnouncement($"Tornado moved {movedCount} item(s)!", resultAnnouncementDuration);
+            if (movedCount > 0)
+            {
+                ShowWeatherAnnouncement($"Tornado moved {movedCount} item(s)!", resultAnnouncementDuration);
+            }
+            else
+            {
+                ShowWeatherAnnouncement($"Tornado! No items could be moved!", resultAnnouncementDuration);
+            }
+            UpdateAllUI();
         }
-        else
-        {
-            ShowWeatherAnnouncement($"Tornado! No items could be moved!", resultAnnouncementDuration);
-        }
-        UpdateAllUI();
     }
 
     // ============================================
     // STORM - DESTROY ITEMS
     // ============================================
 
-    void ExecuteStorm_DestroyItems()
+    private void ExecuteStorm_DestroyItems()
     {
         List<Player> players = turnManager.players;
         int gardensAffected = Random.Range(0, players.Count + 1);
@@ -337,7 +327,7 @@ public class WeatherManager : MonoBehaviour
     // HEATWAVE
     // ============================================
 
-    void ExecuteHeatwave()
+    private void ExecuteHeatwave()
     {
         ShowWeatherAnnouncement("Heatwave! Water evaporates!", weatherAnnouncementDuration);
         PlayEffect(heatEffectPrefab);
@@ -347,22 +337,10 @@ public class WeatherManager : MonoBehaviour
 
         foreach (Player player in players)
         {
-            List<GardenTile> waterTiles = new List<GardenTile>();
-            Garden garden = player.assignedGarden;
+            List<GardenTile> waterTiles = GardenHelper.GetTilesByType(player, ItemType.Water);
 
-            if (garden != null)
-            {
-                GardenTile[] allTiles = garden.GetComponentsInChildren<GardenTile>();
-                foreach (GardenTile tile in allTiles)
-                {
-                    if (tile.occupied && tile.placedItemData != null &&
-                        tile.placedItemData.type == ItemType.Water &&
-                        !tile.isProtected)
-                    {
-                        waterTiles.Add(tile);
-                    }
-                }
-            }
+            // Filter out protected tiles
+            waterTiles.RemoveAll(t => t.isProtected);
 
             int itemsToDestroy = Mathf.Min(Random.Range(1, 3), waterTiles.Count);
             for (int i = 0; i < itemsToDestroy && waterTiles.Count > 0; i++)
@@ -564,14 +542,10 @@ public class WeatherManager : MonoBehaviour
     void DestroyItemInGarden(GardenTile tile, Player player)
     {
         if (tile == null || !tile.occupied || tile.placedItem == null) return;
-
         if (tile.isProtected) return;
 
-        if (tile.placedItem != null) Destroy(tile.placedItem);
-        tile.occupied = false;
-        tile.placedItem = null;
-        tile.placedItemData = null;
-        Debug.Log($"☁️ Item removed from {player.playerName}'s garden by weather");
+        ItemPlacer.RemoveItemFromTile(tile);
+        Debug.Log($"☁️ Item removed from {player?.playerName ?? "unknown"}'s garden by weather");
     }
 
     bool IsPlantType(ItemType type)
@@ -631,6 +605,7 @@ public class WeatherManager : MonoBehaviour
             communityManager.UpdateCommunityGoalScore();
         }
     }
+
 
     // ============================================
     // PUBLIC METHODS

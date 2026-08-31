@@ -125,26 +125,9 @@ public class BoardManager : MonoBehaviour
             int randomItemIndex = Random.Range(0, availableItems.Count);
             ItemData randomItem = availableItems[randomItemIndex];
 
-            if (itemDatabase.TryTakeItem(randomItem))
+            if (ItemPlacer.PlaceItemOnTile(targetTile, randomItem, true))
             {
-                if (randomItem.prefab != null)
-                {
-                    GameObject placed = Instantiate(randomItem.prefab, targetTile.transform.position, Quaternion.identity);
-                    placed.transform.parent = targetTile.transform;
-                    placed.transform.localPosition = Vector3.zero;
-
-                    SpriteRenderer sr = placed.GetComponent<SpriteRenderer>();
-                    if (sr != null)
-                    {
-                        sr.enabled = true;
-                        sr.sortingOrder = 10;
-                    }
-
-                    targetTile.placedItem = placed;
-                    targetTile.placedItemData = randomItem;
-                }
-
-                targetTile.occupied = true;
+                // Item placed
             }
             else
             {
