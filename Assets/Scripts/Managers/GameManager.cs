@@ -98,7 +98,7 @@ public class GameManager : MonoBehaviour
         if (inventoryUI != null && players.Count > 0)
         {
             inventoryUI.playerInventory = players[0].GetComponent<Inventory>();
-            inventoryUI.RefreshUI();
+            UIManager.RefreshAllUI();
         }
 
         PlayerTagManager tagManager = FindFirstObjectByType<PlayerTagManager>();

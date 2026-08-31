@@ -91,12 +91,10 @@ public class ItemActions : MonoBehaviour
 
         if (turnManager != null && turnManager.hasPlacedItemThisTurn) return;
 
-        // Gebruik ItemPlacer
         playerInventory.RemoveItem(selectedItem);
 
         if (!ItemPlacer.PlaceItemOnTile(targetTile, selectedItem, false))
         {
-            // Als plaatsen mislukt, voeg item terug
             playerInventory.AddItem(selectedItem);
             return;
         }
@@ -111,20 +109,7 @@ public class ItemActions : MonoBehaviour
 
         ClearSelectedItem();
 
-        ScoreManager.RefreshScores();
-
-        CommunityManager communityManager = FindFirstObjectByType<CommunityManager>();
-        if (communityManager != null)
-        {
-            communityManager.UpdateCommunityGoalScore();
-        }
-
-        InventoryUI ui = FindFirstObjectByType<InventoryUI>();
-        if (ui != null)
-        {
-            ui.ClearSelectedItem();
-            ui.RefreshUI();
-        }
+        UIManager.RefreshAllUI();
     }
 
     public void PlaceItemDirect(GardenTile targetTile)
@@ -146,14 +131,7 @@ public class ItemActions : MonoBehaviour
 
         ClearSelectedItem();
 
-        ScoreManager.RefreshScores();
-
-        InventoryUI ui = FindFirstObjectByType<InventoryUI>();
-        if (ui != null)
-        {
-            ui.ClearSelectedItem();
-            ui.RefreshUI();
-        }
+        UIManager.RefreshAllUI();
     }
 
     public void RemoveItem(GardenTile targetTile)
@@ -175,20 +153,7 @@ public class ItemActions : MonoBehaviour
             turnManager.UpdateActionButtons();
         }
 
-        ScoreManager.RefreshScores();
-
-        CommunityManager communityManager = FindFirstObjectByType<CommunityManager>();
-        if (communityManager != null)
-        {
-            communityManager.UpdateCommunityGoalScore();
-        }
-
-        InventoryUI ui = FindFirstObjectByType<InventoryUI>();
-        if (ui != null)
-        {
-            ui.ClearSelectedItem();
-            ui.RefreshUI();
-        }
+        UIManager.RefreshAllUI();
 
         Debug.Log($"{gameObject.name} removed an item from the garden");
     }
@@ -201,13 +166,7 @@ public class ItemActions : MonoBehaviour
             GiveRandomItem();
             Debug.Log($"{gameObject.name} passed and received a random item");
 
-            InventoryUI ui = FindFirstObjectByType<InventoryUI>();
-            if (ui != null)
-            {
-                ui.ClearSelectedItem();
-                ui.RefreshUI();
-            }
-
+            UIManager.RefreshAllUI();
             turnManager.EndTurn();
         }
     }

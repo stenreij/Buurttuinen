@@ -304,11 +304,7 @@ public class TurnManager : MonoBehaviour
 
         UpdateActionButtons();
 
-        if (inventoryUI != null)
-        {
-            inventoryUI.ClearSelectedItem();
-            inventoryUI.RefreshUI();
-        }
+        UIManager.RefreshAllUI();
     }
 
     System.Collections.IEnumerator FlashPowerUpButton()
@@ -446,10 +442,7 @@ public class TurnManager : MonoBehaviour
             OnRoundStarted?.Invoke(currentRound);
         }
 
-        if (inventoryUI != null)
-        {
-            inventoryUI.RefreshUI();
-        }
+        UIManager.RefreshAllUI();
 
         StartTurn();
     }

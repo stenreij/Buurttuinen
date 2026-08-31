@@ -385,7 +385,7 @@ public class CommunityManager : MonoBehaviour
             turnManager.ResumeTurnAfterWeather();
         }
 
-        UpdateAllUI();
+        UIManager.RefreshAllUI();
         Debug.Log("🏛️ Community goal check completed");
 
         if (currentRound >= firstCommunityRound &&
@@ -457,7 +457,7 @@ public class CommunityManager : MonoBehaviour
         ShowCommunityAnnouncement($"All items in every garden get +{boostAmount} community boost!", announcementDuration);
         Debug.Log($"🏛️🎁 Community reward: All items +{boostAmount} community boost");
 
-        UpdateAllUI();
+        UIManager.RefreshAllUI();
     }
 
     ItemData FindRandomPlantOrDecoration()
@@ -739,12 +739,6 @@ public class CommunityManager : MonoBehaviour
         yield return new WaitForSeconds(delay);
         if (communityAnnouncementText != null)
             communityAnnouncementText.gameObject.SetActive(false);
-    }
-
-    void UpdateAllUI()
-    {
-        if (scoreManager != null) scoreManager.UpdateScores();
-        if (inventoryUI != null) inventoryUI.RefreshUI();
     }
 
     public bool IsCommunityActive() => isCommunityActive || isExecutingCommunity || isWaitingForResult;

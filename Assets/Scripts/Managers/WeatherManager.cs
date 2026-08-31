@@ -596,14 +596,7 @@ public class WeatherManager : MonoBehaviour
 
     void UpdateAllUI()
     {
-        if (scoreManager != null) scoreManager.UpdateScores();
-        if (inventoryUI != null) inventoryUI.RefreshUI();
-
-        CommunityManager communityManager = FindFirstObjectByType<CommunityManager>();
-        if (communityManager != null)
-        {
-            communityManager.UpdateCommunityGoalScore();
-        }
+        UIManager.RefreshAllUI();
     }
 
 

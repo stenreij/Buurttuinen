@@ -66,13 +66,7 @@ public class PowerUpActions : MonoBehaviour
             turnManager.UpdateActionButtons();
         }
 
-        ScoreManager.RefreshScores();
-
-        CommunityManager communityManager = FindFirstObjectByType<CommunityManager>();
-        if (communityManager != null)
-        {
-            communityManager.UpdateCommunityGoalScore();
-        }
+        UIManager.RefreshAllUI();
 
         ConsumePowerUp();
     }
@@ -91,12 +85,7 @@ public class PowerUpActions : MonoBehaviour
         playerInventory.RemoveItem(selectedPowerUp);
         ClearSelectedPowerUp();
 
-        InventoryUI ui = FindFirstObjectByType<InventoryUI>();
-        if (ui != null)
-        {
-            ui.ClearSelectedItem();
-            ui.RefreshUI();
-        }
+        UIManager.RefreshAllUI();
     }
 
     private void GiveRandomItem()
