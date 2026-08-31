@@ -159,7 +159,6 @@ public class GardenTile : MonoBehaviour
     int GetBonusScore()
     {
         int bonus = 0;
-
         Garden garden = GetComponentInParent<Garden>();
         if (garden != null)
         {
@@ -176,12 +175,10 @@ public class GardenTile : MonoBehaviour
                     {
                         bonus += player.weatherBoost;
                     }
-
                     break;
                 }
             }
         }
-
         return bonus;
     }
 

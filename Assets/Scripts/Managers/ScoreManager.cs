@@ -60,7 +60,7 @@ public class ScoreManager : MonoBehaviour
         Player currentPlayer = turnManager.GetCurrentPlayer();
         if (currentPlayer == null) return;
 
-        int playerScore = CalculatePlayerScore(currentPlayer);
+        int playerScore = ScoreCalculator.CalculatePlayerScore(currentPlayer);
         currentPlayer.score = playerScore;
 
         if (playerScoreText != null)
@@ -68,43 +68,12 @@ public class ScoreManager : MonoBehaviour
             playerScoreText.text = $"Score: {playerScore}";
         }
 
-        int totalScore = CalculateTotalScore();
+        int totalScore = ScoreCalculator.CalculateTotalScore(turnManager.players);
 
         if (neighborhoodScoreText != null)
         {
             neighborhoodScoreText.text = $"Neighborhood score: {totalScore}";
         }
-    }
-
-    public int CalculatePlayerScore(Player player)
-    {
-        int total = 0;
-
-        if (player == null || player.assignedGarden == null) return 0;
-
-        GardenTile[] tiles = player.assignedGarden.GetComponentsInChildren<GardenTile>();
-
-        foreach (GardenTile tile in tiles)
-        {
-            if (tile.occupied && tile.placedItemData != null)
-            {
-                total += tile.placedItemData.score + player.soilBoost + player.weatherBoost + player.communityPenalty + player.communityBoost;
-            }
-        }
-
-        return total;
-    }
-
-    public int CalculateTotalScore()
-    {
-        int total = 0;
-        if (turnManager == null || turnManager.players == null) return 0;
-
-        foreach (Player player in turnManager.players)
-        {
-            total += CalculatePlayerScore(player);
-        }
-        return total;
     }
 
     public void SaveFinalScores()
@@ -130,11 +99,11 @@ public class ScoreManager : MonoBehaviour
             return;
         }
 
-        int totalScore = CalculateTotalScore();
+        int totalScore = ScoreCalculator.CalculateTotalScore(turnManager.players);
 
         foreach (Player player in turnManager.players)
         {
-            int score = CalculatePlayerScore(player);
+            int score = ScoreCalculator.CalculatePlayerScore(player);
             setup.finalScores[player.gameObject.name] = score;
         }
 

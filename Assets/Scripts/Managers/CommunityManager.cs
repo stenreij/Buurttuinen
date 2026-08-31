@@ -87,7 +87,7 @@ public class CommunityManager : MonoBehaviour
                 int total = 0;
                 foreach (Player player in players)
                 {
-                    total += GetBiodiversityScore(player);
+                    total += ScoreCalculator.GetBiodiversityScore(player);
                 }
                 return total;
             },
