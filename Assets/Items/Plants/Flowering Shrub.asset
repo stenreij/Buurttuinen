@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2814edcf85886e144b058ce2a6d4161a, type: 3}
+  m_Name: Flowering Shrub
+  m_EditorClassIdentifier: 
+  icon: {fileID: 3526332315067104744, guid: d310dc4f9be23a34baeed5dfaf36d19c, type: 3}
+  itemName: Flowering Shrub
+  type: 0
+  score: 18
+  water: 5
+  soilHealth: 4
+  biodiversity: 8
+  aesthetic: 6
+  color: {r: 0.8584906, g: 0, b: 0.80704504, a: 0}
+  maxAmount: 2
+  prefab: {fileID: 8256234453272004352, guid: 27a47b176941b92499706ac5f61f01a8, type: 3}

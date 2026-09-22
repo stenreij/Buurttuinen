@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2814edcf85886e144b058ce2a6d4161a, type: 3}
+  m_Name: Fountain
+  m_EditorClassIdentifier: 
+  icon: {fileID: 6537089701838389941, guid: 9b780b60e1e30d84ea7a0183ee5f2c3c, type: 3}
+  itemName: Fountain
+  type: 3
+  score: 22
+  water: 12
+  soilHealth: 2
+  biodiversity: 6
+  aesthetic: 14
+  color: {r: 0, g: 0.76249933, b: 1, a: 0}
+  maxAmount: 2
+  prefab: {fileID: 8385841284833583347, guid: 7889bf31946dec345aab0771d62da62b, type: 3}

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2814edcf85886e144b058ce2a6d4161a, type: 3}
+  m_Name: Compost Bin
+  m_EditorClassIdentifier: 
+  icon: {fileID: -3354684456772930475, guid: dae6a99d478111c479ffa32c45706cf1, type: 3}
+  itemName: Compost Bin
+  type: 5
+  score: 14
+  water: 3
+  soilHealth: 12
+  biodiversity: 6
+  aesthetic: 4
+  color: {r: 0.5188679, g: 0.17396559, b: 0.022027401, a: 0}
+  maxAmount: 2
+  prefab: {fileID: 237437265584321282, guid: 312ba4d8baf38be4491c88d706eebc20, type: 3}

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2814edcf85886e144b058ce2a6d4161a, type: 3}
+  m_Name: Pond
+  m_EditorClassIdentifier: 
+  icon: {fileID: 5817799449637031085, guid: 2d1c4ebb0a4cc08429be7c7dcb9bf1ac, type: 3}
+  itemName: Pond
+  type: 3
+  score: 22
+  water: 10
+  soilHealth: 4
+  biodiversity: 9
+  aesthetic: 9
+  color: {r: 0, g: 0.564461, b: 0.8207547, a: 0}
+  maxAmount: 3
+  prefab: {fileID: 6220079134092328405, guid: 81cfef7aab181e2449f855daf1bdde44, type: 3}

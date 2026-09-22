@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2814edcf85886e144b058ce2a6d4161a, type: 3}
+  m_Name: Gravel Tile
+  m_EditorClassIdentifier: 
+  icon: {fileID: -3578582641699816866, guid: 21416484ca3df8548880a3c521ff28ba, type: 3}
+  itemName: Gravel Path
+  type: 4
+  score: 3
+  water: 1
+  soilHealth: 1
+  biodiversity: 1
+  aesthetic: 4
+  color: {r: 0.5283019, g: 0.20902647, b: 0, a: 0}
+  maxAmount: 6
+  prefab: {fileID: 7613494001699832611, guid: cae7a1d3034419c4fb5ba1af02e36a50, type: 3}

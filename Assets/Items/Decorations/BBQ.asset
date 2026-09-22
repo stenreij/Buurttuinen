@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2814edcf85886e144b058ce2a6d4161a, type: 3}
+  m_Name: BBQ
+  m_EditorClassIdentifier: 
+  icon: {fileID: -6036542359384570008, guid: cb6f1a9d03528434d82787445dc51022, type: 3}
+  itemName: BBQ
+  type: 5
+  score: 2
+  water: 0
+  soilHealth: 0
+  biodiversity: 0
+  aesthetic: 4
+  color: {r: 1, g: 0, b: 0, a: 0}
+  maxAmount: 3
+  prefab: {fileID: 643566289717352192, guid: 8fabe74e5713fff41bd22bef9da62a73, type: 3}

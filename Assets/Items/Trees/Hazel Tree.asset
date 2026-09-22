@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2814edcf85886e144b058ce2a6d4161a, type: 3}
+  m_Name: Hazel Tree
+  m_EditorClassIdentifier: 
+  icon: {fileID: 3234334089713132326, guid: 808bd9a25f4ee5b42ad952beb6a6cbc6, type: 3}
+  itemName: Hazel Tree
+  type: 1
+  score: 16
+  water: 4
+  soilHealth: 9
+  biodiversity: 10
+  aesthetic: 8
+  color: {r: 0.764151, g: 0.25569096, b: 0, a: 0}
+  maxAmount: 2
+  prefab: {fileID: 677653032911958075, guid: 4aca5aebd1403fc4696ba17aaeb95dcc, type: 3}

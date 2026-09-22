@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2814edcf85886e144b058ce2a6d4161a, type: 3}
+  m_Name: OilBarrel
+  m_EditorClassIdentifier: 
+  icon: {fileID: 5711512529572764897, guid: 1eed0498be5eecc4a804087fffbc566a, type: 3}
+  itemName: Oil Barrel
+  type: 6
+  score: -12
+  water: -8
+  soilHealth: -10
+  biodiversity: -5
+  aesthetic: -6
+  color: {r: 0, g: 0, b: 0, a: 0}
+  maxAmount: 3
+  prefab: {fileID: 2884628401271543900, guid: 060efd9a9e0b92743a4d183dfef1fdb7, type: 3}
