@@ -15,7 +15,7 @@ Het doel van Buurttuinen is om spelers op een speelse manier bewust te maken van
 - **Spelers:** 1-4 spelers
 - **Speelveld:** Vier aangrenzende tuinen in een 2×2-opstelling
 - **Per speler:** Een eigen tuintje
-- **Tuingrootte (Unity-versie):** 6 × 3 speelbare tegels
+- **Tuingrootte:** 6 × 3 speelbare tegels
 - **Start:** Elke tuin krijgt een aantal willekeurige items; elke speler begint met een aantal items
 
 ## Functionaliteiten
