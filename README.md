@@ -6,17 +6,17 @@ Buurttuinen is een 'Serious Game' waarin spelers samen een groene buurt creëren
 
 Het doel van Buurttuinen is om spelers op een speelse manier bewust te maken van duurzaamheid in de openbare ruimte. De tuinen worden beoordeeld op drie thema's:
 
-- 🌿 Groener
-- 💧 Waterbestendiger
-- 🐝 Biodiverser
+- 🌿 Groen
+- 💧 Waterbestendigheid
+- 🐝 Biodiversiteit
 
 ## Spelopzet
 
 - **Spelers:** 1-4 spelers
 - **Speelveld:** Vier aangrenzende tuinen in een 2×2-opstelling
-- **Per speler:** Een eigen tuintje
+- **Per speler:** Een eigen tuin, inventory & score
 - **Tuingrootte:** 6 × 3 speelbare tegels
-- **Start:** Elke tuin krijgt een aantal willekeurige items; elke speler begint met een aantal items
+- **Start:** Elke tuin krijgt een aantal willekeurige items; elke speler begint met een aantal willekeurige items in de inventory
 
 ## Functionaliteiten
 
