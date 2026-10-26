@@ -549,7 +549,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 866463822}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.6662923
+  m_Size: 0.6665255
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3521,7 +3521,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Total score: 0'
+  m_text: 'Neighbourhood
+
+    Score:  0'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c85142738ac7865458cb7b5ba9ab6142, type: 2}
   m_sharedMaterial: {fileID: 8935027512786042166, guid: c85142738ac7865458cb7b5ba9ab6142, type: 2}
@@ -3548,13 +3550,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 25
-  m_fontSizeBase: 25
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 5
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -6506,7 +6508,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 50.000004}
+  m_AnchoredPosition: {x: 0, y: 49.999996}
   m_SizeDelta: {x: 0, y: 150}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1500806772
@@ -8947,7 +8949,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 115, y: -82}
+  m_AnchoredPosition: {x: 115, y: -110}
   m_SizeDelta: {x: 205, y: 34}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1951875461

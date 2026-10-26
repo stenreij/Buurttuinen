@@ -50,7 +50,7 @@ public class ScoreManager : MonoBehaviour
 
         if (neighborhoodScoreText != null)
         {
-            neighborhoodScoreText.text = "Total score: 0";
+            neighborhoodScoreText.text = "Neighbourhood Score: 0";
         }
 
         if (turnManager != null && turnManager.players != null)
